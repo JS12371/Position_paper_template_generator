@@ -600,17 +600,17 @@ def get_download_link(file, filename):
 
  
 
-st.title('Excel Case Finder')  
+st.title('Excel Position Paper Template Generator')  
 
  
 
-uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls', 'csv'])  
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
  
 
 case_num = st.text_input('Enter Case Number') 
 
-create_doc = st.button('Create Document')
+create_doc = st.button('Create Populated Position Paper Template')
 
 
  
