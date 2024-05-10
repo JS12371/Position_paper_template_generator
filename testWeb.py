@@ -4,23 +4,25 @@ import streamlit as st
 
 import pandas as pd  
 
- 
-
-from python-docx import Document  
+import docx
 
  
 
-from python-docx.oxml import OxmlElement 
-
-from python-docx.oxml.ns import qn 
+from docx import Document  
 
  
 
-from python-docx.shared import Pt, RGBColor  
+from docx.oxml import OxmlElement 
+
+from docx.oxml.ns import qn 
 
  
 
-from python-docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
+from docx.shared import Pt, RGBColor  
+
+ 
+
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
 
  
 
