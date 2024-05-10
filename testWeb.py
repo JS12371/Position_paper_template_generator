@@ -6,21 +6,21 @@ import pandas as pd
 
  
 
-from docx import Document  
+from python-docx import Document  
 
  
 
-from docx.oxml import OxmlElement 
+from python-docx.oxml import OxmlElement 
 
-from docx.oxml.ns import qn 
-
- 
-
-from docx.shared import Pt, RGBColor  
+from python-docx.oxml.ns import qn 
 
  
 
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
+from python-docx.shared import Pt, RGBColor  
+
+ 
+
+from python-docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
 
  
 
