@@ -610,6 +610,9 @@ uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls', 'c
 
 case_num = st.text_input('Enter Case Number') 
 
+create_doc = st.button('Create Document')
+
+
  
 
  
@@ -618,7 +621,7 @@ case_num = st.text_input('Enter Case Number')
 
  
 
-if uploaded_file and case_num:  
+if uploaded_file and case_num and create_doc:  
 
  
 
@@ -648,11 +651,7 @@ if uploaded_file and case_num:
 
  
 
-    if st.button('Create Document'):  
-
- 
-
-        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
+    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
  
 
