@@ -340,7 +340,7 @@ def create_word_document(case_data):
 
  
 
-    sub = doc.add_paragraph(f"and\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
+    sub = doc.add_paragraph(f"\nSubmitted by: \n\n<Name>\n{mac_name}\n<Address Line 1>\n<Address Line 2>\n\n<Phone Number>\n\nand\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
 
