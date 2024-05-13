@@ -457,6 +457,10 @@ def create_word_document(case_data):
     cell_right = table.cell(0,1) 
 
     cell_right.text = "1\n\n2\n\n3" 
+    run = cell_right.paragraph[0].runs[0]
+    run.font.size = Pt(11)
+    run.font.name = 'Arial'
+ 
 
  
 
