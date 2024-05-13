@@ -120,9 +120,9 @@ def get_issue_content(issue):
    try:  
        with open(filename, 'r') as file:  
            content = file.read()  
-           return content  
-       except FileNotFoundError:  
-           return "Issue file not found." 
+       return content  
+   except FileNotFoundError:  
+       return "Issue file not found." 
      
 
 def create_word_document(case_data):  
