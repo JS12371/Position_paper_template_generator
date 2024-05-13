@@ -2,3 +2,6 @@ streamlit
 pandas
 python-docx
 openpyxl
+base64
+io
+os
