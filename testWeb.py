@@ -4,8 +4,6 @@ import streamlit as st
 
 import pandas as pd  
 
-import docx
-
  
 
 from docx import Document  
@@ -30,7 +28,15 @@ import base64
 
  
 
-from io import BytesIO  
+from io import BytesIO 
+
+ 
+
+import os 
+
+ 
+
+ 
 
  
 
@@ -108,15 +114,41 @@ def format_date(date):
 
     return f"{month}/{day}/{year}" 
 
+ 
 
-def get_issue_content(issue):
-   filename = f"IssuetoArgs\{issue}.txt"
-   try:
-      with open(filename, 'r') as file:
-         content = file.read()
-      return content
-   except FileNotFoundError:
-      return "Issue file not found."
+def get_issue_content(issue):  
+
+ 
+
+    # Function to read content from {issue}.txt file  
+
+ 
+
+    filename = f"{issue}.txt"  
+
+ 
+
+    try:  
+
+ 
+
+        with open(filename, 'r') as file:  
+
+ 
+
+            content = file.read()  
+
+ 
+
+        return content  
+
+ 
+
+    except FileNotFoundError:  
+
+ 
+
+        return "Issue file not found."  
 
  
 
@@ -165,6 +197,8 @@ def create_word_document(case_data):
  
 
     case_name = case_data['Case Name'].unique() if 'Case Name' in case_data else 'Case Name not found' 
+
+    issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found' 
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
 
@@ -350,7 +384,7 @@ def create_word_document(case_data):
 
  
 
-    sub = doc.add_paragraph(f"\nSubmitted by: \n\n<Name>\n{mac_name}\n<Address Line 1>\n<Address Line 2>\n\n<Phone Number>\n\nand\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
+    sub = doc.add_paragraph(f"and\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
 
@@ -534,19 +568,46 @@ def create_word_document(case_data):
 
     run.text = f"\n\nIssue(s): {case_data['Issue'].iloc[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
 
-    doc.add_page_break()
+ 
 
-    header = doc.add_paragraph('III. MAC\'s POSITION')
-    run = header.runs[0]
-    run.font.size = Pt(11)
-    run.font.name = 'Arial'
-    run.font.bold = True
-    run.font.color.rgb = RGBColor(0,0,0)
+    doc.add_page_break() 
 
-    issue_content = get_issue_content(issue[0])
-    run = header.add_run()
-    run.font.size = Pt(11)
-    run.font.name = 'Arial'
+ 
+
+    header = doc.add_paragraph('III. MAC\'S POSITION') 
+
+ 
+
+    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
+
+    run = header.runs[0] 
+
+    run.font.size = Pt(11) 
+
+    run.font.name = 'Arial' 
+
+    run.font.bold = True 
+
+    run.font.color.rgb = RGBColor(0,0,0) 
+
+ 
+
+    issue_content = get_issue_content(issue[0]) 
+
+ 
+
+    header = doc.add_paragraph(issue_content) 
+
+    run = header.add_run() 
+
+    run.font.size = Pt(11) 
+
+    run.font.name = 'Arial' 
+
+ 
+
+ 
+
  
 
  
@@ -587,8 +648,6 @@ def find_case_data(df, case_number):
 
     return case_data 
 
- 
-
    
 
  
@@ -625,18 +684,23 @@ def get_download_link(file, filename):
 
  
 
-st.title('Excel Position Paper Template Generator')  
+st.title('Excel Case Finder')  
 
  
 
-uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls', 'csv'])  
 
  
 
 case_num = st.text_input('Enter Case Number') 
 
-create_doc = st.button('Create Populated Position Paper Template')
+ 
 
+create_doc = st.button('Create Document') 
+
+ 
+
+ 
 
  
 
@@ -672,16 +736,24 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    # Assuming you have a button and functionality to process and create a document  
+    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
  
 
-    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True) 
+if not uploaded_file and create_doc: 
 
-if not uploaded_file and create_doc:
-    st.write('Please upload a file')
-if not case_num and create_doc:
-    st.write('Please enter a case number')
+    st.write('Please upload a file') 
+
+ 
+
+if not case_num and create_doc: 
+
+    st.write('Please enter a case number') 
+
+ 
+
+  
+
  
 
  
