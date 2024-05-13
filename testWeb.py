@@ -116,7 +116,7 @@ def get_issue_content(issue):
 
  
 
-   filename = f"{issue}.txt"  
+   filename = f"IssuestoArgs/{issue}.txt"  
    try:  
        with open(filename, 'r') as file:  
            content = file.read()  
