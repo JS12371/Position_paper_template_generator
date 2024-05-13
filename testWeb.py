@@ -114,9 +114,10 @@ def get_issue_content(issue):
 
     # Function to read content from {issue}.txt file  
 
- 
 
-   filename = f"IssuestoArgs/DRS.txt"  
+   issueformatted = issue.replace(" ", "")
+
+   filename = f"IssuestoArgs/{issueformatted}.txt"  
    try:  
        with open(filename, 'r') as file:  
            content = file.read()  
