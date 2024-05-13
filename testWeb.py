@@ -110,7 +110,7 @@ def format_date(date):
 
 
 def get_issue_content(issue):
-   filename = f"{issue}.txt"
+   filename = f"IssuetoArgs\{issue}.txt"
    try:
       with open(filename, 'r') as file:
          content = file.read()
@@ -533,6 +533,8 @@ def create_word_document(case_data):
  
 
     run.text = f"\n\nIssue(s): {case_data['Issue'].iloc[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
+
+    doc.add_page_break()
 
     header = doc.add_paragraph('III. MAC\'s POSITION')
     run = header.runs[0]
