@@ -4,4 +4,3 @@ python-docx
 openpyxl
 base64
 io
-os
