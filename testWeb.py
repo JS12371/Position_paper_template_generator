@@ -378,6 +378,8 @@ def create_word_document(case_data):
 
     doc.add_page_break() 
 
+    
+
  
 
     table1 = doc.add_table(rows = 1, cols = 2) 
@@ -446,7 +448,7 @@ def create_word_document(case_data):
 
     run = cell_left.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Arial' 
 
