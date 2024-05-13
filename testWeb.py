@@ -108,7 +108,7 @@ def format_date(date):
 
     return f"{month}/{day}/{year}" 
 
- def get_issue_content(issue):  
+def get_issue_content(issue):  
 
  
 
@@ -116,31 +116,13 @@ def format_date(date):
 
  
 
-    filename = f"{issue}.txt"  
-
- 
-
-    try:  
-
- 
-
-        with open(filename, 'r') as file:  
-
- 
-
-            content = file.read()  
-
- 
-
-        return content  
-
- 
-
-    except FileNotFoundError:  
-
- 
-
-        return "Issue file not found." 
+   filename = f"{issue}.txt"  
+   try:  
+       with open(filename, 'r') as file:  
+           content = file.read()  
+           return content  
+       except FileNotFoundError:  
+           return "Issue file not found." 
      
 
 def create_word_document(case_data):  
