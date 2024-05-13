@@ -108,6 +108,16 @@ def format_date(date):
 
     return f"{month}/{day}/{year}" 
 
+
+def get_issue_content(issue):
+   filename = f"{issue}.txt"
+   try:
+      with open(filename, 'r') as file:
+         content = file.read()
+      return content
+   except FileNotFoundError:
+      return "Issue file not found."
+
  
 
 def create_word_document(case_data):  
@@ -523,6 +533,19 @@ def create_word_document(case_data):
  
 
     run.text = f"\n\nIssue(s): {case_data['Issue'].iloc[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
+
+    header = doc.add_paragraph('III. MAC\'s POSITION')
+    run = header.runs[0]
+    run.font.size = Pt(11)
+    run.font.name = 'Arial'
+    run.font.bold = True
+    run.font.color.rgb = RGBColor(0,0,0)
+
+    issue_content = get_issue_content(issue[0])
+    run = header.add_run()
+    run.font.size = Pt(11)
+    run.font.name = 'Arial'
+ 
 
  
 
