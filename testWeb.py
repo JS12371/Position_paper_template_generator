@@ -682,7 +682,7 @@ def string_processing(s):
 
 def find_case_data(df, case_number): 
 
-    case_number = f'"{case_number"'
+    case_number = f'"{case_number}"'
 
     case_data = df[df['Case Num'] == case_number]
 
