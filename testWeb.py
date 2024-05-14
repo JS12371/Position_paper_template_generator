@@ -686,8 +686,9 @@ def find_case_data(df, case_number):
     case_data = df[df['Case Num'] == case_number] 
 
     case_data = case_data.map(string_processing) 
-    
-    st.write(f'loaded {case_number} data')
+
+    if case_data:
+       st.write(f'loaded {case_number} data')
 
     return case_data 
 
