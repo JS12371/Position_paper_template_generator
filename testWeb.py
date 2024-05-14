@@ -671,7 +671,7 @@ def create_word_document(case_data):
 
 def string_processing(s): 
 
-    if pd.isnull(s) or s == '': 
+    if pd.isnull(s) or s == "": 
 
         return "Not in the spreadsheet" 
 
