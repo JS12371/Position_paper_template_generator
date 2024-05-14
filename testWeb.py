@@ -725,11 +725,11 @@ def get_download_link(file, filename):
 
  
 
-st.title('Excel Case Finder')  
+st.title('Position Paper Template Generator')  
 
  
 
-uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls', 'csv'])  
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
  
 
@@ -756,8 +756,11 @@ if uploaded_file and case_num and create_doc:
  
 
      
-
-    df = pd.read_excel(uploaded_file) 
+    try:
+       df = pd.read_excel(uploaded_file)
+    except:
+       st.write('Failed to load this file. Make sure it is of type .xlsx or .xls and try again.')
+     
 
  
 
@@ -768,9 +771,10 @@ if uploaded_file and case_num and create_doc:
     st.write(df.head())  # Displaying the first few rows of the DataFrame  
 
  
-
-    docx_file = create_word_document(find_case_data(df, case_num)) 
-
+    try:
+       docx_file = create_word_document(find_case_data(df, case_num)) 
+    except:
+       st.write('Case not found in the spreadsheet. Please try again with a different case number.')
  
 
       
