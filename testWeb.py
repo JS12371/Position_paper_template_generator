@@ -124,7 +124,7 @@ def get_issue_content(issue):
 
     issueformatted = issue.replace(" ", "") 
 
-    filename = f"IssuestoArgs/{issue}.txt"  
+    filename = f"IssuestoArgs/{issueformatted}.txt"  
 
  
 
@@ -196,7 +196,7 @@ def create_word_document(case_data):
 
  
 
-    case_name = case_data['Case Name'].unique() if 'Case Name' in case_data else 'Case Name not found' 
+    case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else 'Case Name not found' 
 
     issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found' 
 
@@ -378,7 +378,18 @@ def create_word_document(case_data):
 
     run.font.name = 'Arial' 
 
- 
+
+
+
+    sub = doc.add_paragraph(f"Submitted by: \n\n<Name>\n{mac_name}\n<Address Line 1>\n<Address Line 2>\n\n")
+
+    sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+    run = sub.runs[0]
+
+    run.font.size = Pt(9.5)
+
+    run.font.name = 'Arial'
 
      
 
