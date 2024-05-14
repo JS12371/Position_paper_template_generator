@@ -124,7 +124,7 @@ def get_issue_content(issue):
 
     issueformatted = issue.replace(" ", "") 
 
-    filename = f"IssuestoArgs/{issueformatted}.txt"  
+    filename = f"{issue}.txt"  
 
  
 
@@ -378,20 +378,23 @@ def create_word_document(case_data):
 
     run.font.name = 'Arial' 
 
+ 
 
+ 
 
+ 
 
-    sub = doc.add_paragraph(f"Submitted by: \n\n<Name>\n{mac_name}\n<Address Line 1>\n<Address Line 2>\n\n")
+    sub = doc.add_paragraph(f"Sumbitted by:\n\n{mac_name}\n<Address>\n<Address line 2>") 
 
-    sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
 
-    run = sub.runs[0]
+    run = sub.runs[0] 
 
-    run.font.size = Pt(9.5)
+    run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial'
+    run.font.name = 'Arial' 
 
-     
+ 
 
  
 
@@ -519,12 +522,6 @@ def create_word_document(case_data):
 
  
 
- 
-
- 
-
- 
-
      
 
     doc.save(f"Case_{case_num}.docx") 
@@ -637,13 +634,35 @@ def create_word_document(case_data):
 
  
 
-    header = doc.add_paragraph(issue_content) 
+    header = doc.add_paragraph(f"Issue 1: {issue_content} \n\n") 
 
     run = header.add_run() 
 
     run.font.size = Pt(11) 
 
     run.font.name = 'Arial' 
+
+ 
+
+    i = 1 
+
+ 
+
+    while i < len(issue): 
+
+        issue_content = get_issue_content(issue[i]) 
+
+        header = doc.add_paragraph(f"Issue {i}: {issue_content} \n\n") 
+
+        run = header.add_run() 
+
+        run.font.size = Pt(11) 
+
+        run.font.name = 'Arial' 
+
+        i += 1 
+
+ 
 
  
 
@@ -669,26 +688,23 @@ def create_word_document(case_data):
 
  
 
-def string_processing(s):
-   if pd.isnull(s) or s == '':
-      return "Not in the spreadsheet"
-   return str(s).replace('"', '')
+def string_processing(s): 
 
+    if pd.isnull(s) or s == '': 
 
+        return "Not in the spreadsheet" 
 
+    return str(s).replace('"', '') 
 
  
 
 def find_case_data(df, case_number): 
 
-    df['Case Num'] = df['Case Num'].map(string_processing)
+    df['Case Num'] = df['Case Num'].map(string_processing) 
 
-    case_data = df[df['Case Num'] == case_number]
+    case_data = df[df['Case Num'] == case_number] 
 
-    case_data = case_data.map(string_processing)
-
-    if case_data:
-       st.write(f'loaded {case_number} data')
+    case_data = case_data.map(string_processing) 
 
     return case_data 
 
@@ -728,7 +744,7 @@ def get_download_link(file, filename):
 
  
 
-st.title('Position Paper Template Generator')  
+st.title('Excel Case Finder')  
 
  
 
@@ -758,12 +774,19 @@ if uploaded_file and case_num and create_doc:
 
  
 
-     
-    try:
-       df = pd.read_excel(uploaded_file)
-    except:
-       st.write('Failed to load this file. Make sure it is of type .xlsx or .xls and try again.')
-     
+    try:  
+
+ 
+
+        # Read the uploaded file  
+
+ 
+
+        df = pd.read_excel(uploaded_file) 
+
+    except: 
+
+        st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
 
  
 
@@ -774,18 +797,24 @@ if uploaded_file and case_num and create_doc:
     st.write(df.head())  # Displaying the first few rows of the DataFrame  
 
  
-    try:
-       docx_file = create_word_document(find_case_data(df, case_num)) 
-       st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
-    except:
-       st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
+    try: 
+
+        docx_file = create_word_document(find_case_data(df, case_num)) 
+
+    except: 
+
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
+
+ 
+
  
 
       
 
  
 
-    
+    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
  
 
