@@ -687,41 +687,153 @@ def create_word_document(case_data):
     return buffer.getvalue()  
 
  
-def string_processing(s):
-    if pd.isnull(s) or s == '':
-        return "Not in the spreadsheet"
-    return str(s).replace('"', '')
 
-def find_case_data(df, case_number):
-    df['Case Num'] = df['Case Num'].map(string_processing)
-    case_data = df[df['Case Num'] == case_number]
-    return case_data
+def string_processing(s): 
 
-def get_download_link(file, filename):
-    b64 = base64.b64encode(file).decode()
-    href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>'
-    return href
+    if pd.isnull(s) or s == '': 
 
-# Streamlit UI Components
-st.title('Excel Case Finder')
-uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])
-case_num = st.text_input('Enter Case Number')
-create_doc = st.button('Create Document')
+        return "Not in the spreadsheet" 
 
-if uploaded_file and case_num and create_doc:
-    try:
-        df = pd.read_excel(uploaded_file)
-        case_data = find_case_data(df, case_num)
-        if case_data.empty:
-            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-        else:
-            docx_file = create_word_document(case_data)
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-    except Exception as e:
-        st.write(f'Failed to process the file or find the case number: {e}')
+    return str(s).replace('"', '') 
 
-if not uploaded_file and create_doc:
-    st.write('Please upload a file')
+ 
 
-if not case_num and create_doc:
-    st.write('Please enter a case number')
+def find_case_data(df, case_number): 
+
+    df['Case Num'] = df['Case Num'].map(string_processing) 
+
+    case_data = df[df['Case Num'] == case_number] 
+
+    case_data = case_data.map(string_processing) 
+
+    return case_data 
+
+   
+
+ 
+
+# Function to convert binary to download link  
+
+ 
+
+def get_download_link(file, filename):  
+
+ 
+
+    b64 = base64.b64encode(file).decode()  
+
+ 
+
+    href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>'  
+
+ 
+
+    return href  
+
+ 
+
+ 
+
+ 
+
+   
+
+ 
+
+# Streamlit UI Components  
+
+ 
+
+st.title('Excel Case Finder')  
+
+ 
+
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
+
+ 
+
+case_num = st.text_input('Enter Case Number') 
+
+ 
+
+create_doc = st.button('Create Document') 
+
+ 
+
+ 
+
+ 
+
+ 
+
+   
+
+ 
+
+if uploaded_file and case_num and create_doc:  
+
+ 
+
+    try:  
+
+ 
+
+        # Read the uploaded file  
+
+ 
+
+        df = pd.read_excel(uploaded_file) 
+
+    except: 
+
+        st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
+
+ 
+
+    # Assuming the DataFrame 'df' is now available for processing  
+
+ 
+
+    st.write(df.head())  # Displaying the first few rows of the DataFrame  
+
+ 
+
+    try: 
+
+        docx_file = create_word_document(find_case_data(df, case_num)) 
+
+    except: 
+
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
+
+ 
+
+ 
+
+      
+
+ 
+
+    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
+
+ 
+
+if not uploaded_file and create_doc: 
+
+    st.write('Please upload a file') 
+
+ 
+
+if not case_num and create_doc: 
+
+    st.write('Please enter a case number') 
+
+ 
+
+  
+
+ 
+
+ 
+
+ 
