@@ -671,11 +671,12 @@ def create_word_document(case_data):
 
 def string_processing(s): 
 
-    if pd.isnull(s) or s == "": 
+    if pd.isnull(s):
+       return 'Not in spreadsheet'
+    else:
+       return s.strip().strip('"')
 
-        return "Not in the spreadsheet" 
 
-    return str(s).replace('"', '') 
 
  
 
@@ -683,10 +684,9 @@ def find_case_data(df, case_number):
 
     df['Case Num'] = df['Case Num'].map(string_processing) 
 
-    case_data = df[df['Case Num'] == case_number] 
+    case_data = df[df['Case Num'] == case_number]
 
-    for case in case_data:
-       case = string_processing(case)
+    case_data = case_data.map(string_processing)
 
     if case_data:
        st.write(f'loaded {case_number} data')
@@ -779,7 +779,6 @@ if uploaded_file and case_num and create_doc:
        docx_file = create_word_document(find_case_data(df, case_num)) 
     except:
        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-       docx_file = create_word_document(None)
  
 
       
