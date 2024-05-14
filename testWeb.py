@@ -685,7 +685,8 @@ def find_case_data(df, case_number):
 
     case_data = df[df['Case Num'] == case_number] 
 
-    case_data = case_data.map(string_processing) 
+    for case in case_data:
+       case = string_processing(case)
 
     if case_data:
        st.write(f'loaded {case_number} data')
@@ -778,7 +779,7 @@ if uploaded_file and case_num and create_doc:
        docx_file = create_word_document(find_case_data(df, case_num)) 
     except:
        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-       docx_file = create_word_document()
+       docx_file = create_word_document(None)
  
 
       
