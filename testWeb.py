@@ -669,12 +669,11 @@ def create_word_document(case_data):
 
  
 
-def string_processing(s): 
+def string_processing(s):
+   if pd.isnull(s) or s == '':
+      return "Not in the spreadsheet"
+   return str(s).replace('"', '')
 
-    if pd.isnull(s):
-       return 'Not in spreadsheet'
-    else:
-       return s.strip().strip('"')
 
 
 
@@ -682,7 +681,7 @@ def string_processing(s):
 
 def find_case_data(df, case_number): 
 
-    case_number = f'"{case_number}"'
+    df['Case Num'] = df['Case Num'].map(string_processing)
 
     case_data = df[df['Case Num'] == case_number]
 
