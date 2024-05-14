@@ -4,8 +4,6 @@ import streamlit as st
 
 import pandas as pd  
 
-import docx
-
  
 
 from docx import Document  
@@ -30,7 +28,15 @@ import base64
 
  
 
-from io import BytesIO  
+from io import BytesIO 
+
+ 
+
+import os 
+
+ 
+
+ 
 
  
 
@@ -108,23 +114,43 @@ def format_date(date):
 
     return f"{month}/{day}/{year}" 
 
+ 
+
 def get_issue_content(issue):  
 
  
 
     # Function to read content from {issue}.txt file  
 
+    issueformatted = issue.replace(" ", "") 
 
-   issueformatted = issue.replace(" ", "")
+    filename = f"{issue}.txt"  
 
-   filename = f"IssuestoArgs/{issueformatted}.txt"  
-   try:  
-       with open(filename, 'r') as file:  
-           content = file.read()  
-       return content  
-   except FileNotFoundError:  
-       return "Issue file not found." 
-     
+ 
+
+    try:  
+
+ 
+
+        with open(filename, 'r') as file:  
+
+ 
+
+            content = file.read()  
+
+ 
+
+        return content  
+
+ 
+
+    except FileNotFoundError:  
+
+ 
+
+        return "Issue file not found."  
+
+ 
 
 def create_word_document(case_data):  
 
@@ -172,7 +198,7 @@ def create_word_document(case_data):
 
     case_name = case_data['Case Name'].unique() if 'Case Name' in case_data else 'Case Name not found' 
 
-    issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found'
+    issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found' 
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
 
@@ -358,7 +384,7 @@ def create_word_document(case_data):
 
  
 
-    sub = doc.add_paragraph(f"\nSubmitted by: \n\n<Name>\n{mac_name}\n<Address Line 1>\n<Address Line 2>\n\n<Phone Number>\n\nand\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
+    sub = doc.add_paragraph(f"and\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
 
@@ -378,7 +404,7 @@ def create_word_document(case_data):
 
     doc.add_page_break() 
 
-    
+     
 
  
 
@@ -414,6 +440,14 @@ def create_word_document(case_data):
 
     cell_left1.text = f"TABLE OF CONTENTS" 
 
+    run = cell_left1.paragraphs[0].runs[0] 
+
+    run.font.size = Pt(11) 
+
+    run.font.name = 'Arial' 
+
+    run.font.bold = True 
+
  
 
     cell_right1 = table1.cell(0,1) 
@@ -421,6 +455,14 @@ def create_word_document(case_data):
  
 
     cell_right1.text = f"PAGE" 
+
+    run = cell_right1.paragraphs[0].runs[0] 
+
+    run.font.size = Pt(11) 
+
+    run.font.name = 'Arial' 
+
+    run.font.bold = True 
 
  
 
@@ -444,7 +486,7 @@ def create_word_document(case_data):
 
  
 
-    cell_left.text = f"I. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII.MAC\'s POSITION" 
+    cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC\'s POSITION" 
 
     run = cell_left.paragraphs[0].runs[0] 
 
@@ -456,10 +498,18 @@ def create_word_document(case_data):
 
     cell_right = table.cell(0,1) 
 
-    cell_right.text = f"1\n\n2\n\n3" 
-    run = cell_right.paragraph[0].runs[0]
-    run.font.size = Pt(11)
-    run.font.name = 'Arial'
+    cell_right.text = "\n1\n\n2\n\n3" 
+
+    run = cell_right.paragraphs[0].runs[0] 
+
+    run.font.size = Pt(11) 
+
+    run.font.name = 'Arial' 
+
+ 
+
+ 
+
  
 
  
@@ -506,7 +556,7 @@ def create_word_document(case_data):
 
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
 
-    
+ 
 
  
 
@@ -548,8 +598,8 @@ def create_word_document(case_data):
 
     run.text = f"\n\nIssue(s): {case_data['Issue'].iloc[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
 
+ 
 
-    
     doc.add_page_break() 
 
  
@@ -583,6 +633,13 @@ def create_word_document(case_data):
     run.font.size = Pt(11) 
 
     run.font.name = 'Arial' 
+
+ 
+
+ 
+
+ 
+
  
 
     # Save the document to a bytes buffer  
@@ -621,8 +678,6 @@ def find_case_data(df, case_number):
 
     return case_data 
 
- 
-
    
 
  
@@ -659,18 +714,23 @@ def get_download_link(file, filename):
 
  
 
-st.title('Excel Position Paper Template Generator')  
+st.title('Excel Case Finder')  
 
  
 
-uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls', 'csv'])  
 
  
 
 case_num = st.text_input('Enter Case Number') 
 
-create_doc = st.button('Create Populated Position Paper Template')
+ 
 
+create_doc = st.button('Create Document') 
+
+ 
+
+ 
 
  
 
@@ -706,16 +766,24 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    # Assuming you have a button and functionality to process and create a document  
+    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
  
 
-    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True) 
+if not uploaded_file and create_doc: 
 
-if not uploaded_file and create_doc:
-    st.write('Please upload a file')
-if not case_num and create_doc:
-    st.write('Please enter a case number')
+    st.write('Please upload a file') 
+
+ 
+
+if not case_num and create_doc: 
+
+    st.write('Please enter a case number') 
+
+ 
+
+  
+
  
 
  
