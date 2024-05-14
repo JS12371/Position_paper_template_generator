@@ -776,6 +776,7 @@ if uploaded_file and case_num and create_doc:
  
     try:
        docx_file = create_word_document(find_case_data(df, case_num)) 
+       st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
     except:
        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
  
@@ -784,7 +785,7 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
+    
 
  
 
