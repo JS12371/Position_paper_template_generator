@@ -124,7 +124,7 @@ def get_issue_content(issue):
 
     issueformatted = issue.replace(" ", "") 
 
-    filename = f"{issue}.txt"  
+    filename = f"IssuestoArgs/{issue}.txt"  
 
  
 
