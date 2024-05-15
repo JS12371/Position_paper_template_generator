@@ -70,10 +70,8 @@ The Board reviewed an individual case on this very issue, in which the Board dis
 C.  Conclusion
 
 In view of the foregoing, the MAC asks that the Board dismiss the case as the providers have failed to identify any additional SSI days. Further, most of the argument put forth by the Group has been foreclosed by Supreme Court precedent Accordingly, the burden of proof, which was upon the providers, has not been met. Therefore, the Board must find that the MAC’s determination was not arbitrary or capricious and did in fact properly adhere to Medicare Law, Regulations & Program Instructions. Thus, the Board should refuse to disturb CMS’s calculations of the Providers’ Medicare fraction for the cost year at issue.
- 
-IV.	LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS
 
-
+IV.	LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS 
 Law:			Social Security Act          
 Sections 1611(c), 1815, 1833, 1861(v)(1)(A), 1886(d)(5)(F)
 42 U.S.C. Sections 402, 1381a, 1382, 1395ww(d)(5)
@@ -93,7 +91,7 @@ Section 412.320
 42 C.F.R., Part 413, Subpart B 
 Sections 413.20, 413.24
 
-Program    		Provider Reimbursement Manual, CMS Pub. 15-1	
+Program    		Provider Reimbursement Manual, CMS Pub. 15-1
 Instructions:		Section 2304
 			Medicare Claims Processing Manual Chapter 1, § 50.1.5
 			HCFA Rulings & Program Memorandums
