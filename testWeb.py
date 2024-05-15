@@ -609,17 +609,7 @@ def create_word_document(case_data):
 
  
 
-    issue_content = get_issue_content(issue[0]) 
-
- 
-
-    header = doc.add_paragraph(f"Issue 1: {issue_content} \n\n") 
-
-    run = header.add_run() 
-
-    run.font.size = Pt(11) 
-
-    run.font.name = 'Arial' 
+    
 
  
 
