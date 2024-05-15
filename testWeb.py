@@ -625,6 +625,7 @@ def create_word_document(case_data):
  
     
     try:
+        i = 1
         if issue == 'Issue not found':
             pass
         else: 
@@ -642,6 +643,7 @@ def create_word_document(case_data):
 
                 i += 1
     except:
+        i = 1
         if issue.any() == 'Issue not found':
             pass
         else: 
