@@ -686,7 +686,10 @@ def find_case_data(df, case_number):
 
     case_data = case_data.map(string_processing) 
 
-    st.write(case_data)
+    try:
+       st.write(case_data)
+    except:
+       st.write("cannot load case data")
 
     return case_data 
 
