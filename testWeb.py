@@ -1,48 +1,22 @@
 import streamlit as st  
 
- 
-
 import pandas as pd  
 
- 
-
 from docx import Document  
-
- 
 
 from docx.oxml import OxmlElement 
 
 from docx.oxml.ns import qn 
 
- 
-
 from docx.shared import Pt, RGBColor  
-
- 
 
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
 
- 
-
 import base64  
-
- 
 
 from io import BytesIO 
 
- 
-
 import os 
-
- 
-
- 
-
- 
-
-   
-
- 
 
 # Function to convert the DataFrame to Word document  
 
@@ -124,7 +98,11 @@ def get_issue_content(issue):
 
     issueformatted = issue.replace(" ", "") 
 
-    filename = f"IssuestoArgs/{issue}.txt"  
+    filename = f"{issue}.txt"  
+
+    st.write(filename)
+
+    
 
  
 
