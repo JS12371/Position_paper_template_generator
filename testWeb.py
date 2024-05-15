@@ -686,6 +686,8 @@ def find_case_data(df, case_number):
 
     case_data = case_data.map(string_processing) 
 
+    st.write(case_data)
+
     return case_data 
 
    
