@@ -621,45 +621,46 @@ def create_word_document(case_data):
 
  
 
-    i = 1 
+    ## ENTER STUFF HERE NOW 
+ 
+    
     try:
-       if issue == 'Issue not found':
-          pass
-       else: 
-          while i < len(issue): 
-
-             issue_content = get_issue_content(issue[i]) 
-
-             header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
-
-             run = header.add_run() 
-
-             run.font.size = Pt(11) 
-
-             run.font.name = 'Arial' 
-
-             i += 1 
-      except:
-         if issue.any() == 'Issue not found':
+        if issue == 'Issue not found':
             pass
-         else: 
+        else: 
             while i < len(issue): 
 
-               issue_content = get_issue_content(issue[i]) 
+                issue_content = get_issue_content(issue[i]) 
 
-               header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+                header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
 
-               run = header.add_run() 
+                run = header.add_run() 
 
-               run.font.size = Pt(11) 
+                run.font.size = Pt(11) 
 
-               run.font.name = 'Arial' 
+                run.font.name = 'Arial' 
 
-               i += 1 
+                i += 1
+    except:
+        if issue.any() == 'Issue not found':
+            pass
+        else: 
+            while i < len(issue): 
+
+                issue_content = get_issue_content(issue[i]) 
+
+                header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+
+                run = header.add_run() 
+
+                run.font.size = Pt(11) 
+
+                run.font.name = 'Arial' 
+
+                i += 1 
      
 
  
-
  
 
  
@@ -822,5 +823,12 @@ if not case_num and create_doc:
  
 
   
+
+ 
+
+
+
+
+
 
  
