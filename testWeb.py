@@ -384,7 +384,7 @@ def create_word_document(case_data):
 
  
 
-    sub = doc.add_paragraph(f"Sumbitted by:\n\n{mac_name}\n<Address>\n<Address line 2>") 
+    sub = doc.add_paragraph(f"Sumbitted by:\n\n<Name>\n{mac_name}\n<Address>\n<Address line 2>") 
 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
 
@@ -604,7 +604,7 @@ def create_word_document(case_data):
 
  
 
-    run.text = f"\n\nIssue(s): {case_data['Issue'].iloc[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
+    run.text = f"\n\nIssue(s): {issue[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
 
  
 
