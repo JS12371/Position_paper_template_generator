@@ -624,7 +624,7 @@ def create_word_document(case_data):
  
 
     i = 1 
-
+ 
     if issue == 'Issue not found':
        pass
     else: 
@@ -763,6 +763,7 @@ if uploaded_file and case_num and create_doc:
  
 
         df = pd.read_excel(uploaded_file) 
+        st.write(df.head())  # Displaying the first few rows of the DataFrame  
 
     except: 
 
@@ -774,17 +775,18 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    st.write(df.head())  # Displaying the first few rows of the DataFrame  
+    
 
  
 
     try: 
 
         docx_file = create_word_document(find_case_data(df, case_num)) 
+        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
     except: 
 
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
+        st.write('Case not found in the spreadsheet. Please try again with a different case number or check the recency of the spreadsheet uploaded.') 
 
  
 
@@ -794,7 +796,7 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
+    
 
  
 
