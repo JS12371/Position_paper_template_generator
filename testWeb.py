@@ -98,9 +98,7 @@ def get_issue_content(issue):
 
     issueformatted = issue.replace(" ", "") 
 
-    filename = f"{issue}.txt"  
-
-    st.write(filename)
+    filename = f"{issueformatted}.txt"  
 
     
 
