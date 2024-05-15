@@ -176,7 +176,7 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found'
 
-    if issue == 'Issue not found':
+    if issue.any() == 'Issue not found':
        issue = case_data['Issue Typ'].unique() if 'Issue Typ' in case_data else 'Issue not found'
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
