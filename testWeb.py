@@ -774,8 +774,8 @@ if uploaded_file and case_num and create_doc:
  
 
     try: 
-
-        docx_file = create_word_document(find_case_data(df, case_num)) 
+        content = find_case_data(df, case_num)
+        docx_file = create_word_document(content) 
 
     except: 
 
