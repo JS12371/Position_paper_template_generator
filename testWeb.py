@@ -98,7 +98,7 @@ def get_issue_content(issue):
 
     issueformatted = issue.replace(" ", "") 
 
-    filename = f"{issueformatted}.txt"  
+    filename = f"IssuestoArgs/{issueformatted}.txt"  
 
     
 
@@ -755,13 +755,6 @@ if uploaded_file and case_num and create_doc:
  
 
     try:  
-
- 
-
-        # Read the uploaded file  
-
- 
-
         df = pd.read_excel(uploaded_file) 
 
     except: 
