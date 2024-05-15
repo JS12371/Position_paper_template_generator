@@ -176,9 +176,7 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found'
 
-    if issue.any() == 'Issue not found':
-       issue = case_data['Issue Typ'].unique() if 'Issue Typ' in case_data else 'Issue not found'
-
+  
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
 
     provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found' 
@@ -624,23 +622,41 @@ def create_word_document(case_data):
  
 
     i = 1 
+    try:
+       if issue == 'Issue not found':
+          pass
+       else: 
+          while i < len(issue): 
 
-    if issue.any() == 'Issue not found':
-       pass
-    else: 
-       while i < len(issue): 
+             issue_content = get_issue_content(issue[i]) 
 
-          issue_content = get_issue_content(issue[i]) 
+             header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
 
-          header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+             run = header.add_run() 
 
-          run = header.add_run() 
+             run.font.size = Pt(11) 
 
-          run.font.size = Pt(11) 
+             run.font.name = 'Arial' 
 
-          run.font.name = 'Arial' 
+             i += 1 
+     except:
+        if issue.any() == 'Issue not found':
+           pass
+        else: 
+           while i < len(issue): 
 
-          i += 1 
+              issue_content = get_issue_content(issue[i]) 
+
+              header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+
+              run = header.add_run() 
+
+              run.font.size = Pt(11) 
+
+              run.font.name = 'Arial' 
+
+              i += 1 
+     
 
  
 
