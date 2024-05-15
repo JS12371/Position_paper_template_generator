@@ -609,7 +609,38 @@ def create_word_document(case_data):
 
  
 
-    
+    issue_content = get_issue_content(issue[0]) 
+
+ 
+
+    header = doc.add_paragraph(f"Issue 1: {issue_content} \n\n") 
+
+    run = header.add_run() 
+
+    run.font.size = Pt(11) 
+
+    run.font.name = 'Arial' 
+
+ 
+
+    i = 1 
+
+    if issue == 'Issue not found':
+       pass
+    else: 
+       while i < len(issue): 
+
+          issue_content = get_issue_content(issue[i]) 
+
+          header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+
+          run = header.add_run() 
+
+          run.font.size = Pt(11) 
+
+          run.font.name = 'Arial' 
+
+          i += 1 
 
  
 
@@ -732,7 +763,6 @@ if uploaded_file and case_num and create_doc:
  
 
         df = pd.read_excel(uploaded_file) 
-        st.write(df.head())  # Displaying the first few rows of the DataFrame  
 
     except: 
 
@@ -744,18 +774,17 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    
+     
 
  
 
     try: 
 
         docx_file = create_word_document(find_case_data(df, case_num)) 
-        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
     except: 
 
-        st.write('Case not found in the spreadsheet. Please try again with a different case number or check the recency of the spreadsheet uploaded.') 
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
 
  
 
@@ -765,7 +794,7 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    
+    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)  
 
  
 
@@ -782,9 +811,5 @@ if not case_num and create_doc:
  
 
   
-
- 
-
- 
 
  
