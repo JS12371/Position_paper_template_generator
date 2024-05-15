@@ -776,13 +776,10 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    try: 
-        content = find_case_data(df, case_num)
-        docx_file = create_word_document(content) 
+    
+    content = find_case_data(df, case_num)
+    docx_file = create_word_document(content)
 
-    except: 
-
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
 
  
 
