@@ -106,6 +106,7 @@ def get_issue_content(issue):
 def create_word_document(case_data):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
+
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
 
     run = header.runs[0] 
@@ -647,16 +648,6 @@ def find_case_data(df, case_number):
 
     return case_data 
 
-def get_issue_content(df):
-    try:
-        issues = df['Issue'].unique()
-    except:
-        issues = df['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in df else ['Issue not found']
-    issue_content = []
-    for issue in issues:
-        issue_content.append(get_issue_content(issue))
-    return issue_content
-
    
 
  
@@ -722,15 +713,6 @@ create_doc = st.button('Create Document')
 if uploaded_file and case_num and create_doc:  
     try:  
         df = pd.read_excel(uploaded_file) 
-        issues = get_issue_content(df)
-        relaventIssues = []
-        for i in issues:
-            st.checkbox(i)
-        while not st.button('Create Document'):
-            if st.checkbox(i):
-                relaventIssues.append(i)
-            
-        st.write(relaventIssues)
         try:
             docx_file = create_word_document(find_case_data(df, case_num))
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
