@@ -179,11 +179,15 @@ def create_word_document(case_data):
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma 
+        relaventIssues = []
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
             st.write(issue)
             for i in issue:
-               st.checkbox(i)
+                st.checkbox(i)
+                if st.checkbox(i):
+                    relaventIssues.append(i)
+
         except:
             pass
     else:
@@ -769,6 +773,8 @@ create_doc = st.button('Create Document')
  
 
 if uploaded_file and case_num and create_doc:  
+
+    st.write("Select Below the Issues you would like to include the argument for: ")
 
  
 
