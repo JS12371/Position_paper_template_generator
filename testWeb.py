@@ -644,7 +644,8 @@ def create_word_document(case_data):
     if issue[0] == 'Issue not found':
         pass
     else: 
-        while i < len(issue): 
+        while i < len(issue):
+            st.write(issue[i])
 
             issue_content = get_issue_content(issue[i]) 
 
