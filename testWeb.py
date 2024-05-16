@@ -182,12 +182,7 @@ def create_word_document(case_data):
         issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
         st.write(issue)
     else:
-        ##need to check each issue to see if it has a value submitted for 'Transferred to Case #'
-        ## if so, then we need to get the value from the 'Transferred to Case #' column and put that in for the corresponding issue
-        if 'Transferred to Case #' in case_data:
-            for i in range(len(issue)):
-                if case_data['Transferred to Case #'].iloc[i] != '':
-                    issue[i] = f"Transferred to case {case_data['Transferred to Case #'].iloc[i]}"
+        pass
 
     
 
@@ -637,15 +632,14 @@ def create_word_document(case_data):
 
  
 
-    i = 0
+    i = 0 
 
     
 
     if issue[0] == 'Issue not found':
         pass
     else: 
-        while i < len(issue):
-            st.write(issue[i])
+        while i < len(issue): 
 
             issue_content = get_issue_content(issue[i]) 
 
@@ -790,13 +784,13 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    try: 
+     
 
-        docx_file = create_word_document(find_case_data(df, case_num)) 
+    docx_file = create_word_document(find_case_data(df, case_num)) 
 
-    except: 
+     
 
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
+    st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
 
  
 
