@@ -176,10 +176,12 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'].unique() if 'Issue' in case_data else ['Issue not found']
 
+    relaventIssues = []
+
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma 
-        relaventIssues = []
+        boolean = False
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
             st.write(issue)
@@ -188,8 +190,18 @@ def create_word_document(case_data):
                     st.checkbox(i)
                     if st.checkbox(i):
                         relaventIssues.append(i)
+            boolean = True
         except:
             pass
+
+        if boolean:
+            issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
+            st.write(issue)
+            while not st.button("Confirm"):
+                for i in issue:
+                    st.checkbox(i)
+                    if st.checkbox(i):
+                        relaventIssues.append(i)
     else:
         pass
 
