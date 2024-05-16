@@ -127,19 +127,8 @@ def get_issue_content(issue):
         return "Issue file not found."  
     
 
-def manage_issue_checkbox(issues):
-    relaventIssues = []
-    for i in issues:
-        st.checkbox(i)
-    while not st.checkbox('Done'):
-        if st.checkbox(i):
-            relaventIssues.append(i)
-    return relaventIssues
-    
 
- 
-
-def create_word_document(case_data):  
+def create_word_document(case_data, relaventIssues):  
 
  
 
@@ -198,15 +187,10 @@ def create_word_document(case_data):
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
             st.write(issue)
-            type = '020'
         except:
             pass
     else:
         pass
-
-    if type == '020':
-        relaventIssues = manage_issue_checkbox(issue)
-        st.write(relaventIssues)
 
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
@@ -640,29 +624,18 @@ def create_word_document(case_data):
  
 
     issue_content = get_issue_content(issue[0]) 
-
- 
-
-    header = doc.add_paragraph(f"Issue 1: {issue_content} \n\n") 
-
-    run = header.add_run() 
-
-    run.font.size = Pt(11) 
-
-    run.font.name = 'Arial' 
-
  
 
     i = 0 
 
     
 
-    if issue[0] == 'Issue not found':
+    if relaventIssues[0] == 'Issue not found':
         pass
     else: 
-        while i < len(issue): 
+        while i < len(relaventIssues): 
 
-            issue_content = get_issue_content(issue[i]) 
+            issue_content = get_issue_content(relaventIssues[i]) 
 
             header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
 
@@ -721,6 +694,18 @@ def find_case_data(df, case_number):
     case_data = case_data.map(string_processing) 
 
     return case_data 
+
+
+
+def get_issue_to_checkbox(df):
+    issues = df['Issue Typ'].unique()
+    relaventIssues = []
+    while not st.button('Submit'):
+        for i in issues:
+            st.checkbox(i)
+            if st.checkbox(i):
+                relaventIssues.append(i)
+    return relaventIssues
 
    
 
@@ -788,13 +773,16 @@ if uploaded_file and case_num and create_doc:
     try:  
         df = pd.read_excel(uploaded_file) 
         try:
-            docx_file = create_word_document(find_case_data(df, case_num))
+            relaventIssues = get_issue_to_checkbox(df)
+            docx_file = create_word_document(find_case_data(df, case_num), relaventIssues)
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         except:
-            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-
+            try:
+                docx_file = create_word_document(find_case_data(df, case_num))
+                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+            except:
+                st.write('Case not found in the spreadsheet. Please try again with a different case number.')
     except: 
-
         st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
 
 
