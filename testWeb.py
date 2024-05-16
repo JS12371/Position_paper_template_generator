@@ -176,7 +176,12 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'].unique() if 'Issue' in case_data else 'Issue not found'
 
-  
+    if issue == 'Issue not found':
+        #split the 'Issue Typ' by comma 
+        issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else 'Issue not found'
+        st.write(issue)
+        
+
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
 
     provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found' 
@@ -621,48 +626,27 @@ def create_word_document(case_data):
 
  
 
-    ## ENTER STUFF HERE NOW 
- 
-    
-    try:
-        i = 1
-        if issue == 'Issue not found':
-            pass
-        else: 
-            while i < len(issue): 
+    i = 1 
 
-                issue_content = get_issue_content(issue[i]) 
+    if issue == 'Issue not found':
+       pass
+    else: 
+       while i < len(issue): 
 
-                header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+          issue_content = get_issue_content(issue[i]) 
 
-                run = header.add_run() 
+          header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
 
-                run.font.size = Pt(11) 
+          run = header.add_run() 
 
-                run.font.name = 'Arial' 
+          run.font.size = Pt(11) 
 
-                i += 1
-    except:
-        i = 1
-        if issue.any() == 'Issue not found':
-            pass
-        else: 
-            while i < len(issue): 
+          run.font.name = 'Arial' 
 
-                issue_content = get_issue_content(issue[i]) 
-
-                header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
-
-                run = header.add_run() 
-
-                run.font.size = Pt(11) 
-
-                run.font.name = 'Arial' 
-
-                i += 1 
-     
+          i += 1 
 
  
+
  
 
  
@@ -704,11 +688,6 @@ def find_case_data(df, case_number):
     case_data = df[df['Case Num'] == case_number] 
 
     case_data = case_data.map(string_processing) 
-
-    try:
-       st.write(case_data)
-    except:
-       st.write("cannot load case data")
 
     return case_data 
 
@@ -795,10 +774,13 @@ if uploaded_file and case_num and create_doc:
 
  
 
-    
-    content = find_case_data(df, case_num)
-    docx_file = create_word_document(content)
+    try: 
 
+        docx_file = create_word_document(find_case_data(df, case_num)) 
+
+    except: 
+
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
 
  
 
@@ -825,12 +807,5 @@ if not case_num and create_doc:
  
 
   
-
- 
-
-
-
-
-
 
  
