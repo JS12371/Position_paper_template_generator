@@ -183,13 +183,11 @@ def create_word_document(case_data):
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
             st.write(issue)
-            for i in issue:
-                st.checkbox(i)
-            st.button("Confirm")
-
-            while not st.button("Submit"):
-                if st.checkbox(i):
-                    relaventIssues.append(i)
+            while not st.button("Confirm"):
+                for i in issue:
+                    st.checkbox(i)
+                    if st.checkbox(i):
+                        relaventIssues.append(i)
         except:
             pass
     else:
