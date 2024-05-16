@@ -182,6 +182,7 @@ def create_word_document(case_data):
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
             st.write(issue)
+            st.checkbox(issue)
         except:
             pass
     else:
