@@ -185,9 +185,11 @@ def create_word_document(case_data):
             st.write(issue)
             for i in issue:
                 st.checkbox(i)
+            st.button("Confirm")
+
+            while not st.button("Submit"):
                 if st.checkbox(i):
                     relaventIssues.append(i)
-
         except:
             pass
     else:
@@ -773,11 +775,6 @@ create_doc = st.button('Create Document')
  
 
 if uploaded_file and case_num and create_doc:  
-
-    st.write("Select Below the Issues you would like to include the argument for: ")
-
- 
-
     try:  
         df = pd.read_excel(uploaded_file) 
         try:
