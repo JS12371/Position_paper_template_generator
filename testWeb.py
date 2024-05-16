@@ -125,6 +125,17 @@ def get_issue_content(issue):
  
 
         return "Issue file not found."  
+    
+
+def manage_issue_checkbox(issues):
+    relaventIssues = []
+    for i in issues:
+        st.checkbox(i)
+    while not st.checkbox('Done'):
+        if st.checkbox(i):
+            relaventIssues.append(i)
+    return relaventIssues
+    
 
  
 
@@ -178,6 +189,8 @@ def create_word_document(case_data):
 
     relaventIssues = []
 
+    type = None
+
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma 
@@ -185,28 +198,15 @@ def create_word_document(case_data):
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
             st.write(issue)
-            while not st.button("Confirm"):
-                for i in issue:
-                    st.checkbox(i)
-                    if st.checkbox(i):
-                        relaventIssues.append(i)
-            boolean = True
+            type = '020'
         except:
             pass
-
-        if boolean:
-            issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
-            st.write(issue)
-            while not st.button("Confirm"):
-                for i in issue:
-                    st.checkbox(i)
-                    if st.checkbox(i):
-                        relaventIssues.append(i)
     else:
         pass
 
-    
-
+    if type == '020':
+        relaventIssues = manage_issue_checkbox(issue)
+        st.write(relaventIssues)
 
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
