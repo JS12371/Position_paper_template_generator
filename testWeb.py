@@ -179,8 +179,11 @@ def create_word_document(case_data):
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma 
-        issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
-        st.write(issue)
+        try:
+            issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
+            st.write(issue)
+        except:
+            pass
     else:
         pass
 
@@ -784,13 +787,13 @@ if uploaded_file and case_num and create_doc:
 
  
 
-     
+    try: 
 
-    docx_file = create_word_document(find_case_data(df, case_num)) 
+        docx_file = create_word_document(find_case_data(df, case_num)) 
 
-     
+    except: 
 
-    st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.') 
 
  
 
