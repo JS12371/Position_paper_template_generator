@@ -637,7 +637,7 @@ def create_word_document(case_data):
 
  
 
-    i = 1 
+    i = 0
 
     
 
