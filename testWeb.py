@@ -128,7 +128,7 @@ def get_issue_content(issue):
     
 
 
-def create_word_document(case_data, relaventIssues):  
+def create_word_document(case_data):  
 
  
 
@@ -625,17 +625,14 @@ def create_word_document(case_data, relaventIssues):
 
     issue_content = get_issue_content(issue[0]) 
  
-
     i = 0 
 
-    
-
-    if relaventIssues[0] == 'Issue not found':
+    if issue[0] == 'Issue not found':
         pass
     else: 
-        while i < len(relaventIssues): 
+        while i < len(issue): 
 
-            issue_content = get_issue_content(relaventIssues[i]) 
+            issue_content = get_issue_content(issue[i]) 
 
             header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
 
@@ -646,17 +643,6 @@ def create_word_document(case_data, relaventIssues):
             run.font.name = 'Arial' 
 
             i += 1 
-
-
-
- 
-
- 
-
- 
-
- 
-
  
 
     # Save the document to a bytes buffer  
@@ -694,18 +680,6 @@ def find_case_data(df, case_number):
     case_data = case_data.map(string_processing) 
 
     return case_data 
-
-
-
-def get_issue_to_checkbox(df):
-    issues = df['Issue Typ'].unique()
-    relaventIssues = []
-    while not st.button('Submit'):
-        for i in issues:
-            st.checkbox(i)
-            if st.checkbox(i):
-                relaventIssues.append(i)
-    return relaventIssues
 
    
 
@@ -773,16 +747,13 @@ if uploaded_file and case_num and create_doc:
     try:  
         df = pd.read_excel(uploaded_file) 
         try:
-            relaventIssues = get_issue_to_checkbox(df)
-            docx_file = create_word_document(find_case_data(df, case_num), relaventIssues)
+            docx_file = create_word_document(find_case_data(df, case_num))
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         except:
-            try:
-                docx_file = create_word_document(find_case_data(df, case_num))
-                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-            except:
-                st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
     except: 
+
         st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
 
 
