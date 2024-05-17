@@ -143,21 +143,6 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'].unique() if 'Issue' in case_data else ['Issue not found']
 
-    ##find the non null values in 'Transferred to Case #' column
-    ##find the non "" values in 'Transferred to Case #' column
-
-    transferred_to_case = case_data['Transferred to Case #'].unique() if 'Transferred to Case #' in case_data else ['']
-
-    try:
-        i = 0
-        while i < len(issue):
-            if transferred_to_case[i] != '':
-                issue[i] = f'Transferred to case: {transferred_to_case[i]}'
-    except:
-        pass
-        
-
-
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
         boolean = False
