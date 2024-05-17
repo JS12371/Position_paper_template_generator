@@ -153,7 +153,7 @@ def create_word_document(case_data):
 
     while i < len(transferred_to_case):
         if transferred_to_case[i] != 'Not in the spreadsheet':
-            issue[i] = transferred_to_case[i]
+            issue[i] = f"Transferred to case {transferred_to_case[i]}"
         i = i + 1
 
     st.write(issue)
