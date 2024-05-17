@@ -622,6 +622,8 @@ def find_case_data(df, case_number):
 
     case_data = case_data.map(string_processing) 
 
+    st.write(case_data['Issue'])
+
     return case_data 
 
    
@@ -645,12 +647,6 @@ def get_download_link(file, filename):
  
 
     return href  
-
-def get_issue_buttons(df):
-    issues = df['Issue'].unique()
-    for issue in issues:
-        st.checkbox(issue)
-    
 
  
 
@@ -686,14 +682,15 @@ create_doc = st.button('Create Document')
 if uploaded_file and case_num and create_doc:  
     try:  
         df = pd.read_excel(uploaded_file)
-        get_issue_buttons(df)
-        Done = st.button('Finished Selecting Issues')
-        if Done:
-            try:
-                docx_file = create_word_document(find_case_data(df, case_num))
-                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-            except:
-                st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+        try:
+            case_data = find_case_data(df, case_num)
+            indices = st.text_input('Enter the indices of the arguments you\'d like to include with a comma and space between indices(0, 1, 2, etc.)')
+            indices = indices.split(', ')
+            st.write(indices)
+            docx_file = create_word_document(case_data)
+            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        except:
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
     except: 
 
