@@ -143,8 +143,6 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
-    transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['Transferred to Case not found']
-
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
         boolean = False
