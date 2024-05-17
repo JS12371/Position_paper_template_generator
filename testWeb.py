@@ -145,7 +145,7 @@ def create_word_document(case_data):
 
     st.write(issue)
 
-    transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
+    transferred_to_case = case_data['Transferred to Case #'].unique() if 'Transferred to Case #' in case_data else ['transferred to case not found']
 
     st.write(transferred_to_case)
 
