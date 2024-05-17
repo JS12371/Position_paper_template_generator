@@ -147,6 +147,8 @@ def create_word_document(case_data):
 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
 
+    st.write(transferred_to_case)
+
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
