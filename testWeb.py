@@ -145,7 +145,7 @@ def create_word_document(case_data):
 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['Transferred to Case not found']
 
-    if transferred_to_case[0] == Transferred to Case not found':
+    if transferred_to_case[0] == 'Transferred to Case not found':
         pass
     else:
         for i in issue:
