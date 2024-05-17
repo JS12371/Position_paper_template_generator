@@ -674,6 +674,8 @@ case_num = st.text_input('Enter Case Number')
 
 create_doc = st.button('Create Document') 
 
+indices = None
+
  
 
 if uploaded_file and case_num and create_doc:  
@@ -682,9 +684,11 @@ if uploaded_file and case_num and create_doc:
         try:
             case_data = find_case_data(df, case_num)
             indices = st.text_input("Enter the indices of the arguments you'd like to include in the paper (ex. 1, 2, 3)")
-            indices = indices.split(", ")
-            docx_file = create_word_document(case_data)
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+            if indices:
+                indices = indices.split(", ")
+                st.write(indices)
+                docx_file = create_word_document(case_data)
+                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         except:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
