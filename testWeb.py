@@ -143,16 +143,6 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'].unique() if 'Issue' in case_data else ['Issue not found']
 
-    transferred_to_case = case_data['Transferred to Case #'].dropna() if 'Transferred to Case #' in case_data else 'Transferred to Case not found'
-
-
-    try:
-        for i in issue:
-            if transferred_to_case[i] != "":
-                i = f'Transferred to case {transferred_to_case[i]}'
-    except:
-        pass
-
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
         boolean = False
