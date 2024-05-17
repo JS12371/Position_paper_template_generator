@@ -147,11 +147,25 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
-    st.write(issue)
+    i = 0
+    issueformatted = []
+    while i < len(issue):
+        for iss in issue:
+            issueformatted[i] = iss
+            i = i + 1
+
+    st.write(issueformatted)
 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
 
-    st.write(transferred_to_case)
+    i = 0 
+    transferredformatted = []
+    while i < len(transferred_to_case):
+        for trans in transferred_to_case:
+            transferredformatted[i] = trans
+            i = i + 1
+         
+    st.write(transferredformatted)
 
     i = 0
     if len(issue) != 1:
