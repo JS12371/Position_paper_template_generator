@@ -145,8 +145,8 @@ def create_word_document(case_data):
     issue = []
     if 'Transferred to Case #' in case_data:
         for case in case_data:
-            if case["Transferred to Case #"] != '':
-                case['Issue'] = f'Issue transferred to case {case["Transferred to Case #"]}'
+            if case['Transferred to Case #'] != '':
+                case['Issue'] = f'Issue transferred to case {case['Transferred to Case #']}'
     
     issue = case_data['Issue'].iloc[0] if 'Issue' in case_data else 'Issue not found'
 
