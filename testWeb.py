@@ -155,6 +155,8 @@ def create_word_document(case_data):
         if transferred_to_case[i] != 'Not in the spreadsheet':
             issue[i] = transferred_to_case[i]
 
+    st.write(issue)
+
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
