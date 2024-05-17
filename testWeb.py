@@ -622,8 +622,6 @@ def find_case_data(df, case_number):
 
     case_data = case_data.map(string_processing) 
 
-    st.write(case_data['Issue'])
-
     return case_data 
 
    
@@ -675,16 +673,14 @@ case_num = st.text_input('Enter Case Number')
  
 
 create_doc = st.button('Create Document') 
-   
 
  
 
 if uploaded_file and case_num and create_doc:  
     try:  
-        df = pd.read_excel(uploaded_file)
+        df = pd.read_excel(uploaded_file) 
         try:
-            case_data = find_case_data(df, case_num)
-            docx_file = create_word_document(case_data)
+            docx_file = create_word_document(find_case_data(df, case_num))
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         except:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
