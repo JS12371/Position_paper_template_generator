@@ -646,44 +646,18 @@ def get_download_link(file, filename):
 
     return href  
 
- 
-
- 
-
- 
-
-   
-
- 
 
 # Streamlit UI Components  
 
- 
-
 st.title('Excel Case Finder')  
-
- 
 
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
- 
-
 case_num = st.text_input('Enter Case Number') 
-
-
-indices = st.text_input("Enter indices of the arguments you'd like the paper to include: ")
-
 
 create_doc = st.button('Create Document') 
 
 
-if uploaded_file and case_num:
-    case_data = find_case_data(df, case_num)
-    temp = indices
-    indices = indices.split(", ")
-    if indices == "":
-        indices = [temp]
-    st.write(indices)
 
 if uploaded_file and case_num and create_doc:  
     try:  
