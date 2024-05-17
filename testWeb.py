@@ -684,9 +684,6 @@ if uploaded_file and case_num and create_doc:
         df = pd.read_excel(uploaded_file)
         try:
             case_data = find_case_data(df, case_num)
-            indices = st.text_input('Enter the indices of the arguments you\'d like to include with a comma and space between indices(0, 1, 2, etc.)')
-            indices = indices.split(', ')
-            st.write(indices)
             docx_file = create_word_document(case_data)
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         except:
