@@ -114,8 +114,8 @@ def create_word_document(case_data):
     run.font.size = Pt(9.5) 
 
     run.font.name = 'Arial' 
-
  
+    
 
     p = header._p 
 
@@ -149,10 +149,12 @@ def create_word_document(case_data):
 
 
     if issue[0] == 'Issue not found':
-        #split the 'Issue Typ' by comma 
+        #split the 'Issue Typ' by comma
         boolean = False
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
+            ## to do: check if the issue was moved to a different case
+            ##if so, dont include it in the issues list
             st.write(issue)
         except:
             pass
@@ -370,21 +372,13 @@ def create_word_document(case_data):
 
  
 
-     
-
- 
-
     ## SECOND PAGE NOW 
 
     doc.add_page_break() 
 
-     
-
- 
 
     table1 = doc.add_table(rows = 1, cols = 2) 
 
- 
 
     for cell in table1.columns[0].cells: 
 
@@ -422,10 +416,8 @@ def create_word_document(case_data):
 
     run.font.bold = True 
 
- 
 
     cell_right1 = table1.cell(0,1) 
-
  
 
     cell_right1.text = f"PAGE" 
@@ -437,14 +429,10 @@ def create_word_document(case_data):
     run.font.name = 'Arial' 
 
     run.font.bold = True 
-
- 
-
  
 
     table = doc.add_table(rows = 1, cols = 2) 
 
- 
 
     for cell in table.columns[0].cells: 
 
@@ -454,11 +442,9 @@ def create_word_document(case_data):
 
         cell.width = Pt(40) 
 
- 
 
     cell_left = table.cell(0,0) 
 
- 
 
     cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC\'s POSITION" 
 
@@ -480,20 +466,15 @@ def create_word_document(case_data):
 
     run.font.name = 'Arial' 
 
- 
-
-     
 
     doc.save(f"Case_{case_num}.docx") 
 
- 
 
     ##NEW PAGE 
 
     doc.add_page_break() 
 
  
-
     header = doc.add_paragraph('I. INTRODUCTION') 
 
     ##font bold and size color 
@@ -510,7 +491,6 @@ def create_word_document(case_data):
 
     run.font.color.rgb = RGBColor(0,0,0) 
 
- 
 
     header = doc.add_paragraph() 
 
@@ -520,12 +500,8 @@ def create_word_document(case_data):
 
     run.font.name = 'Arial' 
 
- 
 
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
-
- 
-
  
 
     ##NEW PAGE 
@@ -670,6 +646,12 @@ def get_download_link(file, filename):
 
     return href  
 
+def get_issue_buttons(df):
+    issues = df['Issue'].unique()
+    for issue in issues:
+        st.checkbox(issue)
+    
+
  
 
  
@@ -697,27 +679,21 @@ case_num = st.text_input('Enter Case Number')
  
 
 create_doc = st.button('Create Document') 
-
- 
-
- 
-
- 
-
- 
-
    
 
  
 
 if uploaded_file and case_num and create_doc:  
     try:  
-        df = pd.read_excel(uploaded_file) 
-        try:
-            docx_file = create_word_document(find_case_data(df, case_num))
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-        except:
-            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+        df = pd.read_excel(uploaded_file)
+        get_issue_buttons(df)
+        Done = st.button('Finished Selecting Issues')
+        if Done:
+            try:
+                docx_file = create_word_document(find_case_data(df, case_num))
+                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+            except:
+                st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
     except: 
 
