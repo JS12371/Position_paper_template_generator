@@ -99,7 +99,11 @@ def get_issue_content(issue):
             content = file.read()  
         return content  
     except FileNotFoundError:  
-        return "Issue file not found."  
+        ## if issue starts with 'Transfer', then it is a transferred issue
+        if issue.startswith('Transfer'):
+            return f"{issue}"
+        else:
+            return "Issue file not found."    
     
 
 
