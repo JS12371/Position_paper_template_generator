@@ -175,6 +175,8 @@ def create_word_document(case_data):
                 issue[i] = f"Transferred to case {transferred_to_case[i]}"
             i = i + 1
 
+    issue = issue.unique()
+
     st.write(issue)
 
 
