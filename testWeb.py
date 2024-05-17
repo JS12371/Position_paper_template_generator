@@ -147,7 +147,7 @@ def create_word_document(case_data):
 
     i = 0
 
-    if transferred_to_case[0] != 'Transferred to Case not found']
+    if transferred_to_case[0] != 'Transferred to Case not found'
         while i < len(issue):
             if transferred_to_case[i] != '':
                 issue[i] = transferred_to_case[i]
