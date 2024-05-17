@@ -141,7 +141,14 @@ def create_word_document(case_data):
 
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else 'Case Name not found' 
  
-    issue = case_data['Issue'].unique() if 'Issue' in case_data else ['Issue not found']
+
+    issue = []
+    if 'Transferred to Case #' in case_data:
+        for case in case_data:
+            if case["Transferred to Case #"] != '':
+                case['Issue'] = f'Issue transferred to case {case["Transferred to Case #"]}'
+    
+    issue = case_data['Issue'].iloc[0] if 'Issue' in case_data else 'Issue not found'
 
 
     if issue[0] == 'Issue not found':
