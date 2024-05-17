@@ -141,7 +141,8 @@ def create_word_document(case_data):
 
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else 'Case Name not found' 
  
-    issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
+    issue = case_data['Issue'].unique() if 'Issue' in case_data else ['Issue not found']
+
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
@@ -676,11 +677,11 @@ create_doc = st.button('Create Document')
 if uploaded_file and case_num and create_doc:  
     try:  
         df = pd.read_excel(uploaded_file) 
-        
-        docx_file = create_word_document(find_case_data(df, case_num))
-        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-        
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+        try:
+            docx_file = create_word_document(find_case_data(df, case_num))
+            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        except:
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
     except: 
 
