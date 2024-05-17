@@ -151,6 +151,7 @@ def create_word_document(case_data):
         while i < len(issue):
             if transferred_to_case[i] != '':
                 issue[i] = transferred_to_case[i]
+            i = i + 1
 
 
  
