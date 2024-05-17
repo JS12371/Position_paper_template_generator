@@ -141,11 +141,18 @@ def create_word_document(case_data):
 
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else 'Case Name not found' 
  
-    issue = case_data['Issue'].unique() if 'Issue' in case_data else ['Issue not found']
+    issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
-    relaventIssues = []
+    transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else 'Transferred to Case not found'
 
-    type = None
+    try:
+        i = 0
+        while i < len(issue):
+            if transferred_to_case[i] != '':
+                issue[i] = f'Transferred to case: {transferred_to_case[i]}'
+    except:
+        pass
+        
 
 
     if issue[0] == 'Issue not found':
@@ -195,6 +202,8 @@ def create_word_document(case_data):
     mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
 
     mac_name = mac_num_to_name(mac_num) 
+
+    
 
  
 
@@ -646,25 +655,41 @@ def get_download_link(file, filename):
 
     return href  
 
+ 
+
+ 
+
+ 
+
+   
+
+ 
 
 # Streamlit UI Components  
 
+ 
+
 st.title('Excel Case Finder')  
+
+ 
 
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
+ 
+
 case_num = st.text_input('Enter Case Number') 
+
+ 
 
 create_doc = st.button('Create Document') 
 
-
+ 
 
 if uploaded_file and case_num and create_doc:  
     try:  
         df = pd.read_excel(uploaded_file) 
         try:
-            case_data = find_case_data(df, case_num)
-            docx_file = create_word_document(case_data)
+            docx_file = create_word_document(find_case_data(df, case_num))
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         except:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
