@@ -153,17 +153,20 @@ def create_word_document(case_data):
 
 
     issue = tempissue
- 
+    
     st.write(issue)
 
- 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
+ 
+    temptransferred_to_case = []
+    for i in transferred_to_case:
+        temptransferred_to_case.append(i)
+    
+    transferred_to_case = temptransferred_to_case
 
-    tempcase = []
-    for i in fransferred_to_case:
-        tempcase.append(i)
-    transferred_to_case = tempcase
+
     st.write(transferred_to_case)
+
 
     i = 0
     if len(issue) != 1:
