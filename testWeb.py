@@ -571,11 +571,12 @@ def create_word_document(case_data):
     run.font.name = 'Arial' 
 
      
-
+    
  
     for issues in issue:
-        for adj in adj_no:
-            run.text = f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj}\n\nApproximate Reimbursement Amount: N/A"
+        if len(adj_no) > 1:
+            adj_no = 'Various'
+        header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no[0]}\n\nApproximate Reimbursement Amount: N/A")
 
  
 
@@ -741,3 +742,4 @@ if not case_num and create_doc:
   
 
  
+
