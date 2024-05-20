@@ -200,7 +200,7 @@ def create_word_document(case_data):
 
     if len(provider_num_array) > 1: 
 
-        provider_numbers = 'Various' 
+        provider_numbers = "Various"
 
     else: 
 
@@ -214,7 +214,7 @@ def create_word_document(case_data):
 
     if len(provider_name_array) > 1: 
 
-        provider_names = 'Various' 
+        provider_names = "Various"
 
     else: 
 
@@ -575,7 +575,7 @@ def create_word_document(case_data):
  
     for issues in issue:
         if len(adj_no) > 1:
-            adj_no = 'Various'
+            adj_no = "Various"
         header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no[0]}\n\nApproximate Reimbursement Amount: N/A")
 
  
