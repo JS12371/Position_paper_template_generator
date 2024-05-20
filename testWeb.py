@@ -117,7 +117,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
  
     
 
@@ -286,7 +286,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -304,7 +304,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -316,7 +316,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -364,7 +364,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -380,7 +380,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -394,7 +394,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(9.5) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -426,7 +426,7 @@ def create_word_document(case_data):
 
                 run.font.size = Pt(11) 
 
-                run.font.name = 'Arial' 
+                run.font.name = 'Cambria (Body)' 
 
                 run.font.bold = True 
 
@@ -438,7 +438,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -452,7 +452,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
  
@@ -478,7 +478,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -490,7 +490,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
 
     doc.save(f"Case_{case_num}.docx") 
@@ -511,7 +511,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -524,7 +524,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
 
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
@@ -546,7 +546,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -560,7 +560,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
      
     
@@ -586,7 +586,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Arial' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -611,7 +611,7 @@ def create_word_document(case_data):
 
             run.font.size = Pt(11) 
 
-            run.font.name = 'Arial' 
+            run.font.name = 'Cambria (Body)' 
 
             i += 1 
  
