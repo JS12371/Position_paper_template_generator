@@ -141,8 +141,10 @@ def create_word_document(case_data):
 
     pPr.append(pBdr) 
 
- 
 
+ 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
+ 
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else 'Case Name not found' 
  
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
@@ -159,6 +161,8 @@ def create_word_document(case_data):
     temptransferred_to_case = []
     for i in transferred_to_case:
         temptransferred_to_case.append(i)
+
+    ##remove the 'Transferred to case #' entries from the list if the case_num ends with 'G' or 'C'
     
     transferred_to_case = temptransferred_to_case
 
@@ -171,6 +175,7 @@ def create_word_document(case_data):
                 issue[i] = f"Transferred to case {transferred_to_case[i]}"
             i = i + 1
 
+
     issue = list(dict.fromkeys(issue))
 
 
@@ -182,8 +187,6 @@ def create_word_document(case_data):
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
         except:
             pass
-    else:
-        pass
 
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
@@ -568,7 +571,7 @@ def create_word_document(case_data):
     for issues in issue:
         if len(adj_no) > 1:
             adj_no = "Various"
-        header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no[0]}\n\nApproximate Reimbursement Amount: N/A")
+        header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
 
  
 
@@ -601,19 +604,35 @@ def create_word_document(case_data):
     if issue[0] == 'Issue not found':
         pass
     else: 
-        while i < len(issue): 
+        if case_num[-1] == 'G' or case_num[-1] == 'C':
+            if issue[0].startswith('Transfer'):
+                issue_content = issue[1]
+            else:
+                issue_content = get_issue_content[issue[0]]
 
-            issue_content = get_issue_content(issue[i]) 
+            header = doc.add_paragraph(f"Issue: {issue_content} \n\n")
 
-            header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+            run = header.add_run()
 
-            run = header.add_run() 
+            run.font.size = Pt(11)
 
-            run.font.size = Pt(11) 
+            run.font.name = 'Cambria (Body)'
 
-            run.font.name = 'Cambria (Body)' 
+        else:
 
-            i += 1 
+            while i < len(issue): 
+
+                issue_content = get_issue_content(issue[i]) 
+
+                header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+
+                run = header.add_run() 
+
+                run.font.size = Pt(11) 
+
+                run.font.name = 'Cambria (Body)' 
+
+                i += 1 
  
 
     # Save the document to a bytes buffer  
@@ -643,6 +662,9 @@ def string_processing(s):
  
 
 def find_case_data(df, case_number): 
+
+    ##make all letters in case number uppercase
+    case_number = case_number.upper()
 
     df['Case Num'] = df['Case Num'].map(string_processing) 
 
