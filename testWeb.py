@@ -188,6 +188,13 @@ def create_word_document(case_data):
         except:
             pass
 
+    if case_num.endswith('G') or case_num.endswith('C'):
+        ##so we know its a group case
+        ## need to remove the transferred values
+        for issues in issue:
+            if issues.startswith("Transfer"):
+                issue.removeindex(issues)
+
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
 
@@ -313,7 +320,7 @@ def create_word_document(case_data):
 
     cell_right = table.cell(0,2) 
 
-    cell_right.text = f"\n\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
+    cell_right.text = f"\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
 
     run = cell_right.paragraphs[0].runs[0] 
 
@@ -530,7 +537,7 @@ def create_word_document(case_data):
     run.font.name = 'Cambria (Body)' 
 
 
-    run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
+    run.text = f"\n\nCase Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
  
 
     ##NEW PAGE 
@@ -566,12 +573,14 @@ def create_word_document(case_data):
     run.font.name = 'Cambria (Body)' 
 
      
-    
- 
+    i = 1
+    if case_num.endswith('G') or case_num.endswith('C'):
+        header = doc.add_paragraph(f"\n\nIssue: {issues}\n\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
     for issues in issue:
         if len(adj_no) > 1:
             adj_no = "Various"
-        header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
+        header = doc.add_paragraph(f"\n\nIssue {i}: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
+        i = i + 1
 
  
 
