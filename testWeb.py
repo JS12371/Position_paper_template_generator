@@ -585,7 +585,7 @@ def create_word_document(case_data):
 
  
 
-    header = doc.add_paragraph('III. MAC\'S POSITION') 
+    header = doc.add_paragraph('III. MAC\'S POSITION\n') 
 
  
 
