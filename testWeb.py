@@ -153,8 +153,6 @@ def create_word_document(case_data):
 
 
     issue = tempissue
-    
-    st.write(issue)
 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
  
@@ -164,8 +162,6 @@ def create_word_document(case_data):
     
     transferred_to_case = temptransferred_to_case
 
-
-    st.write(transferred_to_case)
 
 
     i = 0
@@ -177,7 +173,6 @@ def create_word_document(case_data):
 
     issue = list(dict.fromkeys(issue))
 
-    st.write(issue)
 
 
     if issue[0] == 'Issue not found':
@@ -185,9 +180,6 @@ def create_word_document(case_data):
         boolean = False
         try:
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
-            ## to do: check if the issue was moved to a different case
-            ##if so, dont include it in the issues list
-            st.write(issue)
         except:
             pass
     else:
