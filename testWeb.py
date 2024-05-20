@@ -569,14 +569,15 @@ def create_word_document(case_data):
     i = 1
     if case_num.endswith('G') or case_num.endswith('C'):
         if issue[0].startswith("Transfer"):
-            header = doc.add_paragraph(f"\n\nIssue: {issue[1]}\n\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
+            header = doc.add_paragraph(f"\n\nIssue: {issue[1]}\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
         else:
-            header = doc.add_paragraph(f"\n\nIssue: {issue[0]}\n\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
-    for issues in issue:
-        if len(adj_no) > 1:
-            adj_no = "Various"
-        header = doc.add_paragraph(f"\n\nIssue {i}: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
-        i = i + 1
+            header = doc.add_paragraph(f"\n\nIssue: {issue[0]}\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
+    else:
+        for issues in issue:
+            if len(adj_no) > 1:
+                adj_no = "Various"
+            header = doc.add_paragraph(f"\n\nIssue {i}: {issues}\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
+            i = i + 1
 
  
 
