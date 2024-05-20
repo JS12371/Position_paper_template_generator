@@ -188,13 +188,6 @@ def create_word_document(case_data):
         except:
             pass
 
-    if case_num.endswith('G') or case_num.endswith('C'):
-        ##so we know its a group case
-        ## need to remove the transferred values
-        for issues in issue:
-            if issues.startswith("Transfer"):
-                issue.removeindex(issues)
-
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
 
@@ -575,7 +568,10 @@ def create_word_document(case_data):
      
     i = 1
     if case_num.endswith('G') or case_num.endswith('C'):
-        header = doc.add_paragraph(f"\n\nIssue: {issues}\n\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
+        if issue[0].startswith("Transfer"):
+            header = doc.add_paragraph(f"\n\nIssue: {issue[1]}\n\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
+        else:
+            header = doc.add_paragraph(f"\n\nIssue: {issue[0]}\n\nAdjustment No(s): Various\n\nApproximate Reimbursement Amount: N/A")
     for issues in issue:
         if len(adj_no) > 1:
             adj_no = "Various"
