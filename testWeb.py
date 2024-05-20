@@ -573,8 +573,9 @@ def create_word_document(case_data):
      
 
  
-
-    run.text = f"\n\nIssue(s): {issue[0]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A" 
+    for issues in issue:
+        for adj in adj_no:
+            run.text = f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj}\n\nApproximate Reimbursement Amount: N/A"
 
  
 
