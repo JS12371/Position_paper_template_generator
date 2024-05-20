@@ -1,0 +1,329 @@
+:  Whether the Provider’s Allied Health Pharmacy Residency Program (PRP) meets the requirements for pass-through cost-based reimbursement.
+A.   Facts
+In reviewing the Pharmacy Residency Program (PRP) cost and statistics, the MAC determined the Provider does not meet the requirements for this program to be allowable paramedical education cost to be reimbursed as a pass-through payment. In audit adjustment number 1, the MAC revised the answer to “No” on Worksheet S-2, Part I, Line 60.00, stating the education program does not meet the criteria under 42 C.F.R. § 413.85. The MAC adjusted to reclassify the cost and statistics from cost center 23.00—Paramed. Ed. Program-Pharmacy Residency to cost center 15.00—Pharmacy, in audit adjustment number 9.  In adjustment number 18, the MAC adjusted to remove the Nursing and Allied Health Managed Care Payment as the hospital does not qualify for reasonable cost payment for its paramedical education program in the current period. See Exhibit C-2 for an excerpt of the audit adjustment report that includes audit adjustment numbers 1, 9, and 18. 
+
+The MAC’s audit workpapers L-D1 and L-D2 documenting these adjustments are included as Exhibit C-3. The MAC’s summary of its review of the PRP is documented on workpaper L-D1. The MAC’s workpaper L-D2, supporting its disallowance of the Managed Care Payment, can be found on page 38 of Exhibit C-3. 
+
+As noted on page 2 of workpaper L-D1 (Exhibit C-3), the adjustments were “made due to FY2015 audit determination that Pharmacy Program is Not provider operated. See 2015 audit workpapers on L-D1-9.”  The 2015 audit workpaper EI-3, included in the FY 2014 audit as workpaper L-D1-9, can be found at Exhibit C-4. As stated on page 2 of Exhibit C-4, “[s]ince the payroll is centralized at the home office, it is determined that the provider is not the legal operator of the program. The hospital is not paying the costs if it is coming from the home office.” Exhibit C-5 is an excerpt of workpaper L-D1-2. On page 3 of Exhibit C-5 is a page from the Payroll Register of the Home Office, Scripps Health. It shows the salaries and benefits for the PRP Director are recorded by the home office. The proposed audit adjustments were in accordance with Medicare Regulations 42 C.F.R. § 413.85 and CMS Pub. 15-1, Section 404 (Exhibits C-9 and C-8).  
+
+The MAC determined the Provider’s PRP does not meet the requirements to be allowable paramedical education cost to be reimbursed as pass-through payment, as the Provider does not have full direct control of the administration of this PRP in the Scripps Health System. 
+
+As stated on pages 3 and 4 of the Provider’s Final Position Paper (FPP): 
+Scripps Health Corp. (“Scripps Health”) is a California non-profit, public benefit corporation that owns four hospitals in San Diego, California, including the Hospital.  All four hospitals are owned and operated directly by the same legal entity, Scripps Health, under Tax ID Number 95-1684089. …
+
+Additionally, Scripps Health has a home office, Scripps Health Administrative Services (“SHAS”), which is also a part of Scripps Health under Tax ID Number: 95-1684089, and is the administrative function of Scripps Health which supports all of its other operating units, including the Hospital (Exhibit P-5).  All hospitals, including the Hospital, and SHAS are different components within the same corporation, Scripps Health.
+(Emphasis added.)
+
+The Provider’s FPP continues on page 4 to state: 
+There is one general ledger system for all of Scripps Health.  Payroll and Accounts Payable are posted directly to each hospital’s expense and other general ledger accounts as part of the general ledger system by the hospital.  …  At the request of the manager of the PRP program, the ministerial function of paying program payroll and other program expenses is performed by SHAS, but these expenses are recorded as direct Hospital expenses of the PRP program.
+(Emphasis added.)
+
+The Provider’s Exhibit P-28 documents the reclassification of cost for Scripps Mercy PRP Director. The Payroll Register of the Home Office, Scripps Health, shows the salaries and benefits for the PRP Director are recorded by the home office (page 3 of MAC FPP Exhibit C-5). The MAC asserts the Provider’s use of one general ledger system for all of Scripps Health confirms the MAC’s findings the Provider does not have full direct control of the administration of the PRP in the Scripps Health System. The MAC asserts the proposed audit adjustments are in accordance with Medicare Regulations 42 C.F.R. § 413.85 and CMS Pub. 15-1, Section 404 (Exhibits C-8 and C-9).
+
+The Provider contends that the program in question does meet the criteria for pass-through payment. It contends its PRP is approved by the appropriate authority, and the related cost is eligible for additional payments under the Medicare program law, regulations and program instructions. The Provider discusses five main points regarding its assertion that pass-through payments should be allowed for its Allied Health Education program in its Final Position Paper (FPP): 
+1.	The Hospital operated the PRP in accordance with 42 C.F.R. § 413.85(f) and its Home Office’s administrative services do not bar pass-through treatment.
+2.	There is no “evidence to the contrary” that the Hospital is not the operator of the PRP, therefore it is in accordance with 42 C.F.R. § 413.85(f)(2).
+3.	The denial of pass-through payment for the PRP is inconsistent with Congress’s statutory scheme and intent of excluding allied health program costs from the IPPS’s  fixed, predetermined rate per discharge methodology. 
+4.	The Hospital did not have fair notice in 2014 of CMS’s interpretation of 42 C.F.R. § 413.85.
+5.	CMS did not adopt its interpretation of the regulation using Notice-and-Comment rulemaking.
+
+Background of Medicare Nursing School and Allied Health Education Program Cost Reimbursement
+
+From its inception in 1966, until 1983, Medicare paid for covered hospital inpatient services on the basis of "reasonable cost." Section 1861(v)(1)(A) of the Act defines "reasonable costs" as "the cost actually incurred," less any costs "unnecessary in the efficient delivery of needed health services." While Section 1861(v)(1)(A) does not prescribe specific procedures for calculating reasonable cost, it authorizes the Secretary to promulgate regulations setting forth the methods to determine reasonable cost and the items to be included in reimbursable services.
+
+In addition, Medicare historically has paid a share of the net costs of "approved medical education activities" under the reasonable cost provisions. The regulations at 42 C.F.R. § 413.85(c) (Exhibit C-9) define approved educational activities as:
+…formally organized or planned programs of study of the type that: 
+(1) Are operated by providers as specified in paragraph (f) of this section; 
+(2) Enhance the quality of health care at the provider; and 
+(3) Meet the requirements of paragraph (e) of this section for State licensure or accreditation.
+
+The approved educational activities include approved training programs for physicians, nurses and certain paramedical health professionals. Under the reasonable cost system, the allowable costs of the activities included: trainee stipends, compensation of teachers and other direct and indirect costs of the activities as determined under Medicare cost finding principles.
+
+Medicare has consistently recognized programs operated by a provider, or jointly by a group of providers, as an allowable cost of the provider. As explained in the September 22, 1992 Federal Register, at pages 43661 – 43662, the Provider Reimbursement Manual (PRM) has stated since 1975 that an approved nursing or paramedical education program must be operated by a provider. Specifically, Section 404.2 stated in 1975 that: 
+However, it is not intended that Medicare should be responsible for expenditures by a provider in subsidizing such programs that are operated by other organizations. Under Medicare principles of reimbursement, an approved nursing or paramedical education program must be operated by a provider (or jointly by a group of providers) for Medicare to recognize the costs of the program as allowable costs of the provider(s).    (See Exhibit C-10, pages 3 and 4.)
+
+Notably, the term "provider of services" means a hospital, critical access hospital, skilled nursing facility, comprehensive outpatient rehabilitation facility home health agency, or hospice program (Section 1861(u) of the Social Security Act (Act)). To be eligible for Medicare payments, an entity must be a "provider" with a provider agreement (42 U.S.C. §1395cc(a)(1)). Consequently, when CMS refers to a program jointly operated by a group of providers it is referring to a program operated by entities that meet the definition of a provider under the Act.
+
+In 1982, Congress modified the Medicare program to provide hospitals with better incentives to render services more efficiently. Pursuant to the Tax Equity and Fiscal Responsibility Act of 1982 (TEFRA), Congress amended the Act by imposing a ceiling on the rate-of-increase of inpatient operating costs recoverable by a hospital. Payments made pursuant to the TEFRA ceiling on the rate-of-increase are determined based upon the target amount which is derived from the hospital's allowable net Medicare operating costs in the hospital's base year. However, under § 1886(a)(4), approved medical education costs were excluded from the definition of inpatient operating costs for purposes of the TEFRA base year and, thus, were not included in the hospital's TEFRA base year for purposes of determining the hospital's target amount.
+
+In 1983, Section 1886(d) of the Act was amended to establish the prospective payment system (PPS) for reimbursement of inpatient hospital services furnished to Medicare beneficiaries. Under PPS, providers are reimbursed their inpatient operating costs based on prospectively determined national and regional rates for each patient discharge, rather than on the basis of reasonable operating costs.
+
+Under §§1886(a)(4) and (d)(1)(A) of the Act, the costs of approved medical education activities were specifically excluded from the definition of "inpatient operating costs" and, thus, were not included in the PPS hospital-specific, regional, or national payment rates or in the target amount for hospitals not subject to PPS. Instead, payment for approved medical education activities costs were separately identified and "pass-through," i.e., paid on a reasonable cost basis. Under PPS, all other costs that can be identified and categorized as costs of educational programs and activities are considered to be part of normal operating costs covered by the per case payments made under the PPS for hospitals subject to that system. This approach was similar to the treatment that these costs had received since 1979 for purposes of the cost limits.
+
+The regulation implementing PPS at 42 C.F.R. § 412.113(b) (Exhibit C-11) provides that the costs of "approved education activities," including training programs for nurses and paramedical (allied health) professionals, will be paid on a reasonable cost basis, as defined in 42 C.F.R. § 413.85 (Exhibit C-9). In conjunction with the implementation of PPS, the regulations at 42 C.F.R. § 413.85 were amended. The regulation at 42 C.F.R. § 413.85 sets forth the applicable principles for reimbursing the reasonable cost of educational activities under the Medicare program, and explicitly defines the types of approved educational activities which are within the scope of these reimbursement principles.
+
+The regulation at 42 C.F.R. § 413.85(h) lists several types of activities which CMS does not recognize as within the scope of approved educational activities. These activities are reimbursed on the inpatient side as normal operating costs and, thus, where applicable, through a provider's diagnosis-related group (DRG) payments, rather than as a pass-through cost.  Specific to the facts in this case, 42 C.F.R. § 413.85(h)(6) excludes clinical training of students enrolled in an approved education program not operated by the provider. (See Exhibit C-9.)
+
+In an effort to clarify the circumstances under which the costs of approved educational activities would be paid on a reasonable cost basis, and thus, eligible for pass-through, HCFA (currently CMS) explained in the January 3, 1984 Federal Register, Final Rule, entitled "Medicare Program; Prospective Payment for Medicare Inpatient Hospital Services," that:
+We believe that only the costs of those approved medical education programs operated directly by a hospital be excluded from the prospective payment system. If a program is operated by another institution, such as a nearby college or university, if [it] must be noted that by far the majority of the costs of that program are borne by that other institution, and not by the hospital. While it is true that the hospital may incur some costs associated with its provision of clinical training to students enrolled in a nearby institution, the hospital also gains in return.... We do not believe that this type of relationship was what Congress intended when it provided for a pass-through of the costs of approved medical education programs. Rather we believe that Congress was concerned with those programs that a hospital operated itself, and for which it incurs substantial direct costs. 
+
+We are revising 42 C.F.R. §405.421(d)(6) [now 42 C.F.R. §413.85(h)(6)] to clarify that the costs of clinical training for students enrolled in programs, other than at the hospital, are normal operating costs."  (Emphasis added.)   49 FR 267 (Jan. 3, 1984).  (See Exhibit C-12, page 2.)
+
+Therefore, since October 1, 1983, only the costs of programs operated directly by a hospital are paid on a reasonable cost basis and excluded from PPS. Other allowable costs are reimbursed as normal operating costs.
+
+CMS responded to a 1989 congressional directive, which instructed regulations to be issued by July 1, 1990 to clarify the criteria for reasonable cost reimbursement of nursing and allied health education costs, by issuing a proposed rule in 57 FR 43659 – 43673 (Sept. 22, 1992) (Exhibit C-10).  CMS proposed the following five criteria that a nursing or allied health education program would have to meet to be considered provider-operated:
+•	The provider must incur the costs associated with the training, for example, the cost for books, supplies, and faculty salaries.
+•	The provider must directly control the program curriculum, that is, the provider must determine the requirements to be met for graduation.  In meeting this requirement, a provider may enter into an agreement with a college or university to provide the basic academic course requirements leading to a degree, diploma, or other certificate, while the provider is directly responsible for providing the courses relating to the theory and practice of the nursing or allied health profession that are required for the degree, diploma, or certificate awarded at completion of the program.
+•	The provider must control the administrative duties relating to the program.  These duties include the collection of tuition, maintaining payroll records for the teaching staff, and being responsible for the day-to-day operation of the entire training program. 
+•	The provider must employ the faculty.
+•	The provider must provide and control both classroom instruction and clinical training.
+57 FR 43669-43670 (Sept. 22, 1992).  (See Exhibit C-10, pages 11 – 12.)
+
+This proposed rule was made final in 66 FR 3358 – 3376 (Jan. 12, 2001) (Exhibit C-13).  This final rule restated that in order for a hospital to receive pass through payment for the nursing and allied health education costs it must meet the criteria outlined above.  CMS provided further discussion and guidance about reimbursement for Nursing and Allied Health Education Programs in the August 1, 2003 Federal Register, specifically in 68 FR 45423 – 45434 (Aug. 1, 2003). (See Exhibit C-14.)
+
+CMS recently published on August 17, 2018, a clarification of its reasonable cost payment policies for Nursing and Allied Health Education Programs. (See Exhibit C-15.) A comment pertinent to this case states:
+It is a reality that many previously provider-operated programs are no longer compliant with all provider-operated criteria at §413.85(f)(1), and should not be receiving Medicare pass-through payments.  We stress that in all cases, the burden of proof is on the hospital to demonstrate that its program is meeting the 5 criteria listed at §413.85(f)(1) for provider-operated status. 
+(Exhibit C-15, page 3.)
+
+Additional Medicare + Choice Nursing and Allied Health Education Payments
+
+As explained above, in adjustment number 18 (Exhibit C-2), the MAC adjusted to remove the Nursing and Allied Health Managed Care Payment as the hospital does not qualify for reasonable cost payment for its paramedical education program in the current period. The MAC’s workpaper L-D2, supporting its disallowance of the Managed Care Payment, can be found on page 38 of Exhibit C-3. 
+
+The MAC asserts the Provider does not meet the qualifying conditions to receive additional Medicare + Choice Nursing and Allied Health Education payments in accordance to 42 C.F.R. § 413.87(c) (Exhibit C-22), which states in part:
+(c) Qualifying conditions for payment. 
+(1) For portions of cost reporting periods occurring on or after January 1, 2000 and before January 1, 2001, a hospital that operates and receives payment for a nursing or allied health education program under § 413.85 may receive an additional payment amount associated with Medicare + Choice utilization. The hospital may receive the additional payment amount, which is calculated in accordance with the provisions of paragraph (d) of this section, if both of the conditions specified in paragraphs (c)(1)(i) and (c)(1)(ii) of this section are met.
+(i) The hospital must have received Medicare reasonable cost payment for an approved nursing or allied health education program under § 413.85 in its cost reporting period(s) ending in the fiscal year that is 2 years prior to the current calendar year. (For example, if the current year is calendar year 2000, the fiscal year that is 2 years prior to calendar year 2000 is FY 1998.) For a hospital that first establishes a nursing or allied health education program after FY 1998 and receives reasonable cost payment for the program as specified under § 413.85 after FY 1998, the hospital is eligible to receive an additional payment amount in a calendar year that is 2 years after the respective fiscal year so long as the hospital also meets the condition under paragraph (c)(1(ii) of this section. 
+(ii) The hospital must be receiving reasonable cost payment for an approved nursing or allied health education program under § 413.85 in the current calendar year.
+(2) For portions of cost reporting periods occurring on or after January 1, 2001, in addition to meeting the conditions specified in paragraphs (c)(1)(i) and (c)(1)(ii) of this section, the hospital must have had a Medicare + Choice utilization greater than zero in its cost reporting period(s) ending in the fiscal year that is 2 years prior to the current calendar year.
+(Emphasis added.)
+
+B.   Argument
+1.  The MAC determination that the Provider’s Allied Health Pharmacy Residency Program (PRP) does not qualify as a provider operated approved educational program eligible to receive pass-through cost-based reimbursement was proper.
+
+The Provider contends the PRP meets all the requirements of a provider operated approved educational program. 
+
+The MAC contends the Provider’s PRP has not been documented as meeting all of the requirements of a provider operated approved educational program. The MAC asserts that the MAC adjustments were in accordance with 42 C.F.R. §§ 413.85, 413.20 and 413.24 (Exhibits C-9, C-6, and C-7, respectively). It is the Provider’s responsibility to provide adequate documentation to support its claim.  
+
+Medicare regulation 42 C.F.R. § 413.20 (Exhibit C-6) states:
+Financial data and reports.
+
+(a) General. The principles of cost reimbursement require that providers maintain sufficient financial records and statistical data for proper determination of costs payable under the program.
+
+Medicare regulation 42 C.F.R. § 413.24(c) (Exhibit C-7) states:
+Adequate cost information must be obtained from the provider's records to support payments made for services furnished to beneficiaries. The requirement of adequacy of data implies that the data be accurate and in sufficient detail to accomplish the purposes for which it is intended.
+
+It is the MAC’s position that the Provider’s PRP does not meet the requirements of 42 C.F.R § 413.85(d) or (f). One of the payment components for an approved educational activity, as stated in 42 C.F.R. § 413.85(d)(1)(i)(B) (Exhibit C-9, page 2):
+Meets the criteria specified in paragraph (f) of this section for identification as an operator of an approved education program.
+
+The regulation at 42 C.F.R. § 413.85(f) states (Exhibit C-9, page 3):
+(f) Criteria for identifying programs operated by a provider. 
+(1) Except as provided in paragraph (f)(2) of this section, for cost reporting periods beginning on or after October 1, 1983, in order to be considered the operator of an approved nursing or allied health education program, a provider must meet all of the following requirements:
+(i)  Directly incur the training costs.
+(ii)  Have direct control of the program curriculum. (A provider may enter into an agreement with an educational institution to furnish basic academic courses required for completion of the program, but the provider must provide all of the courses relating to the theory and practice of the nursing or allied health profession involved that are required for the degree, diploma, or certificate awarded at the completion of the program.) 
+(iii)  Control the administration of the program, including collection of tuition (where applicable), control the maintenance of payroll records of teaching staff or students, or both (where applicable), and be responsible for day-to-day program operation. (A provider may contract with another entity to perform some administrative functions, but the provider must maintain control over all aspects of the contracted functions.)  
+(iv)  Employ the teaching staff.
+(v)  Provide and control both classroom instruction and clinical training (where classroom instruction is a requirement for program completion), subject to the parenthetical sentence in paragraph (f)(1)(ii) of this section. 
+(2) Absent evidence to the contrary, the provider that issues the degree, diploma, or other certificate upon successful completion of an approved education program is assumed to meet all of the criteria set forth in paragraph (f)(1) of this section and to be the operator of the program.  
+
+The payroll is a centralized function of the Provider’s Home Office, Scripps Health / Scripps Health Administrative Services. The paychecks are processed at the home office level. Therefore, the Hospital does not directly incur the Pharmacy Residency Program costs. An excerpt from the Home Office Payroll Register can be found on page 3 of Exhibit C-5. This clearly shows that Scripps Health processes the payroll for the Pharmacy department, including the Pharmacy Residency Program. The MAC confirmed this in its audit of the Provider’s Fiscal Year 2015 Medicare Cost Report. (See Exhibit C-4.) 
+
+On page 5 of the Provider’s FPP, it discusses the role of the Director of Pharmacy Clinical Services and Residency Programs. The position description referred to at Exhibit P-10 states this position reports to “Admin Director of Pharmacy and System Director Pharmacoeconomics and Clinical Operations.” The words “System Director” in the second position’s title indicates that this is a Home Office position. Thus, the Director of the PRP in contention reports in part directly to a Home Office position.
+
+Exhibit P-11 is one of the Exhibits the Provider references to support its position. Exhibit P-11 is a Sample Resident Welcome Letter from the Director. The MAC notes this letter welcomes the resident “to Scripps Health ASHP-accredited Postgraduate year 1 (PGY1) Pharmacy Residency Program based at Scripps Mercy Hospital San Diego Campus, CA.” It goes on to list commitments from Scripps Health, as well as the commitments the resident makes to Scripps Health.  The MAC notes this document confirms the Home Office, Scripps Health, is responsible for employee screening and background checks, salary, and benefits.
+
+The MAC points to 68 FR 45433 (Aug. 1, 2003) that discusses related-entity rules, stating: 
+… for purposes of nursing or allied health education payment under § 413.85, it is not sufficient for a program to be operated by a related entity. Rather, the “related entity” principles do not apply under the agency’s nursing and allied health education payment policy because, as indicated in previous rulemakings, that policy requires that a program be directly operated by the provider itself. Requiring direct operation of a program by the provider ensures that, under § 413.85(c), costs borne by related organizations (that is, the community) are not redistributed to the hospital and claimed as a pass-through under the Medicare program.   (See Exhibit C-14, page 11.)
+
+Since a home office is not considered to be a provider, it is not appropriate to allocate home office costs to the hospital for a Nursing and Allied Health program pass-through reimbursement. The MAC contends that costs allocated from the Home Office are not appropriate for pass-through cost reimbursement of nursing and allied health education activities according to 42 C.F.R. § 413.85(d)(2)(ii). This section states:
+A provider’s total allowable educational costs are those costs incurred by the provider for trainee stipends, compensation of teachers, and other costs of the activities as determined under the Medicare cost-finding principles in § 413.24. These costs do not include patient care costs, costs incurred by a related organization, or costs that constitute a redistribution of costs from an educational institution to a provider or costs that have been or are currently being provided through community support.    (Emphasis added.)   (See Exhibit C-9, page 2.)
+
+The Provider acknowledges the Home Office, Scripps Health, processes the payroll as it is “more economical for the payroll function to be centralized.” (See Exhibit C-4, page 7.)  While the MAC recognizes that the way the Home Office has chosen to organize and operate the PRP may be cost effective and promote efficiency, the MAC disagrees with the Provider’s contentions that it meets the requirements of 42 C.F.R. § 413.85(f). This is contrary to the requirements of 42 C.F.R. § 413.85(f).
+
+In its second argument (Provider’s FPP, pages 30 and 31), the Provider contends the MAC is not considering 42 C.F.R. § 413.85(f)(2). The Provider’s position is since the Hospital issues the certificates of graduation it should be assumed to meet all of the criteria set forth in 42 C.F.R. § 413.85(f)(1). The MAC asserts that CMS published Change Request 10552 on August 17, 2018, as a clarification of its reasonable cost payment policies for Nursing and Allied Health Education Programs (Exhibit C-15).  This CMS clarification states, in relevant part:
+We stress that in all cases, the burden of proof is on the hospital to demonstrate that its program is meeting the 5 criteria listed at §413.85(f)(1) for provider-operated status. The MAC shall not assume that because the hospital issues the degree, diploma, or certificate of completion, either individually, or jointly with a college/university, that that is sufficient to meet the provider-operated criteria. It is not sufficient. As §413.85(f)(2) states, “Absent evidence to the contrary, the provider that issues the degree, diploma, or other certificate upon successful completion of an approved education program is assumed to meet all of the criteria set forth in paragraph (f)(1) of this section and to be the operator of the program” (emphasis added). This bolded language, “absent evidence to the contrary,” indicates that the hospital must first demonstrate that there is no evidence showing that the program is not provider-operated. 
+(Exhibit C-15, page 3.)
+
+This clarification states that a MAC shall not assume that a hospital meets the provider-operated criteria because it issues the certificate.  The MAC must ensure that all of the criteria set forth in 42 C.F.R. §413.85(f)(1) are met, even if the certificate is issued by the Provider.  
+
+The MAC properly determined that the Provider’s Allied Health Pharmacy Residency Program (PRP) does not qualify as a provider operated approved educational program eligible to receive pass-through cost-based reimbursement.
+
+2.  The Provider’s Assertions that the Home Office should be considered as part of the Provider, in determining whether the Allied Health Program is Provider-Operated, are not convincing.
+
+Beginning on page 18 of the Provider’s FPP, the Provider discusses management of the Payroll and the role of the Home Office. As stated in 42 C.F.R. § 413.85(f)(1)(iii) (Exhibit C-9, page 3), the Provider must “control the maintenance of payroll records of teaching staff or students, or both (where applicable).”  The Provider asserts “[f]inancial management of the Hospital is at the hospital-level.” (See Provider’s FPP, page 20.)  On page 20 of the Provider’s FPP, it goes on to explain, “[e]xpenses are posted directly to each hospital’s expense and other general ledger accounts as part of Scripps Health’s computerized, general ledger system.” 
+
+Beginning on page 24 of the Provider’s FPP, the Provider argues that it meets the “regulation referring to “Payroll” at 42 C.F.R. § 413.85(f)(1)(iii)” which states:
+a provider must meet all of the following requirements: …
+
+(iii) control the maintenance of payroll records of teaching staff or students, or
+both (where applicable).
+
+The Provider asserts “the regulations do not require that the provider control all payroll functions.” (See Provider’s FPP, page 25.) The Provider goes on to explain its position that the Home Office’s administrative serves are not a bar to pass-through treatment. (See Provider’s FPP, pages 26 through 30.) On page 30 of the Provider’s FPP, the Provider asserts: 
+The relevant regulation, 42 CFR § 413.85(f)(1)(iii), specifies that hospitals need not perform all administrative functions independently and indicates in a parenthetical that: “(A provider may contract with another entity to perform some administrative functions, but the provider must maintain control over all aspects of the contracted functions.).”  
+
+The MAC reads the parenthetical out of the regulation.  This sentence in the regulation allows providers to obtain administrative services from other sources and makes it clear that all administrative services need not be furnished by the provider itself.  
+
+The MAC finds the Provider’s argument without merit.  The MAC has not ignored the parenthetical in this regulation.  Rather, the MAC argues that this portion of the regulation actually supports the MAC’s position.  It clearly states, “the provider must maintain control over all aspects of the contracted functions”.  The MAC asserts the Home Office controls these administrative functions for the Provider.  The Provider does not maintain control.  The Provider has not demonstrated that it maintains control, as required.
+
+The Provider’s FPP includes discussion of the Provider’s assertion that Home Office cost allocations are allowable Provider costs. On page 22 of the Provider’s FPP, it states:
+The expenses incurred by SHAS in connection with payroll are at most an indirect cost of the PRP.  They are clearly not a direct cost of training.  Nothing in 42 C.F.R. § 413.85 prohibits a provider from having such indirect expenses incurred by a provider’s home office in order for the provider to be reimbursed for its costs of an approved allied health education program.
+
+The Provider states on page 30 of its FPP:
+In sum, there is no basis to treat a home office providing some administrative functions to an allied health program as a disqualifying factor.  There is no evidence to support the view that the provision of some administrative functions by a home office (which reduces costs and promotes efficiency), disqualifies a provider from obtaining pass-through treatment of its costs of its allied health program.
+
+The Provider references Medical University Hospital Authority (MUHA) vs. Becerra (D.S.C.) (March 29, 2021) (Provider FPP, pages 22 through 24) in support of its position. The Provider claims the home office allocations are comparable to the organization of MUHA. 
+
+The MAC notes that this United States District Court decision in the District of South Carolina Charleston Division does not set legal precedence for these Providers located in California. The MAC is obligated to continue to follow Medicare regulations and guidelines.  Further, the MAC asserts that it is not clear the organizational relationship between MUHA and the Medical University of South Carolina (MUSC) College of Pharmacy is similar to the Provider’s relationship with its home office. As described in the decision, MUHA provided the clinical training portion of the Pharmacy Residency Program and reimbursed the MUSC College of Pharmacy for the training costs of the residency programs through intra-division or intra-component transfers.  The organizational relationship in the instant case differs from the MUHA case. The MUHA case involves a related party educational institution, whereas the instant case involves a related party Home Office. 
+
+The MAC’s determination is consistent with Medicare regulations and guidance. The MAC’s determination is supported by the Board’s decision in Medical University Hospital Authority vs. Palmetto GBA, PRRB Decision 2019-D15, February 19, 2019 (MUHA). (Exhibit C-24).  The Board states on pages 6 and 7 of its decision:
+The Board disagrees that MUHA is the operator of the PRP because MUHA did not meet all the criteria in 42 C.F.R. § 413.85(f)(1).  Specifically, MUHA did not directly incur the costs of the PRP program.  Rather, MUSC directly incurred the PRP costs and MUHA reimbursed MUSC for those costs. The Board finds the Provider’s argument on this issue to be unpersuasive as reimbursement of costs to another entity, even a related entity, is not the equivalent of directly incurring the costs. 
+
+The Board’s finding is mandated by the plain language of § 413.85(f)(1)(i) – the claimed costs must be “directly incur[red],” not merely incurred, before a provider may be considered to be the operator of the training program.  CMS’s interpretation of the regulation has been clear from its promulgation: “With respect to educational costs . . . our policy has been that the provider, rather than the related organization, must directly incur the costs on its books and records before the costs will be recognized for Medicare payment purposes. Otherwise, the principle that Medicare payment for medical education costs should not result in a redistribution of costs from the educational institution to the provider would be violated.” [Citing 66 Fed. Reg. 3357, 3367 (Jan. 12, 2001) (emphasis added).] 
+
+The Board focuses on the requirement to directly incur the costs. The Board goes on to state on pages 7 and 8:
+The Board also finds that MUHA did not control the administration of the PRP, as required under § 413.85(f)(1)(iii).  Specifically the Affiliation Agreement states that the Dean of the School of Pharmacy, a MUSC employee, has ultimate control of the PRP, while MUHA exercises day to day control.
+
+In summary, as a result of its finding that MUHA does not directly incur the cost of the PHP or have ultimate control of the PHP, the Board concludes, based on 42 C.F.R. § 413.85(f)(1), that MUHA does not qualify for pass-through reimbursement for the reasonable cost of the PRP.
+
+In the instant case, similar to the case in this MUHA decision, the Provider did not directly incur the cost of the PRP and the Provider did not have ultimate control of the administration of the PRP. Based on 42 C.F.R. § 413.85(f)(1), the Provider does not qualify for pass-through reimbursement for the reasonable cost of the PRP.
+
+The Provider states on page 30 of its FPP:
+In sum, there is no basis to treat a home office providing some administrative functions to an allied health program as a disqualifying factor.  There is no evidence to support the view that the provision of some administrative functions by a home office (which reduces costs and promotes efficiency), disqualifies a provider from obtaining pass-through treatment of its costs of its allied health program.
+
+As discussed earlier, 42 C.F.R. §413.85(d)(2)(ii) specifically states a provider’s allowable educational costs do not include “costs incurred by a related organization.”  Further, it is the MAC’s position that the issue under dispute is that for a NAH Program to qualify for a pass-through cost treatment, the Program must be provider-operated. As discussed above, a home office is not a provider. Therefore, the NAH Program must be solely operated by the Provider and not by the home office.
+
+3.  The Provider’s final three arguments regarding Congress’s intent, CMS’s interpretation of 42 C.F.R. § 413.85, and rule-making process, are not convincing.
+
+On page 32 of the Provider’s FPP, the Provider argues the MAC’s adjustments are inconsistent with the intent of Congress. The Provider states on page 32 of its FPP:
+There is no evidence that Congress intended to exclude organizations utilizing home offices to provide some administrative functions from pass-through treatment of their allied health programs so long as the hospital operating the program otherwise complied with regulatory requirements.  
+
+The Provider argues that the consideration of a home office providing administrative functions is a different interpretation that is “not entitled to any deference” (Provider’s FPP, page 34).  The Provider goes on to state on page 35 of the Provider’s FPP:
+The MAC’s “findings” represent a material change in policy in the agency’s requirements for pass-through treatment under 42 C.F.R. § 413.85(f)(1).  More specifically, the agency has imposed upon providers a new policy of precluding pass-through treatment of costs where a healthcare system involves any entity, called a home office or otherwise, in the provision of specifically defined administrative functions contemplated by the regulation – even where they are components of the same legal entity.
+
+The MAC asserts these arguments are without merit.  Medicare has always considered a home office as a related party. Home Office costs are not allowable, as 42 C.F.R. § 413.85(d)(2)(ii) (Exhibit C-9) specifically states that a provider’s allowable educational costs do not include costs incurred by a related organization.  Further, as discussed at length above, the MAC asserts that the Provider’s PRP does not meet the requirements to be reimbursed as an allowable provider-operated paramedical education program.
+
+Regulation 42 C.F.R. § 413.17 (Exhibit C-19) states:
+
+§ 413.17 Cost to related organizations.
+(a) Principle. Except as provided in paragraph (d) of this section, costs applicable to services, facilities, and supplies furnished to the provider by organizations related to the provider by common ownership or control are includable in the allowable cost of the provider at the cost to the related organization. However, such cost must not exceed the price of comparable services, facilities, or supplies that could be purchased elsewhere.
+(b) Definitions—(1) Related to the provider. Related to the provider means that the provider to a significant extent is associated or affiliated with or has control of or is controlled by the organization furnishing the services, facilities, or supplies.
+(2) Common ownership. Common ownership exists if an individual or individuals possess significant ownership or equity in the provider and the institution or organization serving the provider.
+(3) Control. Control exists if an individual or an organization has the power, directly or indirectly, significantly to influence or direct the actions or policies of an organization or institution.
+(c) Application. (1) Individuals and organizations associate with others for various reasons and by various means. Some deem it appropriate to do so to assure a steady flow of supplies or services, to reduce competition, to gain a tax advantage, to extend influence, and for other reasons. These goals may be accomplished by means of ownership or control, by financial assistance, by management assistance, and other ways.
+(2) If the provider obtains items of services, facilities, or supplies from an organization, even though it is a separate legal entity, and the organization is owned or controlled by the owner(s) of the provider, in effect the items are obtained from itself. An example would be a corporation building a hospital or a nursing home and then leasing it to another corporation controlled by the owner. Therefore, reimbursable cost should include the costs for these items at the cost to the supplying organization. However, if the price in the open market for comparable services, facilities, or supplies is lower than the cost to the supplier, the allowable cost to the provider may not exceed the market price.
+
+Both 42 C.F.R. § 413.17(b)(1) (Exhibit C-19) and CMS Pub. 15, Part 1, Section 1002.1 (Exhibit C-20) define related as:
+Related to the provider means that the provider to a significant extent is associated or affiliated with or has control of, or is controlled by the organization furnishing the services, facilities, or supplies. 
+
+Thus, a Home Office meets the Medicare definition of a related party.
+
+CMS Pub. 15, Part 1, Section 2150 (Exhibit C-21), specifically discusses Home Office costs, stating that:
+2l50. HOME OFFICE COSTS--CHAIN OPERATIONS
+A chain organization consists of a group of two or more health care facilities which are owned, leased, or through any other device, controlled by one organization. Chain organizations include, but are not limited to, chains operated by proprietary organizations and chains operated by various religious, charitable, and governmental organizations. A chain organization may also include business organizations which are engaged in other activities not directly related to health care. (See §§l002.2 and l002.3 for definitions of common ownership and control.)
+
+Home offices of chain organizations vary greatly in size, number of locations, staff, mode of operations, and services furnished to the facilities in the chain. The home office of a chain is not a provider in itself; therefore, its costs may not be directly reimbursed by the program. The relationship of the home office to the Medicare program is that of a related organization to participating providers.					(Emphasis added.)
+
+Clearly, this long-standing manual section states that a home office is considered a related organization to the hospitals that it owns, leases or controls.  The MAC acknowledges that this manual section goes on to discuss the general allowability of Home Office costs.  However, the MAC contends that, as discussed above, for the educational costs in contention, the regulation at 42 C.F.R. § 413.85(d)(2)(ii) (Exhibit C-9) specifically states that a provider’s allowable educational costs do not include costs incurred by a related organization.
+
+The Provider argues that the “MAC’s argument is flawed” as there “is only one legal entity present.” (Provider FPP, page 38).  The Provider FPP continues on to state:
+SHAS (the home office) is a division of Scripps Health, just as the Hospital is a division of Scripps Health. Because SHAS and the Hospital are part of one legal entity, they cannot be related organizations.
+
+The Provider’s argument focuses on the concept of legal entity.  However, as the Provider states, this legal entity has multiple divisions.  For Medicare reimbursement purposes, the division that is this Hospital is certified as Medicare Provider Number 05-0077.  SHAS (the home office) is not a Medicare certified provider.  As stated in CMS Pub. 15, Part 1, Section 2150 (Exhibit C-21):
+The relationship of the home office to the Medicare program is that of a related organization to participating providers.
+
+The Hospital and its Home Office are related organizations for Medicare reimbursement purposes.
+
+The MAC argues that for a provider to qualify for a pass-through cost treatment they must meet the direct-operated standard.  This standard is supported by the decisions reached in Baptist Health v. Thompson, U.S. Court of Appeals for the Eighth Circuit No. 05-4372 (August 15, 2006) (Exhibit C-16); Community Care Foundation v. Thompson, U.S. Court of Appeals for the District of Columbia Circuit No. 01-5295 (Feb. 7, 2003) (Exhibit C-17); and Rapid City Regional Hospital v. BCBS Association/Wellmark, CMS Administrator Decision, (May 24, 2000) (Exhibit C-18).
+
+The MAC’s determination is further supported by the Board’s recent decision in St. Vincent Charity Medical Center vs. CGS Administrators, PRRB Decision 2020-D16, August 14, 2020 (St. Vincent). (Exhibit C-25).  In that appeal, St. Vincent asserted it was the operator of a clinical pastoral care education program (CPE Program).  The MAC argued that the accreditation was held by the home office and St. Vincent did not meet each of the five criteria in 42 C.F.R § 413.85(f)(1).  The Board stated:
+In summary, while there is no question St. Vincent played a significant (if not dominant) role in the CPE Program during FYs 2010, 2011 and 2012, the evidence is clear that St. Vincent did not hold the accreditation for the CPE Program and did not meet all of the requirements as outlined in 42 C.F.R. § 413.85(f)(1) to be considered the “operator” of the CPE program.
+
+As with St. Vincent, the Provider may have “played a significant (if not dominant) role in the PRP Program …, the evidence is clear that” the Provider “did not meet all of the requirements as outlined in 42 C.F.R. § 413.85(f)(1) to be considered the ‘operator’” of the PRP Programs.  The Provider has not adequately documented that the PRP program in question meets the requirements for allowable paramedical education cost reimbursement under any of the regulations at 42 C.F.R. § 413.85 (Exhibit C-8).  The MAC asserts that its position is supported by the above noted regulations.
+
+4. The MAC’s adjustment to remove additional Medicare + Choice Nursing and Allied Health Education payment was proper.
+
+The MAC adjusted to remove the Nursing and Allied Health Managed Care Payment as the hospital does not qualify for reasonable cost payment for its paramedical education program in the current period in adjustment number 18 (Exhibit C-2). The MAC’s workpaper L-D2, supporting its disallowance of the Managed Care Payment, can be found on page 38 of Exhibit C-3. 
+
+CMS issued Program Memorandum (PM) A-03-043 in May 2003 instructing MACs on reimbursing hospitals for the Medicare+Choice Nursing and Allied Health Education Payments. (See Exhibit C-23.) The Benefits Improvement and Protection Act (BIPA), P.L. 106-554, enacted on December 11, 2000, contained numerous provisions affecting inpatient hospital payment policies. Some of these provisions became effective either prior to the passage of the BIPA, or shortly after its passage. PM A-03-043 addresses implementing §512 of the BIPA. It also implements §541 of the Balanced Budget Refinement Act (BBRA) of 1999 (P. L. 106-113) regarding Medicare+Choice nursing and allied health payments for portions of cost reporting periods occurring on or after January 1, 2000. According to PM A-03-043:
+Section 541 of the BBRA of 1999 provides for additional payments to hospitals for costs of nursing and allied health education associated with services to Medicare+Choice enrollees. Hospitals that operate approved nursing or allied health education programs and receive Medicare reasonable cost reimbursement for these programs would receive additional payments. Section 541 limits total spending under the provision to no more than $60 million in any calendar year (CY). (In this document, we refer to the total amount of $60 million or less as the payment “pool”.) Section 541 also provides that direct Graduate Medical Education (GME) payments for Medicare+Choice utilization will be reduced to the extent that these additional payments are made for nursing and allied health education programs. 
+Section 512 of the BIPA of 2000 changed the formula for determining the additional amounts to be paid to hospitals for Medicare+Choice nursing and allied health costs. Under §541 of the BBRA, the additional payment amount was determined based on the proportion of each individual hospital’s nursing and allied health education payment to total nursing and allied health education payments made to all hospitals. However, this formula did not account for a hospital’s specific Medicare+Choice utilization. Section 512 of the BIPA revised this payment formula to specifically account for each hospital’s Medicare+Choice utilization. 
+The regulations at 42 C.F.R. §413.87 were revised to reflect this change. This provision is effective for portions of cost reporting periods occurring in a calendar year (CY), beginning with CY 2001.
+
+The Program Memorandum goes on to explain how the additional Medicare + Choice Nursing and Allied Health Education payment is calculated. The instructions in PM A-03-043 reference the Medicare Cost Report (MCR) Worksheets of CMS-2552-96 (CMS Pub. 15-2, Chapter 36).  The MCR at issue is filed on the CMS 2552-10 Form (CMS Pub. 15-2, Chapter 40).
+
+The MAC was following the most recent CMS instructions in Program Memorandum A-03-043. CMS issued updated instructions regarding the Nursing and Allied Health Education Medicare Advantage Payment Polices on August 21, 2020 in CMS Pub. 100-20, Transmittal 10315, Change Request 11642 (Exhibit C-26).  (Note that Transmittal 10315 was rescinded and replaced by Transmittal 10486 on November 19, 2020, which was then rescinded and replaced by Transmittal 10520 on December 14, 2020.)
+
+The MAC asserts the Provider does not meet the qualifying conditions to receive additional Medicare + Choice Nursing and Allied Health Education payments in accordance to 42 C.F.R. § 413.87(c). The Provider did not receive Medicare reasonable cost payment for an approved nursing or allied health education program under 42 C.F.R. § 413.85 in the current year. The MAC’s determination is in accordance with PM A-03-043 and 42 C.F.R. § 413.87 (Exhibits C-23 and C-22, respectively).
+
+The Provider has not adequately documented that the PRP in question meets the requirements for allowable paramedical education cost reimbursement under any of the regulations at 42 C.F.R. § 413.85 (Exhibit C-9).  The MAC asserts that its position is supported by the above noted regulations.
+
+C.   Conclusion
+The MAC’s adjustments were in accordance with the regulations at 42 C.F.R. §§ 413.85, 413.20 and 413.24, and CMS Pub. 15-1, Section 404.  The Provider has not adequately documented that the as-filed costs and statistics meet the requirements to receive Medicare reasonable cost pass-through payment as a qualifying nursing and allied health education program.  The PRP does not qualify as a provider operated approved educational program.
+
+Furthermore, the MAC’s determination that the Provider does not meet the qualifying conditions to receive reimbursement for Medicare+Choice Nursing and Allied Health Education Payments is in accordance with Program instructions in PM A-03-043 and 42 C.F.R. § 413.87, and CMS Pub. 100-20, Transmittal 10315, Change Request 11642. The Board should affirm the MAC’s adjustments. 
+ 
+IV.  CITATION OF PROGRAM LAWS, REGULATIONS, AND INSTRUCTIONS
+Title XVIII of the Social Security Act
+SSA § 1861(u)
+SSA § 1861(v)(1)(A)
+SSA § 1886(a)(4)
+SSA § 1886(d) 
+SSA § 1886(d)(1)(A) 
+
+United States Statutes
+42 U.S.C. § 1395cc(a)(1)
+Tax Equity and Fiscal Responsibility Act of 1982 (TEFRA)
+Benefits Improvement and Protection Act (BIPA) (P.L. 106-554), December 11, 2000, §512
+Balanced Budget Refinement Act (BBRA) of 1999 (P. L. 106-113), §541
+
+Code of Federal Regulations
+42 C.F.R. § 412.113
+42 C.F.R. § 413.17
+42 C.F.R. § 413.20
+42 C.F.R. § 413.24
+42 C.F.R. § 413.85
+42 C.F.R. § 413.87
+
+Federal Register Notices
+49 FR 266 – 267 (Jan. 3, 1984) 
+57 FR 43659 – 43673 (Sept. 22, 1992)
+66 FR 3358 – 3376 (Jan. 12, 2001)
+68 FR 45423 – 45434 (Aug. 1, 2003)
+
+Judicial Decisions
+Baptist Health v. Thompson, U.S. Court of Appeals for the Eighth Circuit No. 05-4372 (August 15, 2006)
+Community Care Foundation v. Thompson, U.S. Court of Appeals for the District of Columbia Circuit No. 01-5295 (Feb. 7, 2003)
+
+Agency Decisions
+Medical University Hospital Authority vs. Palmetto GBA, PRRB Decision 2019-D15, (February 19, 2019)
+Rapid City Regional Hospital v. BCBS Association/Wellmark, CMS Administrator Decision, (May 24, 2000)
+St. Vincent Charity Medical Center vs. CGS Administrators, PRRB Decision 2020-D16, (August 14, 2020)
+
+Instructions
+CMS Pub. 15-1, Section 404
+CMS Pub. 15, Part 1, Section 1002
+CMS Pub. 15, Part 1, Section 2150
+CMS Pub. 15-2, Chapter 36 
+CMS Pub. 15-2, Chapter 40
+CMS Pub. 100-20, Transmittal 2133 – Clarification of Policies Related to Reasonable Cost Payment for Nursing and Allied Health Education Programs (August 17, 2018) 
+Program Memorandum A-03-043 (May 23, 2003)
+CMS Pub. 100-20, Transmittal 10315, Change Request 11642, Updates to Nursing and Allied Health Education Medicare Advantage Payment Polices (August 21, 2020) (Rescinded and Replaced by Transmittal 10486 on November 19, 2020, which was Rescinded and Replaced by Transmittal 10520 on December 14, 2020
+ 
+
+V.  EXHIBITS
+
+C-1.	Notice of Program Reimbursement
+C-2.	Audit Adjustment Report, applicable pages 
+C-3.	MAC Audit workpapers L-D1 and L-D2 – FY 2014 adjustments to PRP
+C-4.	MAC Audit workpaper L-D1-9 – FY 2015 Review of PRP
+C-5.	MAC Audit workpaper L-D1-2 – FY 2014 (redacted excerpt)
+C-6.	42 C.F.R. § 413.20
+C-7.	42 C.F.R. § 413.24
+C-8.	CMS Pub. 15-1, Chapter 4
+C-9. 	42 C.F.R. § 413.85
+C-10. 	57 FR 43659 – 43673 (Sept. 22, 1992)
+C-11.	42 C.F.R. § 412.113
+C-12.	49 FR 266 – 267 (Jan. 3, 1984)
+C-13.	66 FR 3358 – 3376 (Jan. 12, 2001)
+C-14.	68 FR 45423 – 45434 (Aug. 1, 2003)
+C-15.	CMS Clarification of Policies Related to Reasonable Cost Payment for Nursing and Allied Health Education Programs, dated August 17, 2018
+C-16.	Baptist Health v. Thompson, U.S. Court of Appeals for the Eighth Circuit No. 05-4372 (August 15, 2006)
+C-17.	Community Care Foundation v. Thompson, U.S. Court of Appeals for the District of Columbia Circuit No. 01-5295 (Feb. 7, 2003)
+C-18.	Rapid City Regional Hospital v. BCBS Association/Wellmark, CMS Administrator Decision, (May 24, 2000) 
+C-19.	42 C.F.R. § 413.17
+C-20.	CMS Pub. 15, Part 1, Section 1002.1
+C-21.	CMS Pub. 15, Part 1, Section 2150
+C-22.	42 C.F.R. § 413.87
+C-23. 	Program Memorandum A-03-043, dated May 23, 2003
+C-24.	Medical University Hospital Authority vs. Palmetto GBA, PRRB Decision 2019-D15, (February 19, 2019)
+C-25.	St. Vincent Charity Medical Center vs. CGS Administrators, PRRB Decision 2020-D16, (August 14, 2020)
+C-26.	CMS Pub. 100-20, Transmittal 10520, Change Request 11642, Updates to Nursing and Allied Health Education Medicare Advantage Payment Polices (December 14, 2020, originally issued August 21, 2020 as Transmittal 10315)
