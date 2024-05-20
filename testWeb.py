@@ -297,7 +297,7 @@ def create_word_document(case_data):
 
     cell_middle = table.cell(0,1) 
 
-    cell_middle.text = ")\n"*25 
+    cell_middle.text = ")\n"*16
 
     cell_middle.vertical_alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
 
@@ -313,7 +313,7 @@ def create_word_document(case_data):
 
     cell_right = table.cell(0,2) 
 
-    cell_right.text = f"\n\n\n\n\n\n\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
+    cell_right.text = f"\n\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
 
     run = cell_right.paragraphs[0].runs[0] 
 
