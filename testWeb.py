@@ -95,9 +95,6 @@ def get_issue_content(issue):
     issueformatted = issue.replace(" ", "") 
     filename = f"IssuestoArgs/{issueformatted}.txt"  
     try:
-        with open(filename, 'r') as file:
-            content = file.read()
-        st.write(content)
         filename = f"IssuestoArgs/{issueformatted}.docx"
         doc = Document(filename)
         content = '\n'.join([para.text for para in doc.paragraph])
