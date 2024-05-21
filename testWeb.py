@@ -95,7 +95,7 @@ def get_issue_content(issue):
     issueformatted = issue.replace(" ", "") 
     filename = f"IssuestoArgs/{issueformatted}.docx"  
     try: 
-        with open(filename, "r") as file:
+        with open(filename, 'r') as file:
             content = file.read()
         return content  
     except FileNotFoundError:  
