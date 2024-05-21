@@ -93,7 +93,7 @@ def format_date(date):
 def get_issue_content(issue):  
     # Function to read content from {issue}.txt file  
     issueformatted = issue.replace(" ", "") 
-    filename = f"IssuestoArgs/{issueformatted}.txt"  
+    filename = f"IssuestoArgs/{issueformatted}.docx"  
     try: 
         with open(filename, 'r') as file:  
             content = file.read()  
