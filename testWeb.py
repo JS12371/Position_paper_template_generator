@@ -93,10 +93,10 @@ def format_date(date):
 def get_issue_content(issue):  
     # Function to read content from {issue}.txt file  
     issueformatted = issue.replace(" ", "") 
-    filename = f"IssuestoArgs/{issueformatted}.txt"  
-    try: 
-        with open(filename, 'r') as file:
-            content = file.read()
+    filename = f"IssuestoArgs/{issueformatted}.docx"  
+    try:
+        doc = Document(filename)
+        content = '\n'.join([para.text for para in doc.paragraphs])
         return content  
     except FileNotFoundError:  
         ## if issue starts with 'Transfer', then it is a transferred issue
