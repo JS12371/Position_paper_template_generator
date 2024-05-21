@@ -90,20 +90,20 @@ def format_date(date):
 
  
 
-def get_issue_content(issue):  
-    # Function to read content from {issue}.txt file  
-    issueformatted = issue.replace(" ", "") 
-    filename = f"IssuestoArgs/{issueformatted}.txt"  
+def get_issue_content(issue):
+    # Function to read content from {issue}.docx file
+    issueformatted = issue.replace(" ", "")
+    filename = f"IssuestoArgs/{issueformatted}.docx"
     try:
-        with open(filename, 'r') as file:
-            content = file.read()
+        doc = Document(filename)
+        content = '\n'.join([para.text for para in doc.paragraphs])
         return content
-    except FileNotFoundError:  
-        ## if issue starts with 'Transfer', then it is a transferred issue
+    except FileNotFoundError:
+        # if issue starts with 'Transfer', then it is a transferred issue
         if issue.startswith('Transfer'):
             return f"{issue}"
         else:
-            return "Issue file not found."    
+            return "Issue file not found."
     
 
 
@@ -115,7 +115,7 @@ def create_word_document(case_data):
 
     run = header.runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
  
@@ -241,6 +241,11 @@ def create_word_document(case_data):
 
         pass 
 
+
+    ##remove the transferred values from issue
+
+    if issue[0].startswith('Transfer'):
+        issue.removeindex(0)
  
 
     ## get only first 10 characters of the date 
@@ -287,7 +292,7 @@ def create_word_document(case_data):
 
     run = cell_left.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -297,7 +302,7 @@ def create_word_document(case_data):
 
     cell_middle = table.cell(0,1) 
 
-    cell_middle.text = ")\n"*16
+    cell_middle.text = ")\n"*25 
 
     cell_middle.vertical_alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
 
@@ -305,7 +310,7 @@ def create_word_document(case_data):
 
     run = cell_middle.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -313,11 +318,11 @@ def create_word_document(case_data):
 
     cell_right = table.cell(0,2) 
 
-    cell_right.text = f"\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
+    cell_right.text = f"\n\n\n\n\n\n\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
 
     run = cell_right.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -365,7 +370,7 @@ def create_word_document(case_data):
 
     run = header.runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -381,7 +386,7 @@ def create_word_document(case_data):
 
     run = sub.runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -395,7 +400,7 @@ def create_word_document(case_data):
 
     run = sub.runs[0] 
 
-    run.font.size = Pt(11) 
+    run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -530,7 +535,7 @@ def create_word_document(case_data):
     run.font.name = 'Cambria (Body)' 
 
 
-    run.text = f"\n\nCase Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
+    run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
  
 
     ##NEW PAGE 
@@ -566,18 +571,12 @@ def create_word_document(case_data):
     run.font.name = 'Cambria (Body)' 
 
      
-    i = 1
-    if case_num.endswith('G') or case_num.endswith('C'):
-        if issue[0].startswith("Transfer"):
-            header = doc.add_paragraph(f"\nIssue: {issue[1]}\nAdjustment No(s): Various\nApproximate Reimbursement Amount: N/A")
-        else:
-            header = doc.add_paragraph(f"\nIssue: {issue[0]}\nAdjustment No(s): Various\nApproximate Reimbursement Amount: N/A")
-    else:
-        for issues in issue:
-            if len(adj_no) > 1:
-                adj_no = "Various"
-            header = doc.add_paragraph(f"\n\nIssue {i}: {issues}\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
-            i = i + 1
+    
+ 
+    for issues in issue:
+        if len(adj_no) > 1:
+            adj_no = "Various"
+        header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
 
  
 
@@ -585,7 +584,7 @@ def create_word_document(case_data):
 
  
 
-    header = doc.add_paragraph('III. MAC\'S POSITION\n') 
+    header = doc.add_paragraph('III. MAC\'S POSITION') 
 
  
 
@@ -612,9 +611,9 @@ def create_word_document(case_data):
     else: 
         if case_num[-1] == 'G' or case_num[-1] == 'C':
             if issue[0].startswith('Transfer'):
-                issue_content = get_issue_content(issue[1])
+                issue_content = issue[1]
             else:
-                issue_content = get_issue_content(issue[0])
+                issue_content = get_issue_content[issue[0]]
 
             header = doc.add_paragraph(f"Issue: {issue_content} \n\n")
 
@@ -735,11 +734,9 @@ create_doc = st.button('Create Document')
 if uploaded_file and case_num and create_doc:  
     try:  
         df = pd.read_excel(uploaded_file) 
-        try:
-            docx_file = create_word_document(find_case_data(df, case_num))
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-        except:
-            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+        docx_file = create_word_document(find_case_data(df, case_num))
+        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
     except: 
 
@@ -756,3 +753,10 @@ if not uploaded_file and create_doc:
 if not case_num and create_doc: 
 
     st.write('Please enter a case number') 
+
+ 
+
+  
+
+ 
+
