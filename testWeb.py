@@ -115,7 +115,7 @@ def create_word_document(case_data):
 
     run = header.runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
  
@@ -287,7 +287,7 @@ def create_word_document(case_data):
 
     run = cell_left.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -305,7 +305,7 @@ def create_word_document(case_data):
 
     run = cell_middle.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -317,7 +317,7 @@ def create_word_document(case_data):
 
     run = cell_right.paragraphs[0].runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -365,7 +365,7 @@ def create_word_document(case_data):
 
     run = header.runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -381,7 +381,7 @@ def create_word_document(case_data):
 
     run = sub.runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
 
@@ -395,7 +395,7 @@ def create_word_document(case_data):
 
     run = sub.runs[0] 
 
-    run.font.size = Pt(9.5) 
+    run.font.size = Pt(11) 
 
     run.font.name = 'Cambria (Body)' 
 
