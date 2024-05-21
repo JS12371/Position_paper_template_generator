@@ -96,7 +96,7 @@ def get_issue_content(issue):
     filename = f"IssuestoArgs/{issueformatted}.txt"  
     try: 
         with open(filename, 'r') as file:  
-            content = file.read()
+            content = file.read()  
         return content  
     except FileNotFoundError:  
         ## if issue starts with 'Transfer', then it is a transferred issue
@@ -756,10 +756,3 @@ if not uploaded_file and create_doc:
 if not case_num and create_doc: 
 
     st.write('Please enter a case number') 
-
- 
-
-  
-
- 
-
