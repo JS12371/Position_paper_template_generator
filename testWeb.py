@@ -245,7 +245,7 @@ def create_word_document(case_data):
     ##remove the transferred values from issue
 
     if issue[0].startswith('Transfer'):
-        issue.removeindex(0)
+        issue.remove(issue[0])
  
 
     ## get only first 10 characters of the date 
