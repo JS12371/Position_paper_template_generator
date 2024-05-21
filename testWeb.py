@@ -613,7 +613,7 @@ def create_word_document(case_data):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content = get_issue_content[issue[0]]
+                issue_content = [issue[0]
 
             header = doc.add_paragraph(f"Issue: {issue_content} \n\n")
 
