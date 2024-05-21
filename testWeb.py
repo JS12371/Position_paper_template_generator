@@ -96,7 +96,9 @@ def get_issue_content(issue):
     filename = f"IssuestoArgs/{issueformatted}.docx"  
     try: 
         with open(filename, 'r') as file:  
-            content = file.read()  
+            doc1 = Document()
+            doc1.add_paragraph(file.read())
+            content = doc1.paragraphs[0].text
         return content  
     except FileNotFoundError:  
         ## if issue starts with 'Transfer', then it is a transferred issue
