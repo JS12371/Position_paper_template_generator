@@ -338,7 +338,7 @@ def create_word_document(case_data):
 
     cell_middle = table.cell(0,1) 
 
-    cell_middle.text = ")\n"*25 
+    cell_middle.text = ")\n"*16
 
     cell_middle.vertical_alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
 
@@ -613,6 +613,9 @@ def create_word_document(case_data):
         if len(adj_no) > 1:
             adj_no = "Various"
         header = doc.add_paragraph(f"\n\nIssue(s): {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
+        run = header_add_run()
+        run.font.size = Pt(11)
+        run.font.name = 'Times New Roman'
 
  
 
