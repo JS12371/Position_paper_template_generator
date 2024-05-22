@@ -354,7 +354,7 @@ def create_word_document(case_data):
 
     cell_right = table.cell(0,2) 
 
-    cell_right.text = f"\n\n\n\n\n\n\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
+    cell_right.text = f"\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
 
     run = cell_right.paragraphs[0].runs[0] 
 
