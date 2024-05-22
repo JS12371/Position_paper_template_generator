@@ -90,13 +90,13 @@ def format_date(date):
 
  
 
-def get_issue_content(issue):
+def get_issue_content(issue, dest_doc):
     # Function to read content from {issue}.docx file
     issueformatted = issue.replace(" ", "")
-    filename = f"IssuestoArgs/{issueformatted}.txt"
+    filename = f"IssuestoArgs/{issueformatted}.docx"
     try:
-        with open(filename, 'r') as file:
-            content = file.read()
+        doc = Document(filename)
+        content = copy_paragraphs(doc, dest_doc)
         return content
     except FileNotFoundError:
         # if issue starts with 'Transfer', then it is a transferred issue
@@ -104,6 +104,46 @@ def get_issue_content(issue):
             return f"{issue}"
         else:
             return "Issue file not found."
+
+def copy_paragraph_format(src_paragraph, dest_paragraph):
+    dest_paragraph.alignment = src_paragraph.alignment
+    dest_paragraph.style = src_paragraph.style
+    
+    # Copy paragraph formatting (indentation, spacing)
+    if src_paragraph.paragraph_format.left_indent:
+        dest_paragraph.paragraph_format.left_indent = src_paragraph.paragraph_format.left_indent
+    if src_paragraph.paragraph_format.right_indent:
+        dest_paragraph.paragraph_format.right_indent = src_paragraph.paragraph_format.right_indent
+    if src_paragraph.paragraph_format.first_line_indent:
+        dest_paragraph.paragraph_format.first_line_indent = src_paragraph.paragraph_format.first_line_indent
+    if src_paragraph.paragraph_format.space_before:
+        dest_paragraph.paragraph_format.space_before = src_paragraph.paragraph_format.space_before
+    if src_paragraph.paragraph_format.space_after:
+        dest_paragraph.paragraph_format.space_after = src_paragraph.paragraph_format.space_after
+    if src_paragraph.paragraph_format.line_spacing:
+        dest_paragraph.paragraph_format.line_spacing = src_paragraph.paragraph_format.line_spacing
+
+# Function to copy runs from one paragraph to another
+def copy_runs(src_paragraph, dest_paragraph):
+    for run in src_paragraph.runs:
+        dest_run = dest_paragraph.add_run(run.text)
+        dest_run.bold = run.bold
+        dest_run.italic = run.italic
+        dest_run.underline = run.underline
+        dest_run.font.size = run.font.size
+        dest_run.font.name = run.font.name
+        if run.font.color and run.font.color.rgb:
+            dest_run.font.color.rgb = run.font.color.rgb
+
+# Function to copy paragraphs from source to destination
+def copy_paragraphs(src, dest):
+    for paragraph in src.paragraphs:
+        dest_paragraph = dest.add_paragraph()
+        copy_paragraph_format(paragraph, dest_paragraph)
+        copy_runs(paragraph, dest_paragraph)
+
+
+
     
 
 
@@ -118,8 +158,7 @@ def create_word_document(case_data):
     run.font.size = Pt(9.5) 
 
     run.font.name = 'Cambria (Body)' 
- 
-    
+
 
     p = header._p 
 
@@ -245,7 +284,7 @@ def create_word_document(case_data):
     ##remove the transferred values from issue
 
     if issue[0].startswith('Transfer'):
-        issue.remove(issue[0])
+        issue.removeindex(0)
  
 
     ## get only first 10 characters of the date 
@@ -602,7 +641,7 @@ def create_word_document(case_data):
 
  
 
-    issue_content = get_issue_content(issue[0]) 
+    issue_content = get_issue_content(issue[0], doc) 
  
     i = 0 
 
@@ -611,7 +650,7 @@ def create_word_document(case_data):
     else: 
         if case_num[-1] == 'G' or case_num[-1] == 'C':
             if issue[0].startswith('Transfer'):
-                issue_content = get_issue_content(issue[1])
+                issue_content = issue[1]
             else:
                 issue_content = get_issue_content(issue[0])
 
@@ -627,7 +666,7 @@ def create_word_document(case_data):
 
             while i < len(issue): 
 
-                issue_content = get_issue_content(issue[i]) 
+                issue_content = get_issue_content(issue[i], doc) 
 
                 header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
 
@@ -732,12 +771,15 @@ create_doc = st.button('Create Document')
  
 
 if uploaded_file and case_num and create_doc:  
-    df = pd.read_excel(uploaded_file) 
-    docx_file = create_word_document(find_case_data(df, case_num))
-    st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-    st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+    try:  
+        df = pd.read_excel(uploaded_file) 
+        docx_file = create_word_document(find_case_data(df, case_num))
+        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
-    st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
+    except: 
+
+        st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
 
 
 
