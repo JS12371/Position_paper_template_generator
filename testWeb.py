@@ -144,9 +144,6 @@ def copy_paragraphs(src, dest):
 
 
 
-    
-
-
 def create_word_document(case_data):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
@@ -639,9 +636,6 @@ def create_word_document(case_data):
 
     run.font.color.rgb = RGBColor(0,0,0) 
 
- 
-
-    issue_content = get_issue_content(issue[0], doc) 
  
     i = 0 
 
