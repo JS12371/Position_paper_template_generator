@@ -528,7 +528,7 @@ def create_word_document(case_data):
 
     cell_right = table.cell(0,1) 
 
-    cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n?" 
+    cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n\n?" 
 
     run = cell_right.paragraphs[0].runs[0] 
 
