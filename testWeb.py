@@ -419,7 +419,7 @@ def create_word_document(case_data):
 
  
 
-    sub = doc.add_paragraph(f"Sumbitted by:\n\n<Name>\n{mac_name}\n<Address>\n<Address line 2>") 
+    sub = doc.add_paragraph(f"Submitted by:\n\n<Name>\n{mac_name}\n<Address>\n<Address line 2>") 
 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
 
