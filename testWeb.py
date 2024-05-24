@@ -134,10 +134,13 @@ def copy_runs(src_paragraph, dest_paragraph):
 
 # Function to copy paragraphs from source to destination
 def copy_paragraphs(src, dest):
-    for paragraph in src.paragraphs if paragraph.text.strip() != '' else []:
-        dest_paragraph = dest.add_paragraph()
-        copy_paragraph_format(paragraph, dest_paragraph)
-        copy_runs(paragraph, dest_paragraph)
+    for paragraph in src.paragraphs:
+        if paragraph.text.strip() != '':
+            dest_paragraph = dest.add_paragraph()
+            copy_paragraph_format(paragraph, dest_paragraph)
+            copy_runs(paragraph, dest_paragraph)
+
+
 
 
 
