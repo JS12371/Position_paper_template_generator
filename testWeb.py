@@ -97,7 +97,9 @@ def get_issue_content(issue, dest_doc):
         return f"{issue}"
     try:
         doc1 = Document(filename)
+        content = Document()
         content = copy_paragraphs(doc1, dest_doc)
+        content = content[:-4]
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
