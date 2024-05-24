@@ -98,6 +98,7 @@ def get_issue_content(issue, dest_doc):
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
+        content = content[:-4]
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
@@ -135,10 +136,9 @@ def copy_runs(src_paragraph, dest_paragraph):
 # Function to copy paragraphs from source to destination
 def copy_paragraphs(src, dest):
     for paragraph in src.paragraphs:
-        if paragraph.text.strip() != '' or paragraph.text.strip() != '\0':
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
+        dest_paragraph = dest.add_paragraph()
+        copy_paragraph_format(paragraph, dest_paragraph)
+        copy_runs(paragraph, dest_paragraph)
 
 
 
