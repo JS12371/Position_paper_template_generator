@@ -657,7 +657,7 @@ def create_word_document(case_data):
             else:
                 issue_content = get_issue_content(issue[0], doc)
 
-            header = doc.add_paragraph(f"{issue_content} /")
+            header = doc.add_paragraph(f"{issue_content}")
 
             run = header.add_run()
 
@@ -697,8 +697,8 @@ def create_word_document(case_data):
     ##remove all 'None' values contained within paragraphs in the word document
     
     for paragraph in doc.paragraphs:
-        if paragraph.text.__contains__('None /'):
-            paragraph.text = paragraph.text.replace('None /', '')
+        if paragraph.text.__contains__('None'):
+            paragraph.text = paragraph.text.replace('None', '')
 
     
     
