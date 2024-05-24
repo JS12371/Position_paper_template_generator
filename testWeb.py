@@ -178,7 +178,7 @@ def create_word_document(case_data):
  
     case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
  
-    case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else 'Case Name not found' 
+    case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else '<input provider name>' 
  
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
@@ -620,7 +620,7 @@ def create_word_document(case_data):
 
  
 
-    header = doc.add_paragraph('III. MAC\'S POSITION') 
+    header = doc.add_paragraph('III. MAC\'S POSITION\n\nIssue(s): ') 
 
  
 
@@ -648,14 +648,6 @@ def create_word_document(case_data):
             else:
                 issue_content = get_issue_content(issue[0], doc)
 
-            header = doc.add_paragraph(f"\nIssue: ")
-
-            run = header.add_run()
-
-            run.font.size = Pt(11)
-
-            run.font.name = 'Times New Roman'
-
             header = doc.add_paragraph(f"{issue_content}")
 
             run = header.add_run()
@@ -671,7 +663,7 @@ def create_word_document(case_data):
 
                 issue_content = get_issue_content(issue[i], doc) 
 
-                header = doc.add_paragraph(f"Issue {i+1}: {issue_content} \n\n") 
+                header = doc.add_paragraph(f"\nIssue {i+1}: {issue_content} \n\n") 
 
                 run = header.add_run() 
 
