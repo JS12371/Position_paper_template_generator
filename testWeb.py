@@ -91,19 +91,16 @@ def format_date(date):
  
 
 def get_issue_content(issue, dest_doc):
-    # Function to read content from {issue}.docx file
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}.docx"
+    if not os.path.exists(filename):
+        return f"Issue file {filename} not found."
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
         return content
-    except FileNotFoundError:
-        # if issue starts with 'Transfer', then it is a transferred issue
-        if issue.startswith('Transfer'):
-            return f"{issue}"
-        else:
-            return "Issue file not found."
+    except Exception as e:
+        return f"Error processing issue file: {e}"
 
 def copy_paragraph_format(src_paragraph, dest_paragraph):
     dest_paragraph.alignment = src_paragraph.alignment
