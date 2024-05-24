@@ -691,12 +691,14 @@ def create_word_document(case_data):
                 i += 1 
 
     
-    ##find all occurenced of 'None' in any of the document and remove it
-
+    
+    ##remove all 'None' values contained within paragraphs in the word document
+    
     for paragraph in doc.paragraphs:
-        for run in paragraph.runs:
-            if run.text == 'None':
-                run.text = ''
+        if paragraph.text.__contains__('None'):
+            paragraph.text = paragraph.text.replace('None', '')
+
+    
     
 
     # Save the document to a bytes buffer  
