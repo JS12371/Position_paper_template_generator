@@ -98,8 +98,7 @@ def get_issue_content(issue, dest_doc):
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        filtered_content = [paragraph for paragraph in content if para.text and para.text.strip()]
-        return filtered_content
+        return content
     except Exception as e:
         return f"Error processing issue file: {e}"
 
