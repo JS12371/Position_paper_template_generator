@@ -97,15 +97,8 @@ def get_issue_content(issue, dest_doc):
         return f"{issue}"
     try:
         doc1 = Document(filename)
-        paragraphs = copy_paragraphs(doc1, dest_doc)
-
-        # Remove the last paragraph if it is None or empty
-        if paragraphs and (paragraphs[-1].text == '' or paragraphs[-1].text is None):
-            paragraphs.pop()
-
-        # Extract text from paragraphs and join them
-        content = "\n".join(paragraph.text for paragraph in paragraphs if paragraph.text)
-
+        content = copy_paragraphs(doc1, dest_doc)
+        content = content[:-4]
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
@@ -142,14 +135,10 @@ def copy_runs(src_paragraph, dest_paragraph):
 
 # Function to copy paragraphs from source to destination
 def copy_paragraphs(src, dest):
-    paragraphs = []
     for paragraph in src.paragraphs:
         dest_paragraph = dest.add_paragraph()
         copy_paragraph_format(paragraph, dest_paragraph)
         copy_runs(paragraph, dest_paragraph)
-        paragraphs.append(dest_paragraph)
-    return paragraphs
-
 
 
 
