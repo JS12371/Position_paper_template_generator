@@ -140,10 +140,10 @@ def copy_runs(src_paragraph, dest_paragraph):
 # Function to copy paragraphs from source to destination
 def copy_paragraphs(src, dest):
     paragraphs = []
-    for paragraph in src.paragraphs:
+    for i in range(0, len(src.paragraphs) - 1):
         dest_paragraph = dest.add_paragraph()
-        copy_paragraph_format(paragraph, dest_paragraph)
-        copy_runs(paragraph, dest_paragraph)
+        copy_paragraph_format(src.paragraphs[i], dest_paragraph)
+        copy_runs(src.paragraphs[i], dest_paragraph)
         paragraphs.append(dest_paragraph)
     return paragraphs
 
