@@ -696,7 +696,7 @@ def create_word_document(case_data):
 
     for paragraph in doc.paragraphs:
             
-        if ' None ' in paragraph.text:
+        if 'None' in paragraph.text:
     
             paragraph.text = paragraph.text.replace('None', '')
 
