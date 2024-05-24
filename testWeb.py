@@ -639,6 +639,8 @@ def create_word_document(case_data):
  
     i = 0 
 
+    issue = list(filter(None, issue))
+
     if issue[0] == 'Issue not found':
         pass
     else: 
