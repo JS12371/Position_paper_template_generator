@@ -609,7 +609,7 @@ def create_word_document(case_data):
     for issues in issue:
         if len(adj_no) > 1:
             adj_no = "Various"
-        header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A")
+        header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
         run = header.runs[0] 
         run.font.size = Pt(11) 
         run.font.name = 'Times New Roman' 
@@ -656,7 +656,7 @@ def create_word_document(case_data):
             else:
                 issue_content = get_issue_content(issue[0], doc)
 
-            header = doc.add_paragraph(f"Issue: {issue_content}")
+            header = doc.add_paragraph(f"{issue_content}")
 
             run = header.add_run()
 
