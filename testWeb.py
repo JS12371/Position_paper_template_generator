@@ -94,7 +94,7 @@ def get_issue_content(issue, dest_doc):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}.docx"
     if not os.path.exists(filename):
-        return f"Issue file {filename} not found."
+        return f"{issue}"
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
