@@ -95,8 +95,8 @@ def get_issue_content(issue, dest_doc):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}.docx"
     try:
-        doc = Document(filename)
-        content = copy_paragraphs(doc, dest_doc)
+        doc1 = Document(filename)
+        content = copy_paragraphs(doc1, dest_doc)
         return content
     except FileNotFoundError:
         # if issue starts with 'Transfer', then it is a transferred issue
