@@ -151,7 +151,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
 
     p = header._p 
@@ -327,7 +327,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -345,7 +345,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -357,7 +357,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -405,7 +405,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -421,7 +421,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -435,7 +435,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -467,7 +467,7 @@ def create_word_document(case_data):
 
                 run.font.size = Pt(11) 
 
-                run.font.name = 'Times New Roman' 
+                run.font.name = 'Cambria (Body)' 
 
                 run.font.bold = True 
 
@@ -479,7 +479,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -493,7 +493,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
  
@@ -519,7 +519,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
  
 
@@ -531,7 +531,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
 
     doc.save(f"Case_{case_num}.docx") 
@@ -552,7 +552,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -565,7 +565,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
 
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
@@ -587,7 +587,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -601,7 +601,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
      
     
@@ -612,7 +612,7 @@ def create_word_document(case_data):
         header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
         run = header.runs[0] 
         run.font.size = Pt(11) 
-        run.font.name = 'Times New Roman' 
+        run.font.name = 'Cambria (Body)' 
 
  
 
@@ -630,7 +630,7 @@ def create_word_document(case_data):
 
     run.font.size = Pt(11) 
 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     run.font.bold = True 
 
@@ -649,7 +649,7 @@ def create_word_document(case_data):
 
             run.font.size = Pt(11)
 
-            run.font.name = 'Times New Roman'
+            run.font.name = 'Cambria (Body)'
 
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
@@ -662,7 +662,7 @@ def create_word_document(case_data):
 
             run.font.size = Pt(11)
 
-            run.font.name = 'Times New Roman'
+            run.font.name = 'Cambria (Body)'
             
 
         else:
@@ -677,7 +677,7 @@ def create_word_document(case_data):
 
                 run.font.size = Pt(11) 
 
-                run.font.name = 'Times New Roman' 
+                run.font.name = 'Cambria (Body)' 
 
                 i += 1 
  
