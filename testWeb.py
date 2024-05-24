@@ -691,14 +691,6 @@ def create_word_document(case_data):
                 i += 1 
     
 
-    ##remove all the occurences of the word 'None' from the list
-
-    for paragraph in doc.paragraphs:
-        if '\nNone' in paragraph.text:
-            doc._element.remove(paragraph._element)
-    
-
-
     # Save the document to a bytes buffer  
 
  
