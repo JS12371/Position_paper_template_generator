@@ -667,11 +667,19 @@ def create_word_document(case_data):
 
         else:
 
-            while i < len(issue): 
+            while i < len(issue):
+
+                header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
+
+                run = header.add_run() 
+
+                run.font.size = Pt(11) 
+
+                run.font.name = 'Cambria (Body)' 
 
                 issue_content = get_issue_content(issue[i], doc) 
 
-                header = doc.add_paragraph(f"\n\nIssue {i+1}: {issue_content} \n\n") 
+                header = doc.add_paragraph(f"{issue_content} \n\n") 
 
                 run = header.add_run() 
 
