@@ -643,6 +643,14 @@ def create_word_document(case_data):
         pass
     else: 
         if case_num[-1] == 'G' or case_num[-1] == 'C':
+            header = doc.add_paragraph("Issue: ")
+
+            run = header.add_run()
+
+            run.font.size = Pt(11)
+
+            run.font.name = 'Times New Roman'
+
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
@@ -663,7 +671,7 @@ def create_word_document(case_data):
 
                 issue_content = get_issue_content(issue[i], doc) 
 
-                header = doc.add_paragraph(f"\nIssue {i+1}: {issue_content} \n\n") 
+                header = doc.add_paragraph(f"\n\nIssue {i+1}: {issue_content} \n\n") 
 
                 run = header.add_run() 
 
