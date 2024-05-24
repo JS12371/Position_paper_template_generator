@@ -689,6 +689,14 @@ def create_word_document(case_data):
                 run.font.name = 'Cambria (Body)' 
 
                 i += 1 
+
+    
+    ##find all occurenced of 'None' in any of the document and remove it
+
+    for paragraph in doc.paragraphs:
+        for run in paragraph.runs:
+            if run.text == 'None':
+                run.text = ''
     
 
     # Save the document to a bytes buffer  
