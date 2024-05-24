@@ -656,7 +656,7 @@ def create_word_document(case_data):
             else:
                 issue_content = get_issue_content(issue[0], doc)
 
-            header = doc.add_paragraph(f"{issue_content}")
+            header = doc.add_paragraph(f"Issue: {issue_content}")
 
             run = header.add_run()
 
