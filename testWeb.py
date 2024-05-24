@@ -134,8 +134,7 @@ def copy_runs(src_paragraph, dest_paragraph):
 
 # Function to copy paragraphs from source to destination
 def copy_paragraphs(src, dest):
-    ##dont copy the last paragraph
-    for i in range(len(src.paragraphs) - 1):
+    for i in range(len(src.paragraphs)):
         paragraph = src.paragraphs[i]
         dest_paragraph = dest.add_paragraph()
         copy_paragraph_format(paragraph, dest_paragraph)
@@ -692,7 +691,15 @@ def create_word_document(case_data):
                 run.font.name = 'Cambria (Body)' 
 
                 i += 1 
- 
+             
+    ##find and remove all occurances of "None" in the document
+
+    for paragraph in doc.paragraphs:
+            
+        if ' None ' in paragraph.text:
+    
+            paragraph.text = paragraph.text.replace('None', '')
+
 
     # Save the document to a bytes buffer  
 
