@@ -211,10 +211,7 @@ def create_word_document(case_data):
                 issue[i] = f"Transferred to case {transferred_to_case[i]}"
             i = i + 1
 
-    st.write(issue)
     issue = list(dict.fromkeys(issue))
-    st.write(issue)
-
 
     if issue[0] == 'Issue not found':
         #split the 'Issue Typ' by comma
