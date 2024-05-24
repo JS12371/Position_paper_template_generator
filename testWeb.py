@@ -98,7 +98,6 @@ def get_issue_content(issue, dest_doc):
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        content = content[:-4]
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
@@ -690,7 +689,13 @@ def create_word_document(case_data):
                 run.font.name = 'Cambria (Body)' 
 
                 i += 1 
-            
+    
+
+    ##iterate through all lines of doc
+    ## if any line is just 'None' then remove it
+    for paragraph in doc.paragraphs:
+        if paragraph.text == 'None':
+            doc._element.remove(paragraph._element)
 
 
     # Save the document to a bytes buffer  
@@ -812,4 +817,3 @@ if not case_num and create_doc:
   
 
  
-
