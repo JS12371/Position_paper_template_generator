@@ -697,7 +697,7 @@ def create_word_document(case_data):
     ##remove all 'None' values contained within paragraphs in the word document
     
     for paragraph in doc.paragraphs:
-        if paragraph.text.endswith('None '):
+        if paragraph.text.endswith('None\n'):
             paragraph.text = paragraph.text[:-4]
 
     
