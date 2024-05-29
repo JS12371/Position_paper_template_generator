@@ -207,7 +207,7 @@ def create_word_document(case_data):
     if len(issue) != 1:
         while i < len(issue):
             if transferred_to_case[i] != 'Not in the spreadsheet':
-                issue[i] = f"Transferred to case {transferred_to_case[i]}"
+                issue[i] = f"{issue[i]\nTransferred to case {transferred_to_case[i]}"
             i = i + 1
 
     issue = list(dict.fromkeys(issue))
