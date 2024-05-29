@@ -604,14 +604,25 @@ def create_word_document(case_data):
 
      
     
- 
+    i = 0
     for issues in issue:
-        if len(adj_no) > 1:
-            adj_no = "Various"
-        header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
-        run = header.runs[0] 
-        run.font.size = Pt(11) 
-        run.font.name = 'Cambria (Body)' 
+        if case_num.endswith('G') or case_num.endswith('C'):
+            
+            if len(adj_no) > 1:
+                adj_no = "Various"
+            header = doc.add_paragraph(f"\nIssue {i}: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            run = header.runs[0] 
+            run.font.size = Pt(11) 
+            run.font.name = 'Cambria (Body)' 
+            i = i + 1
+        else:
+            if len(adj_no) > 1:
+                adj_no = "Various"
+            header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            run = header.runs[0] 
+            run.font.size = Pt(11) 
+            run.font.name = 'Cambria (Body)' 
+            
 
  
 
