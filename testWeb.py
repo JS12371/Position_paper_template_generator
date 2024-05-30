@@ -630,7 +630,7 @@ def create_word_document(case_data):
         else:
             if len(adj_no) > 1:
                 adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
             run.font.name = 'Cambria (Body)'
