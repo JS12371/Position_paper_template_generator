@@ -207,7 +207,7 @@ def create_word_document(case_data):
     if len(issue) != 1:
         while i < len(issue):
             if transferred_to_case[i] != 'Not in the spreadsheet':
-                issue[i] = f"{issue[i]} (Transferred to case {transferred_to_case[i]})"
+                issue[i] = f"Transferred to case {transferred_to_case[i]}"
             i = i + 1
 
     issue = list(dict.fromkeys(issue))
@@ -320,7 +320,7 @@ def create_word_document(case_data):
 
     cell_left = table.cell(0,0) 
 
-    cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n" 
+    cell_left.text = f"\nCase Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n" 
 
     run = cell_left.paragraphs[0].runs[0] 
 
@@ -604,25 +604,14 @@ def create_word_document(case_data):
 
      
     
-    i = 1
+ 
     for issues in issue:
-        if case_num.endswith('G') or case_num.endswith('C'):
-            
-            if len(adj_no) > 1:
-                adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
-            run = header.runs[0] 
-            run.font.size = Pt(11) 
-            run.font.name = 'Cambria (Body)' 
-        else:
-            if len(adj_no) > 1:
-                adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue {i}: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
-            run = header.runs[0] 
-            run.font.size = Pt(11) 
-            run.font.name = 'Cambria (Body)' 
-            i = i + 1
-            
+        if len(adj_no) > 1:
+            adj_no = "Various"
+        header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+        run = header.runs[0] 
+        run.font.size = Pt(11) 
+        run.font.name = 'Cambria (Body)' 
 
  
 
@@ -830,9 +819,3 @@ if not uploaded_file and create_doc:
 if not case_num and create_doc: 
 
     st.write('Please enter a case number') 
-
- 
-
-  
-
- 
