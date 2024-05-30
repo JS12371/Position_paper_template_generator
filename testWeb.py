@@ -210,10 +210,10 @@ def create_word_document(case_data):
 
 
 
-    group_mode = false
+    group_mode = False
 
     if case_num.endswith('G') or case_num.endswith('C'):
-        group_mode = true
+        group_mode = True
 
 
 
@@ -619,18 +619,18 @@ def create_word_document(case_data):
      
     
     
-    for issues in issue:
+    for i in range(len(issue)):
         if group_mode:
             if len(adj_no) > 1:
                 adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue GROUP MODE: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header = doc.add_paragraph(f"\nIssue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
             run.font.name = 'Cambria (Body)' 
         else:
             if len(adj_no) > 1:
                 adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue INDIVIDUAL MODE: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
             run.font.name = 'Cambria (Body)'
