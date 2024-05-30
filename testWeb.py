@@ -184,6 +184,13 @@ def create_word_document(case_data):
  
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
+    cloneissue = []
+
+    for iss in issue:
+        cloneissue.append(iss)
+
+ 
+
     tempissue = []
     for i in issue:
         tempissue.append(i)
@@ -200,6 +207,13 @@ def create_word_document(case_data):
     ##remove the 'Transferred to case #' entries from the list if the case_num ends with 'G' or 'C'
     
     transferred_to_case = temptransferred_to_case
+
+
+
+    group_mode = false
+
+    if case_num.endswith('G') or case_num.endswith('C'):
+        group_mode = true
 
 
 
@@ -603,15 +617,23 @@ def create_word_document(case_data):
     run.font.name = 'Cambria (Body)' 
 
      
+    i = 0 
     
- 
-    for issues in issue:
-        if len(adj_no) > 1:
-            adj_no = "Various"
-        header = doc.add_paragraph(f"\nIssue: {issues}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
-        run = header.runs[0] 
-        run.font.size = Pt(11) 
-        run.font.name = 'Cambria (Body)' 
+    for i in range(len(issue)):
+        if group_mode:
+            if len(adj_no) > 1:
+                adj_no = "Various"
+            header = doc.add_paragraph(f"\nIssue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            run = header.runs[0] 
+            run.font.size = Pt(11) 
+            run.font.name = 'Cambria (Body)' 
+        else:
+            if len(adj_no) > 1:
+                adj_no = "Various"
+            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            run = header.runs[0] 
+            run.font.size = Pt(11) 
+            run.font.name = 'Cambria (Body)'
 
  
 
