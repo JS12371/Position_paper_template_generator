@@ -181,7 +181,7 @@ def create_word_document(case_data, selected_arguments):
     if 'Group FYE' in case_data: 
         year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
     else: 
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
+        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
     for cell in table.columns[0].cells: 
