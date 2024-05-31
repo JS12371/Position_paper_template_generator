@@ -804,35 +804,39 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
+# Streamlit representation code
+
 st.title('Excel Case Finder')  
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 case_num = st.text_input('Enter Case Number') 
 create_doc = st.button('Create Document') 
 
-# Maintaining the loaded DataFrame
+# Maintaining the loaded DataFrame and case data
 if 'df' not in st.session_state:
     st.session_state.df = None
+if 'case_data' not in st.session_state:
+    st.session_state.case_data = None
 
 if uploaded_file:
     st.session_state.df = pd.read_excel(uploaded_file)
     st.write('File uploaded successfully')
 
-case_data = None
-
-if st.session_state.df is not None and case_num:
-    case_data = find_case_data(st.session_state.df, case_num)
-    if not case_data.empty:
-        issues = case_data['Issue'].unique()
-        selected_arguments = []
+if st.session_state.df is not None and case_num and st.button('Find Case'):
+    st.session_state.case_data = find_case_data(st.session_state.df, case_num)
+    
+if st.session_state.case_data is not None:
+    if not st.session_state.case_data.empty:
+        issues = st.session_state.case_data['Issue'].unique()
+        selected_arguments = {}
         for issue in issues:
             arguments = get_possible_arguments(issue)
             if arguments:
-                selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments)
-                selected_arguments.append(selected_argument)
+                selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue)
+                selected_arguments[issue] = selected_argument
             else:
-                selected_arguments.append("")
+                selected_arguments[issue] = ""
         if create_doc:
-            docx_file = create_word_document(case_data, selected_arguments)
+            docx_file = create_word_document(st.session_state.case_data, [selected_arguments[issue] for issue in issues])
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
     else:
         st.write('Case not found in the spreadsheet. Please try again with a different case number.')
@@ -841,4 +845,5 @@ elif create_doc:
         st.write('Please upload a file') 
     if not case_num:
         st.write('Please enter a case number')
+
 
