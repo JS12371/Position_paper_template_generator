@@ -807,47 +807,52 @@ def get_download_link(file, filename):
 # Streamlit representation code
 
 st.title('Excel Case Finder')  
-uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
-case_num = st.text_input('Enter Case Number') 
-find_case_button = st.button('Find Case') 
-create_doc = st.button('Create Document') 
 
-# Maintaining the loaded DataFrame and case data
+# Step 1: Upload Excel file
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
+
+# Maintain the loaded DataFrame
 if 'df' not in st.session_state:
     st.session_state.df = None
-if 'case_data' not in st.session_state:
-    st.session_state.case_data = None
-if 'selected_arguments' not in st.session_state:
-    st.session_state.selected_arguments = {}
 
-if uploaded_file:
+if uploaded_file and st.session_state.df is None:
     st.session_state.df = pd.read_excel(uploaded_file)
     st.write('File uploaded successfully')
 
-if st.session_state.df is not None and case_num and find_case_button:
-    st.session_state.case_data = find_case_data(st.session_state.df, case_num)
-    st.session_state.selected_arguments = {}
+# Proceed only if the DataFrame is loaded
+if st.session_state.df is not None:
+    # Step 2: Enter Case Number
+    case_num = st.text_input('Enter Case Number') 
+    find_case_button = st.button('Find Case') 
 
-if st.session_state.case_data is not None:
-    if not st.session_state.case_data.empty:
-        issues = st.session_state.case_data['Issue'].unique()
-        for issue in issues:
-            arguments = get_possible_arguments(issue)
-            if arguments:
-                selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
-                                                 index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
-                st.session_state.selected_arguments[issue] = selected_argument
-            else:
-                st.session_state.selected_arguments[issue] = ""
-        if create_doc:
-            docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-    else:
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-elif create_doc:
-    if not uploaded_file and st.session_state.df is None:
-        st.write('Please upload a file') 
-    if not case_num:
-        st.write('Please enter a case number')
+    # Maintain the loaded case data
+    if 'case_data' not in st.session_state:
+        st.session_state.case_data = None
+
+    if case_num and find_case_button and st.session_state.case_data is None:
+        st.session_state.case_data = find_case_data(st.session_state.df, case_num)
+        st.session_state.selected_arguments = {}
+
+    # Proceed only if the case data is found
+    if st.session_state.case_data is not None:
+        if not st.session_state.case_data.empty:
+            issues = st.session_state.case_data['Issue'].unique()
+            for issue in issues:
+                arguments = get_possible_arguments(issue)
+                if arguments:
+                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
+                                                     index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
+                    st.session_state.selected_arguments[issue] = selected_argument
+                else:
+                    st.session_state.selected_arguments[issue] = ""
+
+            # Step 3: Create Document
+            create_doc = st.button('Create Document') 
+            if create_doc:
+                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
+                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        else:
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
 
 
