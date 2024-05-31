@@ -411,6 +411,7 @@ if uploaded_file and case_num:
         selected_arguments = []
         for issue in issues:
             arguments = get_possible_arguments(issue)
+            st.write(f"Issue: {issue}, Arguments: {arguments}")  # Logging
             if arguments:
                 selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue)
                 selected_arguments.append(selected_argument)
