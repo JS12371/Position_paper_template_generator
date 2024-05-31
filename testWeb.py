@@ -57,10 +57,7 @@ def get_issue_content(issue, dest_doc, selected_argument):
 
 def get_possible_arguments(issue):
     issueformatted = issue.replace(" ", "")
-    pattern = f"IssuestoArgs/{issueformatted}*.docx"
-    st.write(f"Checking pattern: {pattern}")  # Logging
-    files = glob.glob(pattern)
-    st.write(f"Files found: {files}")  # Logging
+    files = glob.glob(f"IssuestoArgs/{issueformatted}*.docx")
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
@@ -184,6 +181,7 @@ def create_word_document(case_data, selected_arguments):
         year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
+
     for cell in table.columns[0].cells: 
         cell.width = Pt(260) 
     for cell in table.columns[1].cells: 
@@ -406,30 +404,29 @@ def get_download_link(file, filename):
 st.title('Excel Case Finder')  
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 case_num = st.text_input('Enter Case Number') 
+create_doc = st.button('Create Document') 
+
+case_data = None
 
 if uploaded_file and case_num:
-    if 'case_data' not in st.session_state:
-        df = pd.read_excel(uploaded_file)
-        st.session_state.case_data = find_case_data(df, case_num)
-    
-    case_data = st.session_state.case_data
+    df = pd.read_excel(uploaded_file)
+    case_data = find_case_data(df, case_num)
     if not case_data.empty:
         issues = case_data['Issue'].unique()
         selected_arguments = []
         for issue in issues:
             arguments = get_possible_arguments(issue)
-            st.write(f"Issue: {issue}, Arguments: {arguments}")  # Logging
             if arguments:
-                selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue)
+                selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments)
                 selected_arguments.append(selected_argument)
             else:
                 selected_arguments.append("")
-        if st.button('Create Document'):
+        if create_doc:
             docx_file = create_word_document(case_data, selected_arguments)
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
     else:
         st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-elif st.button('Create Document'):
+elif create_doc:
     if not uploaded_file:
         st.write('Please upload a file') 
     if not case_num:
