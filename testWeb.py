@@ -1,5 +1,6 @@
 import streamlit as st  
 import pandas as pd  
+import dask.dataframe as dd
 from docx import Document  
 from docx.oxml import OxmlElement 
 from docx.oxml.ns import qn 
@@ -401,23 +402,22 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
+def load_excel_with_dask(file):
+    return dd.read_excel(file).compute()
+
 # Streamlit representation code
 
-st.title('Excel Case Finder')  
+st.title('Excel Case Finder')
 
 # Step 1: Upload Excel file
-uploaded_file = st.file_uploader("Choose an Excel or CSV file", type=['xlsx', 'xls', 'csv'])  
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
 # Maintain the loaded DataFrame
 if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    file_extension = os.path.splitext(uploaded_file.name)[1]
-    if file_extension == '.csv':
-        st.session_state.df = pd.read_csv(uploaded_file)
-    else:
-        st.session_state.df = pd.read_excel(uploaded_file)
+    st.session_state.df = load_excel_with_dask(uploaded_file)
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
