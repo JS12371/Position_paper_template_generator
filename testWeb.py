@@ -1,6 +1,5 @@
 import streamlit as st  
 import pandas as pd  
-import dask.dataframe as dd
 from docx import Document  
 from docx.oxml import OxmlElement 
 from docx.oxml.ns import qn 
@@ -401,9 +400,14 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode() 
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
+    
+# Function definitions here (mac_num_to_name, format_date, get_issue_content, etc.)
 
-def load_excel_with_dask(file):
-    return dd.read_excel(file).compute()
+def load_excel_in_chunks(file):
+    chunks = []
+    for chunk in pd.read_excel(file, chunksize=10000):
+        chunks.append(chunk)
+    return pd.concat(chunks, ignore_index=True)
 
 # Streamlit representation code
 
@@ -417,7 +421,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = load_excel_with_dask(uploaded_file)
+    st.session_state.df = load_excel_in_chunks(uploaded_file)
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
