@@ -826,13 +826,6 @@ if st.session_state.df is not None:
     find_case_button = st.button('Find Case') 
     reset_button = st.button('Reset')
 
-    # Reset session state if reset button is clicked
-    if reset_button:
-        st.session_state.df = None
-        st.session_state.case_data = None
-        st.session_state.selected_arguments = {}
-        st.experimental_rerun()
-
     # Maintain the loaded case data
     if 'case_data' not in st.session_state:
         st.session_state.case_data = None
