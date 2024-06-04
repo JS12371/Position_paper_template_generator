@@ -2,6 +2,8 @@ import streamlit as st
 
 import pandas as pd  
 
+from python_calamine import CalamineWorkbook
+
 from docx import Document  
 
 from docx.oxml import OxmlElement 
