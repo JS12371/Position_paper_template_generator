@@ -817,7 +817,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = dd.read_excel(uploaded_file, engine = 'openpyxl')
+    st.session_state.df = dd.read_excel(uploaded_file, engine = 'openpyxl').compute()
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
