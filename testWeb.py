@@ -796,15 +796,17 @@ def read_excel_columns(uploaded_file):
         'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 
         'Appeal Date', 'Audit Adj No.', 'Group FYE', 'FYE', 'Issue Typ'
     ]
-    dfs = []
+    
+    available_columns = []
     for col in columns:
         try:
             df_col = pd.read_excel(uploaded_file, usecols=[col])
-            dfs.append(df_col)
+            available_columns.append(col)
         except Exception as e:
             pass
-    if dfs:
-        return pd.concat(dfs, axis=1)
+    
+    if available_columns:
+        return pd.read_excel(uploaded_file, usecols=available_columns)
     else:
         return pd.DataFrame()  # Return an empty DataFrame if no columns were read successfully
 
