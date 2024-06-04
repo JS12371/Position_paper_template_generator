@@ -795,17 +795,17 @@ def get_download_link(file, filename):
 
  
 
- def read_excel_with_calamine(file_path):
-    # Create a CalamineWorkbook object
-    workbook = CalamineWorkbook(file_path)
+def read_excel_with_calamine(file_path):
+   # Create a CalamineWorkbook object
+   workbook = CalamineWorkbook(file_path)
+   
+   # Extract data from the first sheet
+   sheet_data = workbook.get_sheet_data(workbook.sheet_names[0])
+   
+   # Convert the data to a pandas DataFrame
+   df = pd.DataFrame(sheet_data[1:], columns=sheet_data[0])
     
-    # Extract data from the first sheet
-    sheet_data = workbook.get_sheet_data(workbook.sheet_names[0])
-    
-    # Convert the data to a pandas DataFrame
-    df = pd.DataFrame(sheet_data[1:], columns=sheet_data[0])
-    
-    return df
+   return df
 
    
 
