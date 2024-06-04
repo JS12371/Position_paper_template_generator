@@ -391,13 +391,6 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-# Function to read the Excel file in chunks
-def load_excel_chunks(file, chunk_size=10000):
-    chunks = []
-    for chunk in pd.read_excel(file, chunksize=chunk_size, engine='openpyxl'):
-        chunks.append(chunk)
-    return pd.concat(chunks, ignore_index=True)
-
 # Streamlit representation code
 
 st.title('Excel Case Finder')  
@@ -410,7 +403,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = load_excel_chunks(uploaded_file)
+    st.session_state.df = pd.read_excel(uploaded_file, engine = 'openpyxl')
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
