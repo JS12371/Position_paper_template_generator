@@ -804,16 +804,6 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-def read_excel_in_chunks(file):
-    try:
-        chunks = []
-        for chunk in pd.read_excel(file, chunksize=10000):
-            chunks.append(chunk)
-        return pd.concat(chunks, axis=0)
-    except Exception as e:
-        st.error(f"Error reading Excel file in chunks: {e}")
-        return pd.DataFrame()  # Return an empty DataFrame in case of error
-
 # Streamlit representation code with reset button
 
 st.title('Excel Case Finder')  
@@ -826,7 +816,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = read_excel_in_chunks(uploaded_file)
+    st.session_state.df = pd.read_excel(uploaded_file, engine = 'calamine')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
