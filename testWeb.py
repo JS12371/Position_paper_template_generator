@@ -833,15 +833,13 @@ create_doc = st.button('Create Document')
  
 
 if uploaded_file and case_num and create_doc:  
+    df = read_excel_with_calamine(uploaded_file)
     try:
-        df = read_excel_with_calamine(uploaded_file)
-        try:
-            docx_file = create_word_document(find_case_data(df, case_num))
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-        except:
-            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+        docx_file = create_word_document(find_case_data(df, case_num))
+        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
     except:
-        st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+    st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
 
 
 
