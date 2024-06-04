@@ -803,7 +803,8 @@ def read_excel_with_calamine(file_path):
    sheet_data = workbook.get_sheet_data(workbook.sheet_names[0])
    
    # Convert the data to a pandas DataFrame
-   df = pd.DataFrame(sheet_data[1:], columns=sheet_data[0])
+   data = sheet.to_python()
+   df = pd.DataFrame(data)
     
    return df
 
