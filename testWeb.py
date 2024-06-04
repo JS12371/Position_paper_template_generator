@@ -811,13 +811,6 @@ st.title('Excel Case Finder')
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
-restart_button = st.button('Reset')
-# Restart the application if the restart button is clicked
-if restart_button:
-    for key in st.session_state.keys():
-        del st.session_state[key]
-    st.experimental_rerun()
-
 # Maintain the loaded DataFrame
 if 'df' not in st.session_state:
     st.session_state.df = None
