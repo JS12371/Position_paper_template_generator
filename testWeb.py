@@ -833,7 +833,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = load_excel(file)
+    st.session_state.df = load_excel(uploaded_file)
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
