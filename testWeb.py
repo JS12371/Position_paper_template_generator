@@ -1,5 +1,5 @@
 import streamlit as st  
-import modin.pandas as pd  
+import pandas as pd  
 import dask.dataframe as dd
 from docx import Document  
 from docx.oxml import OxmlElement 
@@ -817,11 +817,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    reader = pd.read_excel(uploaded_file, engine = 'openpyxl', chunksize = 10000)
-    chunks = []
-    for chunk in reader:
-        chunks.append(chunk)
-    st.session_state.df = pd.concat(chunks, ignore_index = True)
+    st.session_state.df = pd.read_excel(uploaded_file, engine = 'openpyxl')
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
