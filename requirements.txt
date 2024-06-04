@@ -1,5 +1,5 @@
 streamlit
 pandas
 python-docx
-dask[dataframe]==1.1.1
+dask
 openpyxl
