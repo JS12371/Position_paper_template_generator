@@ -805,9 +805,8 @@ def get_download_link(file, filename):
     return href 
 
 def read_excel_in_chunks(file):
-    chunk_size = 10000
     chunks = []
-    for chunk in pd.read_excel(file, chunksize=chunk_size):
+    for chunk in pd.read_excel(file, chunksize=10000):
         chunks.append(chunk)
     return pd.concat(chunks, axis=0)
 
