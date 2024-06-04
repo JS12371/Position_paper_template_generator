@@ -823,7 +823,10 @@ create_doc = st.button('Create Document')
 
 if uploaded_file and case_num and create_doc:  
     try:
-        df = pd.read_excel(uploaded_file)
+        workbook = CalamineWorkbook.from_path(uploaded_file)
+        sheet = workbook.get_sheet_by_index(0)  # Get the first sheet
+        data = sheet.to_python()  # Convert the sheet to a Python data structure (list of lists or
+        df = pd.DataFrame(data)
         try:
             docx_file = create_word_document(find_case_data(df, case_num))
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
