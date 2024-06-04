@@ -790,46 +790,43 @@ def get_download_link(file, filename):
     return href  
 
    
-
- 
+def read_excel_columns(uploaded_file):
+    columns = [
+        'Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 
+        'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 
+        'Appeal Date', 'Audit Adj No.', 'Group FYE', 'FYE', 'Issue Typ'
+    ]
+    dfs = []
+    for col in columns:
+        try:
+            df_col = pd.read_excel(uploaded_file, usecols=[col])
+            dfs.append(df_col)
+        except Exception as e:
+            pass
+    if dfs:
+        return pd.concat(dfs, axis=1)
+    else:
+        return pd.DataFrame()  # Return an empty DataFrame if no columns were read successfully
 
 # Streamlit UI Components  
-
- 
-
 st.title('Excel Case Finder')  
-
- 
-
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
-
- 
-
 case_num = st.text_input('Enter Case Number') 
-
- 
-
 create_doc = st.button('Create Document') 
 
- 
-
 if uploaded_file and case_num and create_doc:  
-    df = pd.read_excel(uploaded_file)
-    try:
-        docx_file = create_word_document(find_case_data(df, case_num))
-        st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-    except:
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-    st.write('Failed to load this file. Make sure it is of type .xlxs or .xls and try again.') 
-
-
+    df = read_excel_columns(uploaded_file)
+    if not df.empty:
+        try:
+            docx_file = create_word_document(find_case_data(df, case_num))
+            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        except:
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+    else:
+        st.write('Failed to load the necessary columns from the file. Please ensure the file contains the required columns.')
 
 if not uploaded_file and create_doc: 
-
     st.write('Please upload a file') 
 
- 
-
 if not case_num and create_doc: 
-
     st.write('Please enter a case number') 
