@@ -412,22 +412,25 @@ uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])
 if 'df' not in st.session_state:
     st.session_state.df = None
 
-# Define the necessary columns
-necessary_columns = ['Case Num', 'Case Name', 'Issue', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Group FYE', 'FYE', 'Transferred to Case #']
+# Define the necessary columns, excluding 'Group FYE' and 'FYE' initially
+necessary_columns = ['Case Num', 'Case Name', 'Issue', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Transferred to Case #']
+conditional_columns = ['Group FYE', 'FYE']
 
 if uploaded_file and st.session_state.df is None:
-    # Open the file and get the sheet names and columns
-    xls = pd.ExcelFile(uploaded_file, engine='openpyxl')
-    sheet_name = xls.sheet_names[0]
+    # Load the necessary columns first
+    df = pd.read_excel(uploaded_file, usecols=necessary_columns, engine='openpyxl')
     
-    # Check which columns are present in the first sheet
-    available_columns = xls.parse(sheet_name, nrows=0).columns.tolist()
+    # Check if 'Group FYE' and 'FYE' exist in the file
+    sheet = pd.read_excel(uploaded_file, nrows=0, engine='openpyxl')
+    available_columns = sheet.columns.tolist()
     
-    # Get the intersection of necessary columns and available columns
-    columns_to_load = [col for col in necessary_columns if col in available_columns]
+    # Load the conditional columns if they are present
+    for col in conditional_columns:
+        if col in available_columns:
+            temp_df = pd.read_excel(uploaded_file, usecols=[col], engine='openpyxl')
+            df = pd.concat([df, temp_df], axis=1)
     
-    # Load only the necessary columns
-    st.session_state.df = xls.parse(sheet_name, usecols=columns_to_load)
+    st.session_state.df = df
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
