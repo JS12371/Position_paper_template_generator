@@ -1,5 +1,6 @@
 streamlit
 pandas
 python-docx
+pyspark
 modin[dask]
 openpyxl
