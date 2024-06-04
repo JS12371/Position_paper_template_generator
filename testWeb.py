@@ -2,8 +2,6 @@ import streamlit as st
 
 import pandas as pd  
 
-import vaex
-
 from docx import Document  
 
 from docx.oxml import OxmlElement 
