@@ -805,10 +805,14 @@ def get_download_link(file, filename):
     return href 
 
 def read_excel_in_chunks(file):
-    chunks = []
-    for chunk in pd.read_excel(file, chunksize=10000):
-        chunks.append(chunk)
-    return pd.concat(chunks, axis=0)
+    try:
+        chunks = []
+        for chunk in pd.read_excel(file, chunksize=10000):
+            chunks.append(chunk)
+        return pd.concat(chunks, axis=0)
+    except Exception as e:
+        st.error(f"Error reading Excel file in chunks: {e}")
+        return pd.DataFrame()  # Return an empty DataFrame in case of error
 
 # Streamlit representation code with reset button
 
@@ -823,7 +827,10 @@ if 'df' not in st.session_state:
 
 if uploaded_file and st.session_state.df is None:
     st.session_state.df = read_excel_in_chunks(uploaded_file)
-    st.write('File uploaded successfully')
+    if not st.session_state.df.empty:
+        st.write('File uploaded successfully')
+    else:
+        st.write('Failed to read the file.')
 
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
