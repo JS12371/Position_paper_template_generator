@@ -1,5 +1,5 @@
 streamlit
 pandas
 python-docx
-calamine==0.7.1
+calamine
 openpyxl
