@@ -2,9 +2,7 @@ import streamlit as st
 
 import pandas as pd  
 
-import dask 
-
-from dask import dask.dataframe as dd
+import dask.dataframe as dd
 
 from docx import Document  
 
