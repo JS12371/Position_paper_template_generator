@@ -1,5 +1,6 @@
 import streamlit as st  
 import pandas as pd  
+import dask.dataframe as dd
 from docx import Document  
 from docx.oxml import OxmlElement 
 from docx.oxml.ns import qn 
@@ -816,7 +817,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine = 'openpyxl')
+    st.session_state.df = dd.read_excel(uploaded_file, engine = 'openpyxl')
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
