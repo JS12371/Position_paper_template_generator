@@ -417,23 +417,8 @@ necessary_columns = ['Case Num', 'Case Name', 'Issue', 'Provider ID', 'Provider 
 conditional_columns = ['Group FYE', 'FYE']
 
 if uploaded_file and st.session_state.df is None:
-    # Load the necessary columns first
-    df = pd.read_excel(uploaded_file, usecols=necessary_columns, engine='openpyxl')
-    
-    # Check if 'Group FYE' and 'FYE' exist in the file
-    sheet = pd.read_excel(uploaded_file, nrows=0, engine='openpyxl')
-    available_columns = sheet.columns.tolist()
-    
-    # Load the conditional columns if they are present
-    for col in conditional_columns:
-        if col in available_columns:
-            temp_df = pd.read_excel(uploaded_file, usecols=[col], engine='openpyxl')
-            df = pd.concat([df, temp_df], axis=1)
-    
-    st.session_state.df = df
-    st.write('File uploaded successfully')
+    df = pd.read_excel(uploaded_file, engine = 'openpyxl')
 
-# Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
     # Step 2: Enter Case Number
     case_num = st.text_input('Enter Case Number')
