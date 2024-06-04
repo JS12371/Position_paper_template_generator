@@ -805,7 +805,8 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-def load_excel_chunks(file, chunk_size=10000):
+def load_excel_chunks(file):
+    chunk_size = 10000
     chunks = []
     for chunk in pd.read_excel(file, chunksize=chunk_size, engine='openpyxl'):
         chunks.append(chunk)
