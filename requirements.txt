@@ -1,6 +1,5 @@
 streamlit
 pandas
 python-docx
-python-calamine
-dask[dataframe]
+modin[all]
 openpyxl
