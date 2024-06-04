@@ -2,8 +2,6 @@ import streamlit as st
 
 import pandas as pd  
 
-import dask.dataframe as dd
-
 from docx import Document  
 
 from docx.oxml import OxmlElement 
