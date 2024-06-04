@@ -827,7 +827,6 @@ if st.session_state.df is not None:
     # Step 2: Enter Case Number
     case_num = st.text_input('Enter Case Number') 
     find_case_button = st.button('Find Case') 
-    reset_button = st.button('Reset')
 
     # Maintain the loaded case data
     if 'case_data' not in st.session_state:
