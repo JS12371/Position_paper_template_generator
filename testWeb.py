@@ -805,6 +805,10 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
+def load_excel_dask(file):
+    df = dd.read_excel(file, engine='openpyxl')
+    return df.compute()
+
 # Streamlit representation code
 
 st.title('Excel Case Finder')  
@@ -817,7 +821,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = dd.read_excel(uploaded_file, engine = 'openpyxl')
+    st.session_state.df = load_excel_dask(uploaded_file)
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
