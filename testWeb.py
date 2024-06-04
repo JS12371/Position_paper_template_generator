@@ -795,7 +795,17 @@ def get_download_link(file, filename):
 
  
 
- 
+ def read_excel_with_calamine(file_path):
+    # Create a CalamineWorkbook object
+    workbook = CalamineWorkbook(file_path)
+    
+    # Extract data from the first sheet
+    sheet_data = workbook.get_sheet_data(workbook.sheet_names[0])
+    
+    # Convert the data to a pandas DataFrame
+    df = pd.DataFrame(sheet_data[1:], columns=sheet_data[0])
+    
+    return df
 
    
 
@@ -823,10 +833,7 @@ create_doc = st.button('Create Document')
 
 if uploaded_file and case_num and create_doc:  
     try:
-        workbook = CalamineWorkbook.from_path(uploaded_file)
-        sheet = workbook.get_sheet_by_index(0)  # Get the first sheet
-        data = sheet.to_python()  # Convert the sheet to a Python data structure (list of lists or
-        df = pd.DataFrame(data)
+        df = read_excel_with_calamine(uploaded_file)
         try:
             docx_file = create_word_document(find_case_data(df, case_num))
             st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
