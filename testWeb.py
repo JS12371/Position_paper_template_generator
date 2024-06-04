@@ -804,23 +804,6 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-def load_excel(file):
-    # Columns to load initially
-    cols_to_load = [
-        'Case Num', 'Case Name', 'Issue', 'Provider ID', 'Provider Name', 
-        'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 
-        'Transferred to Case #', 'Issue Typ', 'Group FYE'
-    ]
-    
-    try:
-        df = pd.read_excel(file, usecols=cols_to_load, engine='openpyxl')
-    except ValueError:
-        # If 'Group FYE' is not found, load with 'FYE' instead
-        cols_to_load[-1] = 'FYE'
-        df = pd.read_excel(file, usecols=cols_to_load, engine='openpyxl')
-    
-    return df 
-
 # Streamlit representation code
 
 st.title('Excel Case Finder')  
@@ -833,7 +816,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = load_excel(uploaded_file)
+    st.session_state.df = read_excel(uploaded_file, engine = 'openpyxl')
     st.write('File uploaded successfully')
 
 # Proceed only if the DataFrame is loaded
