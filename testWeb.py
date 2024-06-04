@@ -1,5 +1,5 @@
 import streamlit as st  
-import pandas as pd  
+import modin.pandas as pd  
 from docx import Document  
 from docx.oxml import OxmlElement 
 from docx.oxml.ns import qn 
