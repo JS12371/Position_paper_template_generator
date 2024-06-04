@@ -9,7 +9,7 @@ import base64
 from io import BytesIO 
 import os 
 import glob
-import python-calamine
+import python_calamine
 
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
