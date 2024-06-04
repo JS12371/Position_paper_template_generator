@@ -804,7 +804,7 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-# Streamlit representation code
+# Streamlit representation code with reset button
 
 st.title('Excel Case Finder')  
 
@@ -824,6 +824,14 @@ if st.session_state.df is not None:
     # Step 2: Enter Case Number
     case_num = st.text_input('Enter Case Number') 
     find_case_button = st.button('Find Case') 
+    reset_button = st.button('Reset')
+
+    # Reset session state if reset button is clicked
+    if reset_button:
+        st.session_state.df = None
+        st.session_state.case_data = None
+        st.session_state.selected_arguments = {}
+        st.experimental_rerun()
 
     # Maintain the loaded case data
     if 'case_data' not in st.session_state:
@@ -853,3 +861,4 @@ if st.session_state.df is not None:
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
