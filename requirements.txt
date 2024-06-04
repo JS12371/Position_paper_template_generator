@@ -3,4 +3,4 @@ pandas
 python-docx
 modin[dask]
 openpyxl
-pandas_calamine
+python-calamine
