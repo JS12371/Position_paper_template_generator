@@ -807,6 +807,9 @@ def get_download_link(file, filename):
 import streamlit as st
 import pandas as pd
 
+import streamlit as st
+import pandas as pd
+
 st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
@@ -822,12 +825,6 @@ if uploaded_file and st.session_state.df is None:
         st.write('File uploaded successfully')
     else:
         st.write('Failed to read the file.')
-
-# Reset functionality
-if st.button('Reset'):
-    st.session_state.case_data = None
-    st.session_state.selected_arguments = {}
-    st.session_state.case_num = ""
 
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
@@ -864,3 +861,10 @@ if st.session_state.df is not None:
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
+# Reset functionality
+if st.button('Reset'):
+    st.session_state.case_data = None
+    st.session_state.selected_arguments = {}
+    st.session_state.case_num = ""
+
