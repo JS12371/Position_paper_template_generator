@@ -815,7 +815,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 # Load the Excel file
-if uploaded_file and st.session_state.df is None:
+if uploaded_file:
     st.session_state.df = pd.read_excel(uploaded_file, engine='openpyxl')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
