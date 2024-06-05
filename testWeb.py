@@ -803,6 +803,8 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode() 
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
+import streamlit as st
+import pandas as pd
 
 # Title
 st.title('Excel Case Finder')  
@@ -857,24 +859,5 @@ if st.session_state.df is not None:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
 # Add a restart button at the bottom
-st.markdown(
-    """
-    <style>
-    .restart-button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        text-align: center;
-        background-color: #f44336;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 20px;
-    }
-    </style>
-    <button class="restart-button" onclick="window.location.reload();">Restart</button>
-    """,
-    unsafe_allow_html=True
-)
+if st.button('Restart'):
+    st.experimental_rerun()
