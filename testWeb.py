@@ -804,11 +804,6 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-import streamlit as st
-import pandas as pd
-
-import streamlit as st
-import pandas as pd
 
 st.title('Excel Case Finder')  
 
