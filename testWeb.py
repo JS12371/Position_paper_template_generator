@@ -803,10 +803,9 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode() 
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
-import streamlit as st
-import pandas as pd
 
-# Title
+# Streamlit representation code with reset button
+
 st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
@@ -817,7 +816,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine='calamine')
+    st.session_state.df = pd.read_excel(uploaded_file, engine = 'calamine')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
@@ -857,7 +856,3 @@ if st.session_state.df is not None:
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-
-# Add a restart button at the bottom
-if st.button('Restart'):
-    st.experimental_rerun()
