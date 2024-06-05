@@ -829,6 +829,7 @@ def reset_state():
         del st.session_state[key]
 
 # Add the reset button at the bottom of the screen
+reset_button = st.button('Reset')
 if reset_button:
     reset_state()
 
@@ -867,7 +868,7 @@ if st.session_state.df is not None:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
 
-reset_button = st.button('Reset')
+
 
 
 
