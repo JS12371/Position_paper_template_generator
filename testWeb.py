@@ -820,32 +820,18 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 # Define the relevant columns to read
-relevant_columns0 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Issue Typ']
 relevant_columns1 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'FYE', 'Issue Typ']
 relevant_columns2 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Group FYE', 'Issue Typ']
-
-# Modify the read_excel call to use only the relevant columns based on the file name
+# Modify the read_excel call to use only the relevant columns
 if uploaded_file and st.session_state.df is None:
-    # Analyze the file name
-    file_name = uploaded_file.name
-    
-    # Determine which columns to use based on the file name
-    if file_name.startswith('045'):
-        relevant_columns = relevant_columns2
-    elif file_name.startswith('061'):
-        relevant_columns = relevant_columns1
-    else:
-        # Default to relevant_columns1 if no specific condition is met
-        relevant_columns = relevant_columns0
-    
     try:
-        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns, engine='calamine')
-        if not st.session_state.df.empty:
-            st.write('File uploaded successfully')
-        else:
-            st.write('Failed to read the file.')
-    except Exception as e:
-        st.write(f'Error reading file: {e}')
+        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns1, engine='calamine')
+    except: 
+        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns2, engine='calamine')
+    if not st.session_state.df.empty:
+        st.write('File uploaded successfully')
+    else:
+        st.write('Failed to read the file.')
 
 
 # Proceed only if the DataFrame is loaded
@@ -883,5 +869,3 @@ if st.session_state.df is not None:
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-
-
