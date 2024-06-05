@@ -804,7 +804,8 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-# Streamlit representation code with reset button
+import streamlit as st
+import pandas as pd
 
 st.title('Excel Case Finder')  
 
@@ -816,25 +817,32 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine = 'calamine')
+    st.session_state.df = pd.read_excel(uploaded_file, engine='calamine')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
         st.write('Failed to read the file.')
 
+# Reset functionality
+if st.button('Reset'):
+    st.session_state.case_data = None
+    st.session_state.selected_arguments = {}
+    st.session_state.case_num = ""
+
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
     # Step 2: Enter Case Number
-    case_num = st.text_input('Enter Case Number') 
+    case_num = st.text_input('Enter Case Number', value=st.session_state.get('case_num', ''))
     find_case_button = st.button('Find Case') 
 
     # Maintain the loaded case data
     if 'case_data' not in st.session_state:
         st.session_state.case_data = None
 
-    if case_num and find_case_button and st.session_state.case_data is None:
+    if case_num and find_case_button:
         st.session_state.case_data = find_case_data(st.session_state.df, case_num)
         st.session_state.selected_arguments = {}
+        st.session_state.case_num = case_num
 
     # Proceed only if the case data is found
     if st.session_state.case_data is not None:
