@@ -862,9 +862,4 @@ if st.session_state.df is not None:
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
-# Reset functionality
-if st.button('Reset'):
-    st.session_state.case_data = None
-    st.session_state.selected_arguments = {}
-    st.session_state.case_num = ""
 
