@@ -804,7 +804,8 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-# Title
+# Streamlit representation code with reset button
+
 st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
@@ -814,37 +815,29 @@ uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])
 if 'df' not in st.session_state:
     st.session_state.df = None
 
-# Load the Excel file
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine='openpyxl')
+    st.session_state.df = pd.read_excel(uploaded_file, engine = 'calamine')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
         st.write('Failed to read the file.')
 
-# Define a reset function to clear session state variables
-def reset_state():
-    st.session_state.df = None
-    st.session_state.case_data = None
-    st.session_state.selected_arguments = {}
-    st.session_state.case_num = ""
-    st.session_state.find_case_button_clicked = False
-    st.session_state.create_doc_button_clicked = False
-
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
     # Step 2: Enter Case Number
-    case_num = st.text_input('Enter Case Number', value=st.session_state.get('case_num', '')) 
+    case_num = st.text_input('Enter Case Number') 
     find_case_button = st.button('Find Case') 
 
-    if find_case_button:
-        st.session_state.case_num = case_num
-        st.session_state.find_case_button_clicked = True
+    # Maintain the loaded case data
+    if 'case_data' not in st.session_state:
+        st.session_state.case_data = None
+
+    if case_num and find_case_button and st.session_state.case_data is None:
         st.session_state.case_data = find_case_data(st.session_state.df, case_num)
         st.session_state.selected_arguments = {}
 
-    # Proceed only if the case data is found and the find case button is clicked
-    if st.session_state.get('find_case_button_clicked', False) and st.session_state.case_data is not None:
+    # Proceed only if the case data is found
+    if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
             issues = st.session_state.case_data['Issue'].unique()
             for issue in issues:
@@ -859,12 +852,7 @@ if st.session_state.df is not None:
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
             if create_doc:
-                st.session_state.create_doc_button_clicked = True
                 docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-                # Reset the state after document creation
-                reset_state()
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-
-
