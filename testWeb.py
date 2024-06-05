@@ -804,8 +804,7 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-# Streamlit representation code with reset button
-
+# Title
 st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
@@ -816,7 +815,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine = 'calamine')
+    st.session_state.df = pd.read_excel(uploaded_file, engine='calamine')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
@@ -856,3 +855,26 @@ if st.session_state.df is not None:
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
+# Add a restart button at the bottom
+st.markdown(
+    """
+    <style>
+    .restart-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    </style>
+    <button class="restart-button" onclick="window.location.reload();">Restart</button>
+    """,
+    unsafe_allow_html=True
+)
