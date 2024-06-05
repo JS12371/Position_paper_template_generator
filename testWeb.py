@@ -819,12 +819,20 @@ uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])
 if 'df' not in st.session_state:
     st.session_state.df = None
 
+# Define the relevant columns to read
+relevant_columns1 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'FYE', 'Issue Typ']
+relevant_columns2 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Group FYE', 'Issue Typ']
+# Modify the read_excel call to use only the relevant columns
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine='calamine')
+    try:
+        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns1, engine='calamine')
+    except: 
+        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns2, engine='calamine')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
         st.write('Failed to read the file.')
+
 
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
