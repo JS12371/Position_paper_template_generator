@@ -804,14 +804,8 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-
-# Title with Reset Button
-col1, col2 = st.columns([4, 1])
-with col1:
-    st.title('Excel Case Finder')  
-with col2:
-    if st.button('Reset'):
-        reset_state()
+# Title
+st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
@@ -868,9 +862,9 @@ if st.session_state.df is not None:
                 st.session_state.create_doc_button_clicked = True
                 docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+                # Reset the state after document creation
+                reset_state()
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-
-
 
 
