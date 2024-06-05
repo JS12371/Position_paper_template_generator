@@ -803,6 +803,8 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode() 
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
+import streamlit as st
+import pandas as pd
 
 # Title
 st.title('Excel Case Finder')  
@@ -824,8 +826,17 @@ if uploaded_file and st.session_state.df is None:
 
 # Define a reset function to clear session state variables
 def reset_state():
-    for key in st.session_state.keys():
-        del st.session_state[key]
+    st.session_state.df = None
+    st.session_state.case_data = None
+    st.session_state.selected_arguments = {}
+    st.session_state.case_num = ""
+    st.session_state.find_case_button_clicked = False
+    st.session_state.create_doc_button_clicked = False
+
+# Add the reset button
+reset_button = st.button('Reset')
+if reset_button:
+    reset_state()
 
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
@@ -861,21 +872,6 @@ if st.session_state.df is not None:
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
 
-# Add the reset button at the bottom of the screen
-st.markdown(
-    """
-    <style>
-    .footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: white;
-        text-align: center;
-        padding: 10px 0;
-    }
-    </style>
-    """, unsafe_allow_html=True
-)
 
 if st.button('Reset', key='reset_button'):
     reset_state()
