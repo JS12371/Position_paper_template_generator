@@ -804,8 +804,6 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
-# Streamlit representation code with reset button
-
 st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
@@ -816,7 +814,7 @@ if 'df' not in st.session_state:
     st.session_state.df = None
 
 if uploaded_file and st.session_state.df is None:
-    st.session_state.df = pd.read_excel(uploaded_file, engine = 'calamine')
+    st.session_state.df = pd.read_excel(uploaded_file, engine='openpyxl')
     if not st.session_state.df.empty:
         st.write('File uploaded successfully')
     else:
@@ -832,7 +830,7 @@ if st.session_state.df is not None:
     if 'case_data' not in st.session_state:
         st.session_state.case_data = None
 
-    if case_num and find_case_button and st.session_state.case_data is None:
+    if case_num and find_case_button:
         st.session_state.case_data = find_case_data(st.session_state.df, case_num)
         st.session_state.selected_arguments = {}
 
@@ -854,5 +852,17 @@ if st.session_state.df is not None:
             if create_doc:
                 docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+                st.session_state.case_data = None
+                st.session_state.selected_arguments = {}
+                st.session_state.df = None
+                st.write("Parameters reset. You can search for a new case.")
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
+# Reset button
+reset_button = st.button('Reset All')
+if reset_button:
+    st.session_state.df = None
+    st.session_state.case_data = None
+    st.session_state.selected_arguments = {}
+    st.write("Parameters reset. You can search for a new case.")
