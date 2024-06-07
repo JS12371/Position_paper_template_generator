@@ -200,14 +200,14 @@ def create_word_document(case_data, selected_arguments):
         pass 
 
     provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found' 
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found' 
+    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case data else 'Provider Names not found' 
     if len(provider_name_array) > 1: 
         provider_names = "Various"
     else: 
         pass 
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found' 
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
     determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
@@ -219,12 +219,12 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found' 
-    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found' 
-    if 'Group FYE' in case_data: 
-        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
+    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case data else 'Date of Appeal not found' 
+    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found' 
+    if 'Group FYE' in case data: 
+        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found' 
     else: 
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
+        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
 
@@ -333,7 +333,6 @@ def create_word_document(case_data, selected_arguments):
     run.font.size = Pt(11) 
     run.font.name = 'Cambria (Body)' 
 
-    doc.save(f"Case_{case_num}.docx") 
     doc.add_page_break() 
 
     header = doc.add_paragraph('I. INTRODUCTION') 
@@ -405,7 +404,7 @@ def create_word_document(case_data, selected_arguments):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content = get_issue_content(issue[0], doc, selected_arguments[0])
+                issue_content = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list)
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
@@ -416,7 +415,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content = get_issue_content(issue[i], doc, selected_arguments[i])
+                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
@@ -447,6 +446,7 @@ def create_word_document(case_data, selected_arguments):
     buffer = BytesIO()  
     doc.save(buffer)  
     return buffer.getvalue()  
+
   
 
 def string_processing(s): 
