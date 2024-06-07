@@ -102,24 +102,31 @@ def copy_paragraphs(src, dest):
             copy_paragraph_format(paragraph, dest_paragraph)
             copy_runs(paragraph, dest_paragraph)
 
-
 def extract_exhibits(doc):
     exhibits = []
     exhibit_started = False
-    exhibit_text = ""
+    current_exhibit = []
+
     for paragraph in doc.paragraphs:
-        if "EXHIBITS" in paragraph.text:
+        text = paragraph.text.strip()
+
+        if "EXHIBITS" in text:
             exhibit_started = True
             continue
+
         if exhibit_started:
-            if paragraph.text.strip():
-                exhibit_text += paragraph.text + "\n"
+            if text:
+                current_exhibit.append(text)
             else:
-                exhibits.append(exhibit_text.strip())
-                exhibit_text = ""
-    if exhibit_text:
-        exhibits.append(exhibit_text.strip())
+                if current_exhibit:
+                    exhibits.append("\n".join(current_exhibit).strip())
+                    current_exhibit = []
+
+    if current_exhibit:
+        exhibits.append("\n".join(current_exhibit).strip())
+
     return exhibits
+
 
 def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
     issueformatted = issue.replace(" ", "")
@@ -134,6 +141,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
+        
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
