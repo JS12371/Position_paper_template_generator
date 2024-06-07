@@ -192,7 +192,7 @@ def create_word_document(case_data, selected_arguments):
     else: 
         pass 
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found' 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
     mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
