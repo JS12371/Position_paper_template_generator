@@ -110,17 +110,24 @@ def extract_exhibits(doc):
 
     for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
+        st.write(f"Processing paragraph: {text}")  # Logging each paragraph
 
         if "EXHIBITS" in text:
             exhibit_started = True
+            st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
             continue
 
         if exhibit_started:
-            if text:  # Non-empty paragraph
+            if text:
+                # Append each exhibit with its corresponding index
                 exhibits.append(f"C-{exhibit_index}: {text}")
+                st.write(f"Adding exhibit C-{exhibit_index}: {text}")  # Logging added exhibit
                 exhibit_index += 1
 
+    st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
     return exhibits
+
+
 
 
 def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
