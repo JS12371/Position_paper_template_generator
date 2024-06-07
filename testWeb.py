@@ -120,7 +120,7 @@ def extract_exhibits(doc):
         if exhibit_started:
             if text:
                 # Append each exhibit with its corresponding index
-                exhibits.append(f"C-{exhibit_index}: {text}")
+                exhibits.append(f" {text}")
                 st.write(f"Adding exhibit C-{exhibit_index}: {text}")  # Logging added exhibit
                 exhibit_index += 1
 
