@@ -207,7 +207,7 @@ def create_word_document(case_data, selected_arguments):
         pass 
 
     case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found' 
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
     determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
