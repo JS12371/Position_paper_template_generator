@@ -102,10 +102,11 @@ def copy_paragraphs(src, dest):
             copy_paragraph_format(paragraph, dest_paragraph)
             copy_runs(paragraph, dest_paragraph)
 
+
 def extract_exhibits(doc):
     exhibits = []
     exhibit_started = False
-    current_exhibit = []
+    exhibit_index = 1
 
     for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
@@ -115,15 +116,9 @@ def extract_exhibits(doc):
             continue
 
         if exhibit_started:
-            if text:
-                current_exhibit.append(text)
-            else:
-                if current_exhibit:
-                    exhibits.append("\n".join(current_exhibit).strip())
-                    current_exhibit = []
-
-    if current_exhibit:
-        exhibits.append("\n".join(current_exhibit).strip())
+            if text:  # Non-empty paragraph
+                exhibits.append(f"C-{exhibit_index}: {text}")
+                exhibit_index += 1
 
     return exhibits
 
