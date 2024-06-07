@@ -91,12 +91,17 @@ def copy_runs(src_paragraph, dest_paragraph):
         if run.font.color and run.font.color.rgb:
             dest_run.font.color.rgb = run.font.color.rgb
 
-# Function to copy paragraphs from source to destination
+# Function to copy paragraphs from source to destination, excluding exhibits
 def copy_paragraphs(src, dest):
+    exhibit_section_started = False
     for paragraph in src.paragraphs:
-        dest_paragraph = dest.add_paragraph()
-        copy_paragraph_format(paragraph, dest_paragraph)
-        copy_runs(paragraph, dest_paragraph)
+        if "V. EXHIBITS" in paragraph.text:
+            exhibit_section_started = True
+        if not exhibit_section_started:
+            dest_paragraph = dest.add_paragraph()
+            copy_paragraph_format(paragraph, dest_paragraph)
+            copy_runs(paragraph, dest_paragraph)
+
 
 def extract_exhibits(doc):
     exhibits = []
