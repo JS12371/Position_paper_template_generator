@@ -95,7 +95,7 @@ def copy_runs(src_paragraph, dest_paragraph):
 def copy_paragraphs(src, dest):
     exhibit_section_started = False
     for paragraph in src.paragraphs:
-        if "V. EXHIBITS" in paragraph.text:
+        if "EXHIBITS" in paragraph.text:
             exhibit_section_started = True
         if not exhibit_section_started:
             dest_paragraph = dest.add_paragraph()
