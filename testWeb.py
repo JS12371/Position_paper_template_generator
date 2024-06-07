@@ -108,7 +108,7 @@ def extract_exhibits(doc):
     exhibit_started = False
     exhibit_text = ""
     for paragraph in doc.paragraphs:
-        if "V. EXHIBITS" in paragraph.text:
+        if "EXHIBITS" in paragraph.text:
             exhibit_started = True
             continue
         if exhibit_started:
@@ -134,7 +134,6 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
-
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
@@ -407,7 +406,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
+                issue_content = get_issue_content(issue[i], doc, selected_arguments[i])
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
@@ -415,22 +414,21 @@ def create_word_document(case_data, selected_arguments):
                 i += 1 
 
     # Add exhibits at the end of the document for individual cases
-    if not group_mode and exhibits_list:
-        doc.add_page_break()
-        header = doc.add_paragraph('V. EXHIBITS')
-        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-        run = header.runs[0]
+    doc.add_page_break()
+    header = doc.add_paragraph('V. EXHIBITS')
+    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    run = header.runs[0]
+    run.font.size = Pt(11)
+    run.font.name = 'Cambria (Body)'
+    run.font.bold = True
+    run.font.color.rgb = RGBColor(0, 0, 0)
+
+    for exhibit in exhibits_list:
+        exhibit_para = doc.add_paragraph(exhibit)
+        exhibit_para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+        run = exhibit_para.runs[0]
         run.font.size = Pt(11)
         run.font.name = 'Cambria (Body)'
-        run.font.bold = True
-        run.font.color.rgb = RGBColor(0, 0, 0)
-
-        for exhibit in exhibits_list:
-            exhibit_para = doc.add_paragraph(exhibit)
-            exhibit_para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-            run = exhibit_para.runs[0]
-            run.font.size = Pt(11)
-            run.font.name = 'Cambria (Body)'
 
     for paragraph in doc.paragraphs:
         if 'None' in paragraph.text:
@@ -439,6 +437,7 @@ def create_word_document(case_data, selected_arguments):
     buffer = BytesIO()  
     doc.save(buffer)  
     return buffer.getvalue()  
+  
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
