@@ -128,7 +128,7 @@ def extract_exhibits(doc):
     st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
     return exhibits, issue_num
 
-def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list, issue_num):
+def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
