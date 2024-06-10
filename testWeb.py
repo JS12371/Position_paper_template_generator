@@ -284,7 +284,7 @@ def create_word_document(case_data, selected_arguments):
     run.font.size = Pt(11) 
     run.font.name = 'Cambria (Body)' 
 
-    sub = doc.add_paragraph(f"and\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
+    sub = doc.add_paragraph(f"\nand\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
