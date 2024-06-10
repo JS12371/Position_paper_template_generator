@@ -10,6 +10,8 @@ from io import BytesIO
 import os 
 import glob
 
+issue_num = 1
+
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
     if mac_num[:2] == '05': 
@@ -103,7 +105,7 @@ def copy_paragraphs(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 
-def extract_exhibits(doc):
+def extract_exhibits(doc, issue_num):
     exhibits = []
     exhibit_started = False
     exhibit_index = 1
@@ -115,7 +117,8 @@ def extract_exhibits(doc):
 
         if "EXHIBITS" in text:
             exhibit_started = True
-            exhibits.append(f"\n\nNEW ISSUE\n")
+            exhibits.append(f"\n\nISSUE {issue_num}\n")
+            issue_num = issue_num + 1
             st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
             continue
 
@@ -129,7 +132,7 @@ def extract_exhibits(doc):
     st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
     return exhibits
 
-def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
+def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list, issue_num):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
@@ -137,7 +140,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        exhibits = extract_exhibits(doc1)
+        exhibits = extract_exhibits(doc1, issue_num)
         exhibits_list.extend(exhibits)
         return content
     except Exception as e:
@@ -403,7 +406,7 @@ def create_word_document(case_data, selected_arguments):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list)
+                issue_content = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list, issue_num)
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
@@ -414,7 +417,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
+                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list, issue_num)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
