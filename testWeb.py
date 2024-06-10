@@ -10,8 +10,6 @@ from io import BytesIO
 import os 
 import glob
 
-issue_num = 1
-
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
     if mac_num[:2] == '05': 
@@ -140,9 +138,9 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        exhibits, issue_num = extract_exhibits(doc1, issue_num)
+        exhibits, issue_num = extract_exhibits(doc1)
         exhibits_list.extend(exhibits)
-        return content
+        return content, issue_num
     except Exception as e:
         return f"Error processing issue file: {e}"
         
@@ -406,7 +404,7 @@ def create_word_document(case_data, selected_arguments):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list, issue_num)
+                issue_content, issue_num = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list, issue_num)
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
@@ -417,7 +415,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list, issue_num)
+                issue_content, issue_num = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list, issue_num)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
