@@ -117,7 +117,7 @@ def extract_exhibits(doc, issue_num):
             exhibit_started = True
             exhibits.append(f"\n\nISSUE {str(issue_num)}\n")
             st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
-            issue_num += 1
+            issue_num = issue_num + 1
             continue
 
         if exhibit_started:
