@@ -140,6 +140,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
         content = copy_paragraphs(doc1, dest_doc)
         exhibits = extract_exhibits(doc1)
         exhibits_list.extend(exhibits)
+        exhibits_list = exhibits_list.unique()
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
