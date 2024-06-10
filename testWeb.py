@@ -109,7 +109,7 @@ def copy_paragraphs(src, dest):
         copy_runs(paragraph, dest_paragraph)
 
 
-def extract_exhibits(doc):
+def extract_exhibits(doc, issue):
     exhibits = []
     exhibit_started = False
     exhibit_index = 1
@@ -120,7 +120,7 @@ def extract_exhibits(doc):
 
         if "EXHIBITS" in text:
             exhibit_started = True
-            exhibits.append(f"\n\nNEW ISSUE\n")
+            exhibits.append(f"\n\nISSUE: {issue}\n")
             st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
             continue
 
@@ -142,7 +142,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
     try:
         doc1 = Document(filename)
         content = copy_paragraphs_for_exhibits(doc1, dest_doc)
-        exhibits = extract_exhibits(doc1)
+        exhibits = extract_exhibits(doc1, issue)
         exhibits_list.extend(exhibits)
         return content
     except Exception as e:
