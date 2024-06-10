@@ -130,8 +130,6 @@ def extract_exhibits(doc, issue_num):
     st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
     return exhibits
 
-
-
 issue_num = 1
 
 def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list, issue_num):
@@ -408,7 +406,7 @@ def create_word_document(case_data, selected_arguments):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list)
+                issue_content = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list, issue_num)
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
@@ -419,7 +417,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
+                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list, issue_num)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
