@@ -126,7 +126,7 @@ def extract_exhibits(doc):
                 exhibit_index += 1
 
     st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
-    return exhibits, issue_num
+    return exhibits
 
 def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
     issueformatted = issue.replace(" ", "")
