@@ -10,6 +10,8 @@ from io import BytesIO
 import os 
 import glob
 
+issue_num = 1
+
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
     if mac_num[:2] == '05': 
@@ -128,7 +130,7 @@ def extract_exhibits(doc, issue_num):
                 exhibit_index += 1
 
     st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
-    return exhibits
+    return exhibits, issue_num
 
 def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list, issue_num):
     issueformatted = issue.replace(" ", "")
@@ -138,14 +140,13 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        exhibits = extract_exhibits(doc1, issue_num)
+        exhibits, issue_num = extract_exhibits(doc1, issue_num)
         exhibits_list.extend(exhibits)
         return content
     except Exception as e:
         return f"Error processing issue file: {e}"
         
 def create_word_document(case_data, selected_arguments):  
-    issue_num = 1
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
