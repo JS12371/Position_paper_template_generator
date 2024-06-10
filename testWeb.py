@@ -92,7 +92,7 @@ def copy_runs(src_paragraph, dest_paragraph):
             dest_run.font.color.rgb = run.font.color.rgb
 
 # Function to copy paragraphs from source to destination, excluding exhibits
-def copy_paragraphs(src, dest):
+def copy_paragraphs_for_exhibits(src, dest):
     exhibit_section_started = False
     for paragraph in src.paragraphs:
         if "EXHIBITS" in paragraph.text:
@@ -101,6 +101,12 @@ def copy_paragraphs(src, dest):
             dest_paragraph = dest.add_paragraph()
             copy_paragraph_format(paragraph, dest_paragraph)
             copy_runs(paragraph, dest_paragraph)
+
+def copy_paragraphs(src, dest):
+    for paragraph in src.paragraphs:
+        dest_paragraph = dest.add_paragraph()
+        copy_paragraph_format(paragraph, dest_paragraph)
+        copy_runs(paragraph, dest_paragraph)
 
 
 def extract_exhibits(doc):
@@ -135,7 +141,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
         return f"{issue}"
     try:
         doc1 = Document(filename)
-        content = copy_paragraphs(doc1, dest_doc)
+        content = copy_paragraphs_for_exhibits(doc1, dest_doc)
         exhibits = extract_exhibits(doc1)
         exhibits_list.extend(exhibits)
         return content
