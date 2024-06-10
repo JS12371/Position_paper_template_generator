@@ -103,10 +103,11 @@ def copy_paragraphs(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 
-def extract_exhibits(doc):
+def extract_exhibits(doc, issue_num):
     exhibits = []
     exhibit_started = False
     exhibit_index = 1
+    
 
     for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
@@ -114,7 +115,9 @@ def extract_exhibits(doc):
 
         if "EXHIBITS" in text:
             exhibit_started = True
+            exhibits.append(f"\n\nISSUE {issue_num}\n")
             st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
+            issue_num += 1
             continue
 
         if exhibit_started:
@@ -132,13 +135,14 @@ def extract_exhibits(doc):
 
 def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
     issueformatted = issue.replace(" ", "")
+    issue_num = 1
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
         return f"{issue}"
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        exhibits = extract_exhibits(doc1)
+        exhibits = extract_exhibits(doc1, issue_num)
         exhibits_list.extend(exhibits)
         return content
     except Exception as e:
