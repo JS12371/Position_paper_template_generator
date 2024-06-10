@@ -132,10 +132,10 @@ def extract_exhibits(doc, issue_num):
 
 
 
+issue_num = 1
 
-def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
+def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list, issue_num):
     issueformatted = issue.replace(" ", "")
-    issue_num = 1
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
         return f"{issue}"
