@@ -103,20 +103,18 @@ def copy_paragraphs(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 
-def extract_exhibits(doc, issue_num):
+def extract_exhibits(doc):
     exhibits = []
     exhibit_started = False
     exhibit_index = 1
     
-
     for paragraph in doc.paragraphs:
         text = paragraph.text.strip()
         st.write(f"Processing paragraph: {text}")  # Logging each paragraph
 
         if "EXHIBITS" in text:
             exhibit_started = True
-            exhibits.append(f"\n\nISSUE {issue_num}\n")
-            issue_num = issue_num + 1
+            exhibits.append(f"\n\nNEW ISSUE\n")
             st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
             continue
 
@@ -138,7 +136,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
     try:
         doc1 = Document(filename)
         content = copy_paragraphs(doc1, dest_doc)
-        exhibits, issue_num = extract_exhibits(doc1)
+        exhibits = extract_exhibits(doc1)
         exhibits_list.extend(exhibits)
         return content, issue_num
     except Exception as e:
@@ -404,7 +402,7 @@ def create_word_document(case_data, selected_arguments):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content, issue_num = get_issue_content_with_exhibits(issue[0], doc, selected_arguments[0], exhibits_list, issue_num)
+                issue_content = get_issue_content(issue[0], doc, selected_arguments[0])
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
@@ -415,7 +413,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content, issue_num = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list, issue_num)
+                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
