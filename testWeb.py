@@ -428,20 +428,23 @@ def create_word_document(case_data, selected_arguments):
 
     # Add exhibits at the end of the document for individual cases
     doc.add_page_break()
-    header = doc.add_paragraph('V. EXHIBITS')
-    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-    run = header.runs[0]
-    run.font.size = Pt(11)
-    run.font.name = 'Cambria (Body)'
-    run.font.bold = True
-    run.font.color.rgb = RGBColor(0, 0, 0)
-
-    for exhibit in exhibits_list:
-        exhibit_para = doc.add_paragraph(exhibit)
-        exhibit_para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-        run = exhibit_para.runs[0]
+    if case_num[-1] == 'G' or case_num[-1] == 'C':
+        pass
+    else:
+        header = doc.add_paragraph('V. EXHIBITS')
+        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+        run = header.runs[0]
         run.font.size = Pt(11)
         run.font.name = 'Cambria (Body)'
+        run.font.bold = True
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+        for exhibit in exhibits_list:
+            exhibit_para = doc.add_paragraph(exhibit)
+            exhibit_para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+            run = exhibit_para.runs[0]
+            run.font.size = Pt(11)
+            run.font.name = 'Cambria (Body)'
 
     for paragraph in doc.paragraphs:
         if 'None' in paragraph.text:
