@@ -10,8 +10,6 @@ from io import BytesIO
 import os 
 import glob
 
-issue_num = 1
-
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
     if mac_num[:2] == '05': 
@@ -147,6 +145,7 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
         return f"Error processing issue file: {e}"
         
 def create_word_document(case_data, selected_arguments):  
+    issue_num = 1
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
