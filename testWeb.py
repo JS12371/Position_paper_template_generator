@@ -269,11 +269,11 @@ def create_word_document(case_data, selected_arguments):
 
     table = doc.add_table(rows = 1, cols = 3) 
 
-    for cell in table columns[0].cells: 
+    for cell in table_columns[0].cells: 
         cell.width = Pt(260) 
-    for cell in table columns[1].cells: 
+    for cell in table_columns[1].cells: 
         cell.width = Pt(20) 
-    for cell in table columns[2].cells: 
+    for cell in table_columns[2].cells: 
         cell.width = Pt(260) 
 
     cell_left = table.cell(0,0) 
@@ -359,7 +359,7 @@ def create_word_document(case_data, selected_arguments):
     table = doc.add_table(rows = 1, cols = 2) 
     for cell in table.columns[0].cells: 
         cell.width = Pt(500) 
-    for cell in table columns[1].cells: 
+    for cell in table_columns[1].cells: 
         cell.width = Pt(40) 
 
     cell_left = table.cell(0,0) 
