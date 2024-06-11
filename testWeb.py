@@ -79,8 +79,8 @@ def copy_paragraph_format(src_paragraph, dest_paragraph):
     if src_paragraph.paragraph_format.line_spacing:
         dest_paragraph.paragraph_format.line_spacing = src_paragraph.paragraph_format.line_spacing
 
-# Function to copy runs from one paragraph to another
-def copy_runs(src_paragraph, dest_paragraph):
+# Function to copy runs from one paragraph to another including footnotes
+def copy_runs_with_footnotes(src_paragraph, dest_paragraph):
     for run in src_paragraph.runs:
         dest_run = dest_paragraph.add_run(run.text)
         dest_run.bold = run.bold
@@ -90,24 +90,18 @@ def copy_runs(src_paragraph, dest_paragraph):
         dest_run.font.name = run.font.name
         if run.font.color and run.font.color.rgb:
             dest_run.font.color.rgb = run.font.color.rgb
+        for element in run._r:
+            if element.tag.endswith('footnoteReference'):
+                footnote_ref = OxmlElement('w:footnoteReference')
+                footnote_ref.set(qn('w:id'), element.attrib[qn('w:id')])
+                dest_run._r.append(footnote_ref)
 
-# Function to copy paragraphs from source to destination, excluding exhibits
-def copy_paragraphs_for_exhibits(src, dest):
-    exhibit_section_started = False
-    for paragraph in src.paragraphs:
-        if "EXHIBITS" in paragraph.text:
-            exhibit_section_started = True
-        if not exhibit_section_started:
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
-
-def copy_paragraphs(src, dest):
+# Function to copy paragraphs from source to destination, including footnotes
+def copy_paragraphs_with_footnotes(src, dest):
     for paragraph in src.paragraphs:
         dest_paragraph = dest.add_paragraph()
         copy_paragraph_format(paragraph, dest_paragraph)
-        copy_runs(paragraph, dest_paragraph)
-
+        copy_runs_with_footnotes(paragraph, dest_paragraph)
 
 def extract_exhibits(doc, issue):
     exhibits = []
@@ -134,14 +128,14 @@ def extract_exhibits(doc, issue):
     st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
     return exhibits
 
-def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
+def get_issue_content_with_footnotes(issue, dest_doc, selected_argument, exhibits_list):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
         return f"{issue}"
     try:
         doc1 = Document(filename)
-        content = copy_paragraphs_for_exhibits(doc1, dest_doc)
+        content = copy_paragraphs_with_footnotes(doc1, dest_doc)
         exhibits = extract_exhibits(doc1, issue)
         exhibits_list.extend(exhibits)
         return content
@@ -240,7 +234,7 @@ def create_word_document(case_data, selected_arguments):
         cell.width = Pt(260) 
 
     cell_left = table.cell(0,0) 
-    cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n" 
+    cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\nProvider Names: {provider_names} \n\n vs. \n\n{mac_name}\n(Medicare Administrative Contractor)\n\nand \n\n Federal Specialized Services \n(Appeals Support Contractor)\n" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
     run.font.name = 'Cambria (Body)' 
@@ -419,7 +413,7 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Cambria (Body)' 
-                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
+                issue_content = get_issue_content_with_footnotes(issue[i], doc, selected_arguments[i], exhibits_list)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
@@ -453,8 +447,6 @@ def create_word_document(case_data, selected_arguments):
     buffer = BytesIO()  
     doc.save(buffer)  
     return buffer.getvalue()  
-
-  
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
