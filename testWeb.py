@@ -1,8 +1,8 @@
 import streamlit as st  
 import pandas as pd  
 from docx import Document  
-from docx.oxml import OxmlElement 
-from docx.oxml.ns import qn 
+from docx.oxml import OxmlElement, parse_xml
+from docx.oxml.ns import qn
 from docx.shared import Pt, RGBColor  
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
 import base64  
