@@ -123,15 +123,14 @@ def copy_paragraphs(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 def create_footnote_with_text(doc, text):
-    footnote_parts = doc._element.xpath('//w:footnotes')
-    if not footnote_parts:
+    footnotes = doc.element.xpath('//w:footnotes')
+    if not footnotes:
         footnotes = OxmlElement('w:footnotes')
-        doc._element.append(footnotes)
-        footnote_parts = [footnotes]
+        doc.element.append(footnotes)
     
-    footnote_part = footnote_parts[0]
     footnote = OxmlElement('w:footnote')
-    footnote.set(qn('w:id'), str(len(footnote_part) + 1))
+    footnote_id = len(footnotes[0].xpath('./w:footnote')) + 1
+    footnote.set(qn('w:id'), str(footnote_id))
     
     p = OxmlElement('w:p')
     r = OxmlElement('w:r')
@@ -141,9 +140,9 @@ def create_footnote_with_text(doc, text):
     r.append(t)
     p.append(r)
     footnote.append(p)
-    footnote_part.append(footnote)
+    footnotes[0].append(footnote)
     
-    return str(len(footnote_part))
+    return str(footnote_id)
 
 def insert_footnote_in_paragraph(paragraph, footnote_id):
     run = paragraph.add_run()
