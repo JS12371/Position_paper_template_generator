@@ -496,13 +496,7 @@ def create_word_document(case_data, selected_arguments):
 
     for paragraph in doc.paragraphs:
         if 'None' in paragraph.text:
-            paragraph.text = paragraph.text.replace('None', '', 1)
-
-    for paragraph in doc.paragraphs:
-        if paragraph.text.strip() == "1":
-            p = paragraph._element
-            p.getparent().remove(p)
-            p._element = p._p = None
+            paragraph.text = paragraph.text.replace('None', '')
 
     set_font_properties(doc)
 
