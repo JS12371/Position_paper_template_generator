@@ -112,7 +112,7 @@ def copy_paragraphs(src, dest):
             footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
         elif "END FOOTNOTE" in paragraph.text:
             in_footnote = False
-            insert_footnote(dest, " ".join(footnote_text))
+            insert_footnote(dest.add_paragraph(), " ".join(footnote_text))
             footnote_text = []
         elif in_footnote:
             footnote_text.append(paragraph.text.strip())
@@ -124,16 +124,15 @@ def copy_paragraphs(src, dest):
 def insert_footnote(paragraph, text):
     run = paragraph.add_run()
     footnote_ref = run._r.add_footnote_ref()
-    footnote = paragraph._element.addnext(create_footnote_xml(text, footnote_ref))
+    footnote = paragraph._element.addnext(create_footnote_xml(text))
     return footnote
 
-def create_footnote_xml(text, footnote_ref):
+def create_footnote_xml(text):
     # Create the XML structure for the footnote
     footnote = OxmlElement('w:footnote')
     footnote.set(qn('w:id'), '1')
     footnote_p = OxmlElement('w:p')
     footnote_r = OxmlElement('w:r')
-    footnote_r.append(footnote_ref)
     footnote_t = OxmlElement('w:t')
     footnote_t.text = text
     footnote_r.append(footnote_t)
@@ -185,7 +184,8 @@ def set_font_properties(doc):
         for run in paragraph.runs:
             run.font.name = 'Times New Roman'
             run.font.size = Pt(11)
-        
+
+# Rest of your code remains unchanged
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
