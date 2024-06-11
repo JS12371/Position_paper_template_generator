@@ -112,7 +112,8 @@ def copy_paragraphs(src, dest):
             footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
         elif "END FOOTNOTE" in paragraph.text:
             in_footnote = False
-            insert_footnote(dest.add_paragraph(), " ".join(footnote_text))
+            footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
+            insert_footnote_in_paragraph(dest.add_paragraph(), footnote_id)
             footnote_text = []
         elif in_footnote:
             footnote_text.append(paragraph.text.strip())
@@ -121,30 +122,28 @@ def copy_paragraphs(src, dest):
             copy_paragraph_format(paragraph, dest_paragraph)
             copy_runs(paragraph, dest_paragraph)
 
-def insert_footnote(paragraph, text):
-    run = paragraph.add_run()
-    footnote_ref = OxmlElement('w:footnoteReference')
-    run._r.append(footnote_ref)
-    footnote = create_footnote_xml(text)
-    paragraph._element.addnext(footnote)
-    return footnote
-
-def create_footnote_xml(text):
-    footnotes_part = OxmlElement('w:footnotes')
+def create_footnote_with_text(doc, text):
+    footnote_part = doc._element.xpath('//w:footnotes')[0]
     footnote = OxmlElement('w:footnote')
-    footnote.set(qn('w:id'), '1')
+    footnote.set(qn('w:id'), str(len(footnote_part) + 1))
     
-    footnote_p = OxmlElement('w:p')
-    footnote_r = OxmlElement('w:r')
-    footnote_t = OxmlElement('w:t')
-    footnote_t.text = text
+    p = OxmlElement('w:p')
+    r = OxmlElement('w:r')
+    t = OxmlElement('w:t')
+    t.text = text
+
+    r.append(t)
+    p.append(r)
+    footnote.append(p)
+    footnote_part.append(footnote)
     
-    footnote_r.append(footnote_t)
-    footnote_p.append(footnote_r)
-    footnote.append(footnote_p)
-    footnotes_part.append(footnote)
-    
-    return footnotes_part
+    return str(len(footnote_part))
+
+def insert_footnote_in_paragraph(paragraph, footnote_id):
+    run = paragraph.add_run()
+    footnote_reference = OxmlElement('w:footnoteReference')
+    footnote_reference.set(qn('w:id'), footnote_id)
+    run._r.append(footnote_reference)
 
 def extract_exhibits(doc, issue):
     exhibits = []
@@ -192,7 +191,6 @@ def set_font_properties(doc):
             run.font.size = Pt(11)
 
 # Rest of your code remains unchanged
-
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
