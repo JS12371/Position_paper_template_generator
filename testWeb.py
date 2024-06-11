@@ -123,31 +123,31 @@ def copy_paragraphs(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 def create_footnote_with_text(doc, text):
-    footnotes_part = doc._element.xpath('//w:footnotes')
-    if not footnotes_part:
-        footnotes = OxmlElement(qn('w:footnotes'))
+    footnote_parts = doc._element.xpath('//w:footnotes')
+    if not footnote_parts:
+        footnotes = OxmlElement('w:footnotes')
         doc._element.append(footnotes)
-        footnotes_part = [footnotes]
+        footnote_parts = [footnotes]
     
-    footnote = OxmlElement(qn('w:footnote'))
-    footnote_id = len(footnotes_part[0].xpath('./w:footnote')) + 1
-    footnote.set(qn('w:id'), str(footnote_id))
+    footnote_part = footnote_parts[0]
+    footnote = OxmlElement('w:footnote')
+    footnote.set(qn('w:id'), str(len(footnote_part) + 1))
     
-    p = OxmlElement(qn('w:p'))
-    r = OxmlElement(qn('w:r'))
-    t = OxmlElement(qn('w:t'))
+    p = OxmlElement('w:p')
+    r = OxmlElement('w:r')
+    t = OxmlElement('w:t')
     t.text = text
 
     r.append(t)
     p.append(r)
     footnote.append(p)
-    footnotes_part[0].append(footnote)
+    footnote_part.append(footnote)
     
-    return str(footnote_id)
+    return str(len(footnote_part))
 
 def insert_footnote_in_paragraph(paragraph, footnote_id):
     run = paragraph.add_run()
-    footnote_reference = OxmlElement(qn('w:footnoteReference'))
+    footnote_reference = OxmlElement('w:footnoteReference')
     footnote_reference.set(qn('w:id'), footnote_id)
     run._r.append(footnote_reference)
 
@@ -195,7 +195,6 @@ def set_font_properties(doc):
         for run in paragraph.runs:
             run.font.name = 'Times New Roman'
             run.font.size = Pt(11)
-
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
