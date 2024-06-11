@@ -123,7 +123,13 @@ def copy_paragraphs(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 def create_footnote_with_text(doc, text):
-    footnote_part = doc._element.xpath('//w:footnotes')[0]
+    footnote_parts = doc._element.xpath('//w:footnotes')
+    if not footnote_parts:
+        footnotes = OxmlElement('w:footnotes')
+        doc._element.append(footnotes)
+        footnote_parts = [footnotes]
+    
+    footnote_part = footnote_parts[0]
     footnote = OxmlElement('w:footnote')
     footnote.set(qn('w:id'), str(len(footnote_part) + 1))
     
@@ -190,7 +196,6 @@ def set_font_properties(doc):
             run.font.name = 'Times New Roman'
             run.font.size = Pt(11)
 
-# Rest of your code remains unchanged
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
