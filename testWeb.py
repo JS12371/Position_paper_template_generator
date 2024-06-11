@@ -330,13 +330,13 @@ def create_word_document(case_data, selected_arguments):
     doc.add_page_break() 
 
     table1 = doc.add_table(rows = 1, cols = 2) 
-    for cell in table1 columns[0].cells: 
+    for cell in table1_columns[0].cells: 
         cell.width = Pt(500) 
-    for cell in table1 columns[1].cells: 
+    for cell in table1_columns[1].cells: 
         cell.width = Pt(40) 
 
     cell_left1 = table1.cell(0,0) 
-    for cell in table1 columns[0].cells: 
+    for cell in table1_columns[0].cells: 
         for paragraph in cell.paragraphs: 
             for run in paragraph.runs: 
                 run.font.size = Pt(11) 
