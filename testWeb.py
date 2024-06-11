@@ -168,7 +168,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     p = header._p 
     pPr = p.get_or_add_pPr() 
     pBdr = OxmlElement('w:pBdr')     
@@ -257,7 +257,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     cell_middle = table.cell(0,1) 
     cell_middle.text = ")\n"*16
@@ -265,13 +265,13 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     cell_middle.paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = cell_middle.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     cell_right = table.cell(0,2) 
     cell_right.text = f"\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
     run = cell_right.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     line_para = doc.add_paragraph() 
     line_para.add_run() 
@@ -290,19 +290,19 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     sub = doc.add_paragraph(f"Submitted by:\n\n<Name>\n{mac_name}\n<Address>\n<Address line 2>") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     sub = doc.add_paragraph(f"\nand\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     doc.add_page_break() 
 
@@ -317,20 +317,20 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
         for paragraph in cell.paragraphs: 
             for run in paragraph.runs: 
                 run.font.size = Pt(11) 
-                run.font.name = 'Cambria (Body)' 
+                run.font.name = 'Times New Roman' 
                 run.font.bold = True 
 
     cell_left1.text = f"TABLE OF CONTENTS" 
     run = cell_left1.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
 
     cell_right1 = table1.cell(0,1) 
     cell_right1.text = f"PAGE" 
     run = cell_right1.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
 
     table = doc.add_table(rows = 1, cols = 2) 
@@ -343,13 +343,13 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC\'s POSITION\n\nIV. CITATION OF PROGRAM LAWS, REGULATIONS, INSTRUCTIONS, AND CASES\n\nV. EXHIBITS" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     cell_right = table.cell(0,1) 
     cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n?" 
     run = cell_right.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     doc.add_page_break() 
 
@@ -357,14 +357,14 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
     run.font.color.rgb = RGBColor(0,0,0) 
 
     header = doc.add_paragraph() 
     run = header.add_run() 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
 
     doc.add_page_break() 
@@ -373,14 +373,14 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
     run.font.color.rgb = RGBColor(0,0,0) 
 
     header = doc.add_paragraph() 
     run = header.add_run() 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
 
     for i in range(len(issue)):
         if group_mode:
@@ -389,14 +389,14 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
             header = doc.add_paragraph(f"\nIssue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
-            run.font.name = 'Cambria (Body)' 
+            run.font.name = 'Times New Roman' 
         else:
             if len(adj_no) > 1:
                 adj_no = "Various"
             header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman'
 
     doc.add_page_break() 
 
@@ -404,7 +404,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
     run.font.color.rgb = RGBColor(0,0,0) 
 
@@ -418,7 +418,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
             header = doc.add_paragraph("Issue: ")
             run = header.add_run()
             run.font.size = Pt(11)
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman'
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
@@ -426,18 +426,18 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman'
         else:
             while i < len(issue):
                 header = doc.add_paragraph(f"\n\nIssue {i + 1}: ")
                 run = header.add_run() 
                 run.font.size = Pt(11) 
-                run.font.name = 'Cambria (Body)' 
+                run.font.name = 'Times New Roman' 
                 issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
-                run.font.name = 'Cambria (Body)' 
+                run.font.name = 'Times New Roman' 
 
                 # Load the source document (example path, replace with your actual file path)
                 src_doc = Document(f"IssuestoArgs/{issueformatted}{selected_argument}.docx")
@@ -454,7 +454,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
         header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
         run = header.runs[0]
         run.font.size = Pt(11)
-        run.font.name = 'Cambria (Body)'
+        run.font.name = 'Times New Roman'
         run.font.bold = True
         run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -463,7 +463,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
             exhibit_para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
             run = exhibit_para.runs[0]
             run.font.size = Pt(11)
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman'
 
     for paragraph in doc.paragraphs:
         if 'None' in paragraph.text:
