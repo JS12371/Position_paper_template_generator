@@ -1,3 +1,107 @@
+import streamlit as st  
+import pandas as pd  
+from docx import Document  
+from docx.oxml import OxmlElement 
+from docx.oxml.ns import qn 
+from docx.shared import Pt, RGBColor  
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
+import base64  
+from io import BytesIO 
+import os 
+import glob
+
+# Function to convert the DataFrame to Word document  
+def mac_num_to_name(mac_num): 
+    if mac_num[:2] == '05': 
+        return 'WPS Government Health Administrators (J-5)' 
+    if mac_num[:2] == '06': 
+        return 'National Government Services (J-6)' 
+    if mac_num[:2] == '08': 
+        return 'WPS Government Health Administrators (J-8)' 
+    if mac_num[:2] == '15': 
+        return 'CGS Administrators (J-15)' 
+    if mac_num[:2] == '01': 
+        return 'Noridian Healthcare Solutions c/o Cahaba Safeguard Administrators (J-E)' 
+    if mac_num[:2] == '02' or mac_num[:2] == '03': 
+        return 'Noridian Healthcare Solutions (J-F)' 
+    if mac_num[:2] == '04' or mac_num[:2] == '07': 
+        return 'Novitas Solutions, Inc. (J-H)' 
+    if mac_num[:2] == '10': 
+        return 'Palmetto GBA (J-I)' 
+    if mac_num[:2] == '13': 
+        return 'National Government Services, Inc. (J-K)' 
+    if mac_num[:2] == '12': 
+        return 'Novitas Solutions, Inc. (J-L)' 
+    if mac_num[:2] == '11': 
+        return 'Palmetto GBA c/o National Government Services, Inc. (J-M)' 
+    if mac_num[:2] == '09': 
+        return 'First Coast Service Options, Inc. (J-N)' 
+
+def format_date(date): 
+    year = date[:4] 
+    month = date[5:7] 
+    day = date[8:10] 
+    return f"{month}/{day}/{year}" 
+
+def get_issue_content(issue, dest_doc, selected_argument):
+    issueformatted = issue.replace(" ", "")
+    filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
+    if not os.path.exists(filename):
+        return f"{issue}"
+    try:
+        doc1 = Document(filename)
+        content = copy_paragraphs(doc1, dest_doc)
+        return content
+    except Exception as e:
+        return f"Error processing issue file: {e}"
+
+def get_possible_arguments(issue):
+    issueformatted = issue.replace(" ", "")
+    files = glob.glob(f"IssuestoArgs/{issueformatted}*.docx")
+    arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
+    return arguments
+
+def copy_paragraph_format(src_paragraph, dest_paragraph):
+    dest_paragraph.alignment = src_paragraph.alignment
+    dest_paragraph.style = src_paragraph.style
+    
+    # Copy paragraph formatting (indentation, spacing)
+    if src_paragraph.paragraph_format.left_indent:
+        dest_paragraph.paragraph_format.left_indent = src_paragraph.paragraph_format.left_indent
+    if src_paragraph.paragraph_format.right_indent:
+        dest_paragraph.paragraph_format.right_indent = src_paragraph.paragraph_format.right_indent
+    if src_paragraph.paragraph_format.first_line_indent:
+        dest_paragraph.paragraph_format.first_line_indent = src_paragraph.paragraph_format.first_line_indent
+    if src_paragraph.paragraph_format.space_before:
+        dest_paragraph.paragraph_format.space_before = src_paragraph.paragraph_format.space_before
+    if src_paragraph.paragraph_format.space_after:
+        dest_paragraph.paragraph_format.space_after = src_paragraph.paragraph_format.space_after
+    if src_paragraph.paragraph_format.line_spacing:
+        dest_paragraph.paragraph_format.line_spacing = src_paragraph.paragraph_format.line_spacing
+
+# Function to copy runs from one paragraph to another
+def copy_runs(src_paragraph, dest_paragraph):
+    for run in src_paragraph.runs:
+        dest_run = dest_paragraph.add_run(run.text)
+        dest_run.bold = run.bold
+        dest_run.italic = run.italic
+        dest_run.underline = run.underline
+        dest_run.font.size = run.font.size
+        dest_run.font.name = run.font.name
+        if run.font.color and run.font.color.rgb:
+            dest_run.font.color.rgb = run.font.color.rgb
+
+# Function to copy paragraphs from source to destination, excluding exhibits
+def copy_paragraphs_for_exhibits(src, dest):
+    exhibit_section_started = False
+    for paragraph in src.paragraphs:
+        if "EXHIBITS" in paragraph.text:
+            exhibit_section_started = True
+        if not exhibit_section_started:
+            dest_paragraph = dest.add_paragraph()
+            copy_paragraph_format(paragraph, dest_paragraph)
+            copy_runs(paragraph, dest_paragraph)
+
 def copy_paragraphs(src, dest):
     in_footnote = False
     footnote_text = []
@@ -8,12 +112,7 @@ def copy_paragraphs(src, dest):
             footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
         elif "END FOOTNOTE" in paragraph.text:
             in_footnote = False
-            # Add the footnote to the document
-            footnote = dest.add_paragraph()
-            footnote_run = footnote.add_run(" ".join(footnote_text))
-            footnote_run.font.size = Pt(11)
-            footnote_run.font.name = 'Times New Roman'
-            footnote_run.italic = True  # Footnote text is often italicized
+            insert_footnote(dest, " ".join(footnote_text))
             footnote_text = []
         elif in_footnote:
             footnote_text.append(paragraph.text.strip())
@@ -22,6 +121,71 @@ def copy_paragraphs(src, dest):
             copy_paragraph_format(paragraph, dest_paragraph)
             copy_runs(paragraph, dest_paragraph)
 
+def insert_footnote(paragraph, text):
+    run = paragraph.add_run()
+    footnote_ref = run._r.add_footnote_ref()
+    footnote = paragraph._element.addnext(create_footnote_xml(text, footnote_ref))
+    return footnote
+
+def create_footnote_xml(text, footnote_ref):
+    # Create the XML structure for the footnote
+    footnote = OxmlElement('w:footnote')
+    footnote.set(qn('w:id'), '1')
+    footnote_p = OxmlElement('w:p')
+    footnote_r = OxmlElement('w:r')
+    footnote_r.append(footnote_ref)
+    footnote_t = OxmlElement('w:t')
+    footnote_t.text = text
+    footnote_r.append(footnote_t)
+    footnote_p.append(footnote_r)
+    footnote.append(footnote_p)
+    return footnote
+
+def extract_exhibits(doc, issue):
+    exhibits = []
+    exhibit_started = False
+    exhibit_index = 1
+    
+    for paragraph in doc.paragraphs:
+        text = paragraph.text.strip()
+        st.write(f"Processing paragraph: {text}")  # Logging each paragraph
+
+        if "EXHIBITS" in text:
+            exhibit_started = True
+            exhibits.append(f"\n\nISSUE: {issue}\n")
+            st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
+            continue
+
+        if exhibit_started:
+            if text:
+                # Append each exhibit with its corresponding index
+                exhibits.append(f" {text}")
+                st.write(f"Adding exhibit C-{exhibit_index}: {text}")  # Logging added exhibit
+                exhibit_index += 1
+
+    st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
+    return exhibits
+
+def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
+    issueformatted = issue.replace(" ", "")
+    filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
+    if not os.path.exists(filename):
+        return f"{issue}"
+    try:
+        doc1 = Document(filename)
+        content = copy_paragraphs_for_exhibits(doc1, dest_doc)
+        exhibits = extract_exhibits(doc1, issue)
+        exhibits_list.extend(exhibits)
+        return content
+    except Exception as e:
+        return f"Error processing issue file: {e}"
+
+def set_font_properties(doc):
+    for paragraph in doc.paragraphs:
+        for run in paragraph.runs:
+            run.font.name = 'Times New Roman'
+            run.font.size = Pt(11)
+        
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
@@ -328,4 +492,95 @@ def create_word_document(case_data, selected_arguments):
 
     buffer = BytesIO()  
     doc.save(buffer)  
-    return buffer.getvalue()
+    return buffer.getvalue()  
+
+def string_processing(s): 
+    if pd.isnull(s) or s == '': 
+        return "Not in the spreadsheet" 
+    return str(s).replace('"', '') 
+
+def find_case_data(df, case_number): 
+    case_number = case_number.upper()
+    df['Case Num'] = df['Case Num'].map(string_processing) 
+    case_data = df[df['Case Num'] == case_number] 
+    case_data = case_data.map(string_processing) 
+    return case_data 
+
+def get_download_link(file, filename): 
+    b64 = base64.b64encode(file).decode() 
+    href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
+    return href 
+
+st.title('Excel Case Finder')  
+
+# Step 1: Upload Excel file
+uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
+
+# Maintain the loaded DataFrame
+if 'df' not in st.session_state:
+    st.session_state.df = None
+
+# Define the relevant columns to read
+relevant_columns0 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Issue Typ']
+relevant_columns1 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'FYE', 'Issue Typ']
+relevant_columns2 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Group FYE', 'Issue Typ']
+
+# Modify the read_excel call to use only the relevant columns based on the file name
+if uploaded_file and st.session_state.df is None:
+    # Analyze the file name
+    file_name = uploaded_file.name
+    
+    # Determine which columns to use based on the file name
+    if file_name.startswith('045'):
+        relevant_columns = relevant_columns2
+    elif file_name.startswith('061'):
+        relevant_columns = relevant_columns1
+    else:
+        # Default to relevant_columns1 if no specific condition is met
+        relevant_columns = relevant_columns0
+    
+    try:
+        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns, engine='calamine')
+        if not st.session_state.df.empty:
+            st.write('File uploaded successfully')
+        else:
+            st.write('Failed to read the file.')
+    except Exception as e:
+        st.write(f'Error reading file: {e}')
+
+
+# Proceed only if the DataFrame is loaded
+if st.session_state.df is not None:
+    # Step 2: Enter Case Number
+    case_num = st.text_input('Enter Case Number', value=st.session_state.get('case_num', ''))
+    find_case_button = st.button('Find Case') 
+
+    # Maintain the loaded case data
+    if 'case_data' not in st.session_state:
+        st.session_state.case_data = None
+
+    if case_num and find_case_button:
+        st.session_state.case_data = find_case_data(st.session_state.df, case_num)
+        st.session_state.selected_arguments = {}
+        st.session_state.case_num = case_num
+
+    # Proceed only if the case data is found
+    if st.session_state.case_data is not None:
+        if not st.session_state.case_data.empty:
+            issues = st.session_state.case_data['Issue'].unique()
+            for issue in issues:
+                arguments = get_possible_arguments(issue)
+                if arguments:
+                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
+                                                     index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
+                    st.session_state.selected_arguments[issue] = selected_argument
+                else:
+                    st.session_state.selected_arguments[issue] = ""
+
+            # Step 3: Create Document
+            create_doc = st.button('Create Document') 
+            if create_doc:
+                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
+                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        else:
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
