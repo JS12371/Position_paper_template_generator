@@ -112,7 +112,7 @@ def copy_paragraphs(src, dest):
             footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
         elif "END FOOTNOTE" in paragraph.text:
             in_footnote = False
-            insert_footnote(dest, " ".join(footnote_text))
+            add_footnote_to_paragraph(dest, " ".join(footnote_text))
             footnote_text = []
         elif in_footnote:
             footnote_text.append(paragraph.text.strip())
@@ -121,25 +121,24 @@ def copy_paragraphs(src, dest):
             copy_paragraph_format(paragraph, dest_paragraph)
             copy_runs(paragraph, dest_paragraph)
 
-def insert_footnote(paragraph, text):
+def add_footnote_to_paragraph(paragraph, text):
+    # Add the footnote reference to the paragraph
     run = paragraph.add_run()
-    footnote_ref = run._r.add_footnote_ref()
-    footnote = paragraph._element.addnext(create_footnote_xml(text, footnote_ref))
-    return footnote
+    footnote_reference = OxmlElement('w:r')
+    footnote_reference.text = str(len(paragraph._element.xpath('.//w:r')) + 1)
+    run._r.append(footnote_reference)
 
-def create_footnote_xml(text, footnote_ref):
-    # Create the XML structure for the footnote
+    # Add the footnote text to the document
     footnote = OxmlElement('w:footnote')
-    footnote.set(qn('w:id'), '1')
+    footnote.set(qn('w:id'), str(len(paragraph._element.xpath('.//w:footnote')) + 1))
     footnote_p = OxmlElement('w:p')
     footnote_r = OxmlElement('w:r')
-    footnote_r.append(footnote_ref)
     footnote_t = OxmlElement('w:t')
     footnote_t.text = text
     footnote_r.append(footnote_t)
     footnote_p.append(footnote_r)
     footnote.append(footnote_p)
-    return footnote
+    paragraph._element.addnext(footnote)
 
 def extract_exhibits(doc, issue):
     exhibits = []
@@ -235,25 +234,25 @@ def create_word_document(case_data, selected_arguments):
             pass
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
-    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found' 
+    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case data else 'Provider Numbers not found' 
     if len(provider_num_array) > 1: 
         provider_numbers = "Various"
     else: 
         pass 
 
-    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found' 
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found' 
+    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case data else 'Provider Names not found' 
+    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case data else 'Provider Names not found' 
     if len(provider_name_array) > 1: 
         provider_names = "Various"
     else: 
         pass 
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found' 
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
-    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
-    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
+    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case data['Determination Event Date'].unique()]) if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
+    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
     if len(det_event_array) > 1: 
         determination_event_dates = 'Various' 
     else: 
@@ -261,20 +260,20 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found' 
-    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found' 
-    if 'Group FYE' in case_data: 
-        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
+    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case data else 'Date of Appeal not found' 
+    adj_no = ','.join(case data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found' 
+    if 'Group FYE' in case data: 
+        year = format_date(case data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found' 
     else: 
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
+        year = format_date(case data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
 
-    for cell in table.columns[0].cells: 
+    for cell in table columns[0].cells: 
         cell.width = Pt(260) 
-    for cell in table.columns[1].cells: 
+    for cell in table columns[1].cells: 
         cell.width = Pt(20) 
-    for cell in table.columns[2].cells: 
+    for cell in table columns[2].cells: 
         cell.width = Pt(260) 
 
     cell_left = table.cell(0,0) 
@@ -331,13 +330,13 @@ def create_word_document(case_data, selected_arguments):
     doc.add_page_break() 
 
     table1 = doc.add_table(rows = 1, cols = 2) 
-    for cell in table1.columns[0].cells: 
+    for cell in table1 columns[0].cells: 
         cell.width = Pt(500) 
-    for cell in table1.columns[1].cells: 
+    for cell in table1 columns[1].cells: 
         cell.width = Pt(40) 
 
     cell_left1 = table1.cell(0,0) 
-    for cell in table1.columns[0].cells: 
+    for cell in table1 columns[0].cells: 
         for paragraph in cell.paragraphs: 
             for run in paragraph.runs: 
                 run.font.size = Pt(11) 
@@ -360,7 +359,7 @@ def create_word_document(case_data, selected_arguments):
     table = doc.add_table(rows = 1, cols = 2) 
     for cell in table.columns[0].cells: 
         cell.width = Pt(500) 
-    for cell in table.columns[1].cells: 
+    for cell in table columns[1].cells: 
         cell.width = Pt(40) 
 
     cell_left = table.cell(0,0) 
