@@ -124,38 +124,27 @@ def copy_paragraphs(src, dest):
 def insert_footnote(paragraph, text):
     run = paragraph.add_run()
     footnote_ref = OxmlElement('w:footnoteReference')
-    footnote_id = get_next_footnote_id(paragraph)
-    footnote_ref.set(qn('w:id'), str(footnote_id))
     run._r.append(footnote_ref)
-    add_footnote_text(paragraph, text, footnote_id)
+    footnote = create_footnote_xml(text)
+    paragraph._element.addnext(footnote)
+    return footnote
 
-def get_next_footnote_id(paragraph):
-    # Find the highest footnote id in the document
-    doc = paragraph._element.getroottree().getroot()
-    footnote_ids = doc.xpath('//w:footnote/@w:id', namespaces={'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'})
-    if footnote_ids:
-        return max(int(i) for i in footnote_ids) + 1
-    return 1
-
-def add_footnote_text(paragraph, text, footnote_id):
-    doc = paragraph._element.getroottree().getroot()
-    footnotes = doc.find('.//w:footnotes', namespaces={'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'})
-    if footnotes is None:
-        footnotes = OxmlElement('w:footnotes')
-        doc.append(footnotes)
-
+def create_footnote_xml(text):
+    footnotes_part = OxmlElement('w:footnotes')
     footnote = OxmlElement('w:footnote')
-    footnote.set(qn('w:id'), str(footnote_id))
-
+    footnote.set(qn('w:id'), '1')
+    
     footnote_p = OxmlElement('w:p')
     footnote_r = OxmlElement('w:r')
     footnote_t = OxmlElement('w:t')
     footnote_t.text = text
-
+    
     footnote_r.append(footnote_t)
     footnote_p.append(footnote_r)
     footnote.append(footnote_p)
-    footnotes.append(footnote)
+    footnotes_part.append(footnote)
+    
+    return footnotes_part
 
 def extract_exhibits(doc, issue):
     exhibits = []
@@ -201,6 +190,8 @@ def set_font_properties(doc):
         for run in paragraph.runs:
             run.font.name = 'Times New Roman'
             run.font.size = Pt(11)
+
+# Rest of your code remains unchanged
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
