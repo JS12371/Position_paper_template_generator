@@ -123,22 +123,28 @@ def copy_paragraphs(src, dest):
 
 def insert_footnote(paragraph, text):
     run = paragraph.add_run()
-    footnote_ref = run._r.add_footnote_ref()
-    footnote = paragraph._element.addnext(create_footnote_xml(text))
+    footnote_ref = OxmlElement('w:footnoteReference')
+    run._r.append(footnote_ref)
+    footnote = create_footnote_xml(text)
+    paragraph._element.addnext(footnote)
     return footnote
 
 def create_footnote_xml(text):
-    # Create the XML structure for the footnote
+    footnotes_part = OxmlElement('w:footnotes')
     footnote = OxmlElement('w:footnote')
     footnote.set(qn('w:id'), '1')
+    
     footnote_p = OxmlElement('w:p')
     footnote_r = OxmlElement('w:r')
     footnote_t = OxmlElement('w:t')
     footnote_t.text = text
+    
     footnote_r.append(footnote_t)
     footnote_p.append(footnote_r)
     footnote.append(footnote_p)
-    return footnote
+    footnotes_part.append(footnote)
+    
+    return footnotes_part
 
 def extract_exhibits(doc, issue):
     exhibits = []
