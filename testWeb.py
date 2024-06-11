@@ -103,10 +103,43 @@ def copy_paragraphs_for_exhibits(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 def copy_paragraphs(src, dest):
+    in_footnote = False
+    footnote_text = []
+
     for paragraph in src.paragraphs:
-        dest_paragraph = dest.add_paragraph()
-        copy_paragraph_format(paragraph, dest_paragraph)
-        copy_runs(paragraph, dest_paragraph)
+        if "FOOTNOTE:" in paragraph.text:
+            in_footnote = True
+            footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
+        elif "END FOOTNOTE" in paragraph.text:
+            in_footnote = False
+            insert_footnote(dest, " ".join(footnote_text))
+            footnote_text = []
+        elif in_footnote:
+            footnote_text.append(paragraph.text.strip())
+        else:
+            dest_paragraph = dest.add_paragraph()
+            copy_paragraph_format(paragraph, dest_paragraph)
+            copy_runs(paragraph, dest_paragraph)
+
+def insert_footnote(paragraph, text):
+    run = paragraph.add_run()
+    footnote_ref = run._r.add_footnote_ref()
+    footnote = paragraph._element.addnext(create_footnote_xml(text, footnote_ref))
+    return footnote
+
+def create_footnote_xml(text, footnote_ref):
+    # Create the XML structure for the footnote
+    footnote = OxmlElement('w:footnote')
+    footnote.set(qn('w:id'), '1')
+    footnote_p = OxmlElement('w:p')
+    footnote_r = OxmlElement('w:r')
+    footnote_r.append(footnote_ref)
+    footnote_t = OxmlElement('w:t')
+    footnote_t.text = text
+    footnote_r.append(footnote_t)
+    footnote_p.append(footnote_r)
+    footnote.append(footnote_p)
+    return footnote
 
 def extract_exhibits(doc, issue):
     exhibits = []
@@ -147,23 +180,14 @@ def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits
     except Exception as e:
         return f"Error processing issue file: {e}"
 
-# Function to copy footnotes
-def copy_footnotes(src_doc, dest_doc):
-    src_footnotes = src_doc.element.xpath('//w:footnote')
-    dest_footnotes = dest_doc.element.xpath('//w:footnotes')[0]
-
-    for footnote in src_footnotes:
-        dest_footnotes.append(footnote)
-
-    # Add footnotes reference styles to the main document
-    styles = src_doc.element.xpath('//w:styles')[0]
-    dest_styles = dest_doc.element.xpath('//w:styles')[0]
-    for style in styles:
-        if 'FootnoteReference' in style.xml or 'FootnoteText' in style.xml:
-            dest_styles.append(style)
-
-def create_word_document_with_footnotes(case_data, selected_arguments):
-    doc = Document()
+def set_font_properties(doc):
+    for paragraph in doc.paragraphs:
+        for run in paragraph.runs:
+            run.font.name = 'Times New Roman'
+            run.font.size = Pt(11)
+        
+def create_word_document(case_data, selected_arguments):  
+    doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
@@ -429,7 +453,7 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
             run.font.name = 'Times New Roman'
         else:
             while i < len(issue):
-                header = doc.add_paragraph(f"\n\nIssue {i + 1}: ")
+                header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Times New Roman' 
@@ -438,11 +462,6 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
                 run = header.add_run() 
                 run.font.size = Pt(11) 
                 run.font.name = 'Times New Roman' 
-
-                # Load the source document (example path, replace with your actual file path)
-                src_doc = Document(f"IssuestoArgs/{issueformatted}{selected_argument}.docx")
-                copy_footnotes(src_doc, doc)
-
                 i += 1 
 
     # Add exhibits at the end of the document for individual cases
@@ -469,9 +488,11 @@ def create_word_document_with_footnotes(case_data, selected_arguments):
         if 'None' in paragraph.text:
             paragraph.text = paragraph.text.replace('None', '', 1)
 
+    set_font_properties(doc)
+
     buffer = BytesIO()  
     doc.save(buffer)  
-    return buffer.getvalue()
+    return buffer.getvalue()  
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
@@ -559,7 +580,7 @@ if st.session_state.df is not None:
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
             if create_doc:
-                docx_file = create_word_document_with_footnotes(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
+                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
