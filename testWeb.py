@@ -373,13 +373,6 @@ def create_word_document(case_data, selected_arguments):
             run.font.name = 'Times New Roman'
             run.font.color.rgb = RGBColor(0, 0, 0)
 
-    for footnote in doc.footnotes.part.rels.values():
-        for paragraph in footnote.target.paragraphs:
-            for run in paragraph.runs:
-                run.font.size = Pt(9)
-                run.font.name = 'Times New Roman'
-                run.font.color.rgb = RGBColor(0, 0, 0)
-
     buffer = BytesIO()  
     doc.save(buffer)  
     return buffer.getvalue()  
