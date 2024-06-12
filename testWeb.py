@@ -91,37 +91,6 @@ def copy_runs(src_paragraph, dest_paragraph):
         if run.font.color and run.font.color.rgb:
             dest_run.font.color.rgb = run.font.color.rgb
 
-# Function to copy paragraphs from source to destination, excluding exhibits
-def copy_paragraphs_for_exhibits(src, dest):
-    exhibit_section_started = False
-    for paragraph in src.paragraphs:
-        if "EXHIBITS" in paragraph.text:
-            exhibit_section_started = True
-        if not exhibit_section_started:
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
-
-def copy_paragraphs(src, dest):
-    in_footnote = False
-    footnote_text = []
-
-    for paragraph in src.paragraphs:
-        if "FOOTNOTE:" in paragraph.text:
-            in_footnote = True
-            footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
-        elif "END FOOTNOTE" in paragraph.text:
-            in_footnote = False
-            footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
-            insert_footnote_in_paragraph(dest.add_paragraph(), footnote_id)
-            footnote_text = []
-        elif in_footnote:
-            footnote_text.append(paragraph.text.strip())
-        else:
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
-
 def create_footnote_with_text(doc, text):
     footnote_parts = doc._element.xpath('//w:footnotes')
     if not footnote_parts:
@@ -150,6 +119,28 @@ def insert_footnote_in_paragraph(paragraph, footnote_id):
     footnote_reference = OxmlElement('w:footnoteReference')
     footnote_reference.set(qn('w:id'), footnote_id)
     run._r.append(footnote_reference)
+
+def copy_paragraphs(src, dest):
+    in_footnote = False
+    footnote_text = []
+
+    for paragraph in src.paragraphs:
+        if "FOOTNOTE:" in paragraph.text:
+            in_footnote = True
+            footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
+            dest_paragraph = dest.add_paragraph(paragraph.text.split("FOOTNOTE:")[0].strip())
+            footnote_paragraph = dest.add_paragraph()
+        elif "END FOOTNOTE" in paragraph.text:
+            in_footnote = False
+            footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
+            insert_footnote_in_paragraph(dest_paragraph, footnote_id)
+            footnote_text = []
+        elif in_footnote:
+            footnote_text.append(paragraph.text.strip())
+        else:
+            dest_paragraph = dest.add_paragraph()
+            copy_paragraph_format(paragraph, dest_paragraph)
+            copy_runs(paragraph, dest_paragraph)
 
 def extract_exhibits(doc, issue):
     exhibits = []
