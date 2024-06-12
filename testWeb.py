@@ -121,22 +121,20 @@ def insert_footnote_in_paragraph(paragraph, footnote_id):
     run._r.append(footnote_reference)
 
 def copy_paragraphs(src, dest):
-    in_footnote = False
-    footnote_text = []
-
     for paragraph in src.paragraphs:
-        if "FOOTNOTE:" in paragraph.text:
-            in_footnote = True
-            footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
-            dest_paragraph = dest.add_paragraph(paragraph.text.split("FOOTNOTE:")[0].strip())
-            footnote_paragraph = dest.add_paragraph()
-        elif "END FOOTNOTE" in paragraph.text:
-            in_footnote = False
-            footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
+        text = paragraph.text.strip()
+        if "FOOTNOTE:" in text and "END FOOTNOTE" in text:
+            parts = text.split("FOOTNOTE:")
+            before_footnote = parts[0].strip()
+            footnote_parts = parts[1].split("END FOOTNOTE")
+            footnote_text = footnote_parts[0].strip()
+            after_footnote = footnote_parts[1].strip()
+
+            dest_paragraph = dest.add_paragraph(before_footnote)
+            footnote_id = create_footnote_with_text(dest, footnote_text)
             insert_footnote_in_paragraph(dest_paragraph, footnote_id)
-            footnote_text = []
-        elif in_footnote:
-            footnote_text.append(paragraph.text.strip())
+            if after_footnote:
+                dest.add_paragraph(after_footnote)
         else:
             dest_paragraph = dest.add_paragraph()
             copy_paragraph_format(paragraph, dest_paragraph)
