@@ -49,9 +49,9 @@ def get_issue_content(issue, dest_doc, selected_argument):
     if not os.path.exists(filename):
         return f"{issue}"
     try:
-        doc1 = Document(filename)
-        content = copy_paragraphs(doc1, dest_doc)
-        return content
+        src_doc = Document(filename)
+        merge_docs(dest_doc, src_doc)
+        return "Content merged successfully"
     except Exception as e:
         return f"Error processing issue file: {e}"
 
@@ -91,129 +91,49 @@ def copy_runs(src_paragraph, dest_paragraph):
         if run.font.color and run.font.color.rgb:
             dest_run.font.color.rgb = run.font.color.rgb
 
-# Function to copy paragraphs from source to destination, excluding exhibits
-def copy_paragraphs_for_exhibits(src, dest):
-    exhibit_section_started = False
-    for paragraph in src.paragraphs:
-        if "EXHIBITS" in paragraph.text:
-            exhibit_section_started = True
-        if not exhibit_section_started:
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
-
+# Function to copy paragraphs from source to destination
 def copy_paragraphs(src, dest):
-    in_footnote = False
-    footnote_text = []
-    before_text = ""
-    after_text = ""
-
     for paragraph in src.paragraphs:
-        if "FOOTNOTE:" in paragraph.text:
-            in_footnote = True
-            before_text = paragraph.text.split("FOOTNOTE:")[0]
-            footnote_text.append(paragraph.text.split("FOOTNOTE:")[1].strip())
-        elif "END FOOTNOTE" in paragraph.text:
-            in_footnote = False
-            after_text = paragraph.text.split("END FOOTNOTE")[1].strip()
-            footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
-            new_paragraph = dest.add_paragraph()
-            insert_footnote_in_paragraph(new_paragraph, footnote_id, before_text, after_text)
-            footnote_text = []
-        elif in_footnote:
-            footnote_text.append(paragraph.text.strip())
-        else:
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
+        dest_paragraph = dest.add_paragraph()
+        copy_paragraph_format(paragraph, dest_paragraph)
+        copy_runs(paragraph, dest_paragraph)
 
-def create_footnote_with_text(doc, text):
-    footnote_parts = doc._element.xpath('//w:footnotes')
-    if not footnote_parts:
-        footnotes = OxmlElement('w:footnotes')
-        doc._element.append(footnotes)
-        footnote_parts = [footnotes]
-    
-    footnote_part = footnote_parts[0]
-    footnote = OxmlElement('w:footnote')
-    footnote.set(qn('w:id'), str(len(footnote_part) + 1))
-    
-    p = OxmlElement('w:p')
-    r = OxmlElement('w:r')
-    t = OxmlElement('w:t')
-    t.text = text
+def merge_docs(dest_doc, src_doc):
+    # Function to append content from src_doc to dest_doc
+    def append_paragraphs(src, dest):
+        for para in src.paragraphs:
+            p = dest.add_paragraph()
+            copy_paragraph_format(para, p)
+            copy_runs(para, p)
+        for table in src.tables:
+            tbl = dest.add_table(rows=0, cols=0)
+            for row in table.rows:
+                row_cells = row.cells
+                tbl_row = tbl.add_row().cells
+                for idx, cell in enumerate(row_cells):
+                    copy_paragraphs(cell, tbl_row[idx])
 
-    r.append(t)
-    p.append(r)
-    footnote.append(p)
-    footnote_part.append(footnote)
-    
-    return str(len(footnote_part))
+    def copy_headers(src, dest):
+        for section in src.sections:
+            src_hdr = section.header
+            dest_hdr = dest.sections[0].header
+            for paragraph in src_hdr.paragraphs:
+                p = dest_hdr.add_paragraph()
+                copy_paragraph_format(paragraph, p)
+                copy_runs(paragraph, p)
 
-def insert_footnote_in_paragraph(paragraph, footnote_id, before_text, after_text):
-    # Add the text before the footnote reference
-    run_before = paragraph.add_run()
-    run_before.text = before_text
+    def copy_footnotes(src, dest):
+        for para in src.paragraphs:
+            for run in para.runs:
+                if run.footnote_reference:
+                    footnote = run.footnote_reference
+                    dest_footnote = dest.add_paragraph().add_run().add_footnote_reference(footnote.text)
+                    copy_paragraph_format(footnote, dest_footnote)
+                    copy_runs(footnote, dest_footnote)
 
-    # Insert the footnote reference
-    run_footnote = paragraph.add_run()
-    footnote_reference = OxmlElement('w:footnoteReference')
-    footnote_reference.set(qn('w:id'), footnote_id)
-    run_footnote._r.append(footnote_reference)
-
-    # Add the text after the footnote reference
-    run_after = paragraph.add_run()
-    run_after.text = after_text
-
-    # Ensure all text follows the same font and size
-    for run in [run_before, run_footnote, run_after]:
-        run.font.size = Pt(11)
-        run.font.name = 'Times New Roman'
-
-def extract_exhibits(doc, issue):
-    exhibits = []
-    exhibit_started = False
-    exhibit_index = 1
-    
-    for paragraph in doc.paragraphs:
-        text = paragraph.text.strip()
-        st.write(f"Processing paragraph: {text}")  # Logging each paragraph
-
-        if "EXHIBITS" in text:
-            exhibit_started = True
-            exhibits.append(f"\n\nISSUE: {issue}\n")
-            st.write("Found EXHIBITS section")  # Logging when EXHIBITS is found
-            continue
-
-        if exhibit_started:
-            if text:
-                # Append each exhibit with its corresponding index
-                exhibits.append(f" {text}")
-                st.write(f"Adding exhibit C-{exhibit_index}: {text}")  # Logging added exhibit
-                exhibit_index += 1
-
-    st.write(f"Extracted exhibits: {exhibits}")  # Logging final exhibits list
-    return exhibits
-
-def get_issue_content_with_exhibits(issue, dest_doc, selected_argument, exhibits_list):
-    issueformatted = issue.replace(" ", "")
-    filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
-    if not os.path.exists(filename):
-        return f"{issue}"
-    try:
-        doc1 = Document(filename)
-        content = copy_paragraphs_for_exhibits(doc1, dest_doc)
-        exhibits = extract_exhibits(doc1, issue)
-        exhibits_list.extend(exhibits)
-        return content
-    except Exception as e:
-        return f"Error processing issue file: {e}"
-
-def set_font_properties(doc):
-    for paragraph in doc.paragraphs:
-        for run in paragraph.runs:
-            run.font.name = 'Times New Roman'
-            run.font.size = Pt(11)
+    copy_headers(src_doc, dest_doc)
+    copy_footnotes(src_doc, dest_doc)
+    append_paragraphs(src_doc, dest_doc)
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
@@ -221,7 +141,7 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     p = header._p 
     pPr = p.get_or_add_pPr() 
     pBdr = OxmlElement('w:pBdr')     
@@ -271,18 +191,18 @@ def create_word_document(case_data, selected_arguments):
         pass 
 
     provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found' 
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found' 
+    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case data else 'Provider Names not found' 
     if len(provider_name_array) > 1: 
         provider_names = "Various"
     else: 
         pass 
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found' 
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
-    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
-    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
+    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
+    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
     if len(det_event_array) > 1: 
         determination_event_dates = 'Various' 
     else: 
@@ -290,12 +210,12 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found' 
-    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found' 
-    if 'Group FYE' in case_data: 
-        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
+    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case data else 'Date of Appeal not found' 
+    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found' 
+    if 'Group FYE' in case data: 
+        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found' 
     else: 
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
+        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
 
@@ -310,7 +230,7 @@ def create_word_document(case_data, selected_arguments):
     cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     cell_middle = table.cell(0,1) 
     cell_middle.text = ")\n"*16
@@ -318,13 +238,13 @@ def create_word_document(case_data, selected_arguments):
     cell_middle.paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = cell_middle.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     cell_right = table.cell(0,2) 
     cell_right.text = f"\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
     run = cell_right.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     line_para = doc.add_paragraph() 
     line_para.add_run() 
@@ -343,19 +263,19 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     sub = doc.add_paragraph(f"Submitted by:\n\n<Name>\n{mac_name}\n<Address>\n<Address line 2>") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
-    sub = doc.add_paragraph(f"\nand\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
+    sub = doc.add_paragraph(f"and\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     doc.add_page_break() 
 
@@ -370,20 +290,20 @@ def create_word_document(case_data, selected_arguments):
         for paragraph in cell.paragraphs: 
             for run in paragraph.runs: 
                 run.font.size = Pt(11) 
-                run.font.name = 'Times New Roman' 
+                run.font.name = 'Cambria (Body)' 
                 run.font.bold = True 
 
     cell_left1.text = f"TABLE OF CONTENTS" 
     run = cell_left1.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     run.font.bold = True 
 
     cell_right1 = table1.cell(0,1) 
     cell_right1.text = f"PAGE" 
     run = cell_right1.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     run.font.bold = True 
 
     table = doc.add_table(rows = 1, cols = 2) 
@@ -396,28 +316,29 @@ def create_word_document(case_data, selected_arguments):
     cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC\'s POSITION\n\nIV. CITATION OF PROGRAM LAWS, REGULATIONS, INSTRUCTIONS, AND CASES\n\nV. EXHIBITS" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     cell_right = table.cell(0,1) 
     cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n?" 
     run = cell_right.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
+    doc.save(f"Case_{case_num}.docx") 
     doc.add_page_break() 
 
     header = doc.add_paragraph('I. INTRODUCTION') 
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     run.font.bold = True 
     run.font.color.rgb = RGBColor(0,0,0) 
 
     header = doc.add_paragraph() 
     run = header.add_run() 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
 
     doc.add_page_break() 
@@ -426,14 +347,14 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     run.font.bold = True 
     run.font.color.rgb = RGBColor(0,0,0) 
 
     header = doc.add_paragraph() 
     run = header.add_run() 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
 
     for i in range(len(issue)):
         if group_mode:
@@ -442,14 +363,14 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph(f"\nIssue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
-            run.font.name = 'Times New Roman' 
+            run.font.name = 'Cambria (Body)' 
         else:
             if len(adj_no) > 1:
                 adj_no = "Various"
             header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
-            run.font.name = 'Times New Roman'
+            run.font.name = 'Cambria (Body)'
 
     doc.add_page_break() 
 
@@ -457,11 +378,10 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Times New Roman' 
+    run.font.name = 'Cambria (Body)' 
     run.font.bold = True 
     run.font.color.rgb = RGBColor(0,0,0) 
 
-    exhibits_list = []
     i = 0 
     issue = list(filter(None, issue))
     if issue[0] == 'Issue not found':
@@ -471,7 +391,7 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph("Issue: ")
             run = header.add_run()
             run.font.size = Pt(11)
-            run.font.name = 'Times New Roman'
+            run.font.name = 'Cambria (Body)'
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
@@ -479,45 +399,23 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph(f"{issue_content}")
             run = header.add_run()
             run.font.size = Pt(11)
-            run.font.name = 'Times New Roman'
+            run.font.name = 'Cambria (Body)'
         else:
             while i < len(issue):
                 header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
                 run = header.add_run() 
                 run.font.size = Pt(11) 
-                run.font.name = 'Times New Roman' 
-                issue_content = get_issue_content_with_exhibits(issue[i], doc, selected_arguments[i], exhibits_list)
+                run.font.name = 'Cambria (Body)' 
+                issue_content = get_issue_content(issue[i], doc, selected_arguments[i]) 
                 header = doc.add_paragraph(f"{issue_content} \n\n") 
                 run = header.add_run() 
                 run.font.size = Pt(11) 
-                run.font.name = 'Times New Roman' 
+                run.font.name = 'Cambria (Body)' 
                 i += 1 
-
-    # Add exhibits at the end of the document for individual cases
-    doc.add_page_break()
-    if case_num[-1] == 'G' or case_num[-1] == 'C':
-        pass
-    else:
-        header = doc.add_paragraph('V. EXHIBITS')
-        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-        run = header.runs[0]
-        run.font.size = Pt(11)
-        run.font.name = 'Times New Roman'
-        run.font.bold = True
-        run.font.color.rgb = RGBColor(0, 0, 0)
-
-        for exhibit in exhibits_list:
-            exhibit_para = doc.add_paragraph(exhibit)
-            exhibit_para.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-            run = exhibit_para.runs[0]
-            run.font.size = Pt(11)
-            run.font.name = 'Times New Roman'
 
     for paragraph in doc.paragraphs:
         if 'None' in paragraph.text:
             paragraph.text = paragraph.text.replace('None', '', 1)
-
-    set_font_properties(doc)
 
     buffer = BytesIO()  
     doc.save(buffer)  
@@ -539,6 +437,7 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode() 
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
+
 
 st.title('Excel Case Finder')  
 
