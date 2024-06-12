@@ -105,15 +105,20 @@ def copy_paragraphs_for_exhibits(src, dest):
 def copy_paragraphs(src, dest):
     in_footnote = False
     footnote_text = []
+    before_text = ""
+    after_text = ""
 
     for paragraph in src.paragraphs:
         if "FOOTNOTE:" in paragraph.text:
             in_footnote = True
-            footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
+            before_text = paragraph.text.split("FOOTNOTE:")[0]
+            footnote_text.append(paragraph.text.split("FOOTNOTE:")[1].strip())
         elif "END FOOTNOTE" in paragraph.text:
             in_footnote = False
+            after_text = paragraph.text.split("END FOOTNOTE")[1].strip()
             footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
-            insert_footnote_in_paragraph(dest.add_paragraph(), footnote_id)
+            new_paragraph = dest.add_paragraph()
+            insert_footnote_in_paragraph(new_paragraph, footnote_id, before_text, after_text)
             footnote_text = []
         elif in_footnote:
             footnote_text.append(paragraph.text.strip())
@@ -145,11 +150,25 @@ def create_footnote_with_text(doc, text):
     
     return str(len(footnote_part))
 
-def insert_footnote_in_paragraph(paragraph, footnote_id):
-    run = paragraph.add_run()
+def insert_footnote_in_paragraph(paragraph, footnote_id, before_text, after_text):
+    # Add the text before the footnote reference
+    run_before = paragraph.add_run()
+    run_before.text = before_text
+
+    # Insert the footnote reference
+    run_footnote = paragraph.add_run()
     footnote_reference = OxmlElement('w:footnoteReference')
     footnote_reference.set(qn('w:id'), footnote_id)
-    run._r.append(footnote_reference)
+    run_footnote._r.append(footnote_reference)
+
+    # Add the text after the footnote reference
+    run_after = paragraph.add_run()
+    run_after.text = after_text
+
+    # Ensure all text follows the same font and size
+    for run in [run_before, run_footnote, run_after]:
+        run.font.size = Pt(11)
+        run.font.name = 'Times New Roman'
 
 def extract_exhibits(doc, issue):
     exhibits = []
