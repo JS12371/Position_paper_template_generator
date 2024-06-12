@@ -1,5 +1,5 @@
 streamlit
-pypandoc
+docxcompose
 pandas
 python-docx
 modin[dask]
