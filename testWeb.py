@@ -165,7 +165,7 @@ def create_word_document(case_data, selected_arguments):
     tempissue = [i for i in issue]
     issue = tempissue
 
-    transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case data else ['transferred to case not found']
+    transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
     temptransferred_to_case = [i for i in transferred_to_case]
     transferred_to_case = temptransferred_to_case
 
@@ -183,30 +183,30 @@ def create_word_document(case_data, selected_arguments):
     issue = list(dict.fromkeys(issue))
     if issue[0] == 'Issue not found':
         try:
-            issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case data else ['Issue not found']
+            issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
         except:
             pass
 
-    provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case data else 'Provider Numbers not found' 
-    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case data else 'Provider Numbers not found' 
+    provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
+    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found' 
     if len(provider_num_array) > 1: 
         provider_numbers = "Various"
     else: 
         pass 
 
-    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case data else 'Provider Names not found' 
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case data else 'Provider Names not found' 
+    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found' 
+    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found' 
     if len(provider_name_array) > 1: 
         provider_names = "Various"
     else: 
         pass 
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found' 
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found' 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
-    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
-    det_event_array = case data['Determination Event Date'].unique() if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
+    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
+    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
     if len(det_event_array) > 1: 
         determination_event_dates = 'Various' 
     else: 
@@ -214,12 +214,12 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case data else 'Date of Appeal not found' 
-    adj_no = ','.join(case data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found' 
-    if 'Group FYE' in case data: 
-        year = format_date(case data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found' 
+    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found' 
+    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found' 
+    if 'Group FYE' in case_data: 
+        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
     else: 
-        year = format_date(case data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
+        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
 
@@ -487,7 +487,7 @@ if st.session_state.df is not None:
     case_num = st.text_input('Enter Case Number', value=st.session_state.get('case_num', ''))
     find_case_button = st.button('Find Case') 
 
-    # Maintain the loaded case data
+    # Maintain the loaded case_data
     if 'case_data' not in st.session_state:
         st.session_state.case_data = None
 
@@ -496,7 +496,7 @@ if st.session_state.df is not None:
         st.session_state.selected_arguments = {}
         st.session_state.case_num = case_num
 
-    # Proceed only if the case data is found
+    # Proceed only if the case_data is found
     if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
             issues = st.session_state.case_data['Issue'].unique()
