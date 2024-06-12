@@ -308,7 +308,8 @@ def create_word_document(case_data, selected_arguments):
             run = header.runs[0]
             run.font.color.rgb = RGBColor(0, 0, 0)
             if issue[i].startswith("Transferred"):
-                header.add_run(f"\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+                header.add_run(f"\n\nDisposition: {issue[i]}")
+            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
 
     doc.add_page_break()
 
@@ -380,7 +381,6 @@ def create_word_document(case_data, selected_arguments):
     doc.save(buffer)
     return buffer.getvalue()
   
-
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
         return "Not in the spreadsheet" 
