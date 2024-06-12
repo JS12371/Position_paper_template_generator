@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
+import pypandoc
 from docx import Document
-from docxcompose.composer import Composer
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Pt, RGBColor
@@ -10,7 +10,6 @@ import base64
 from io import BytesIO
 import os
 import glob
-
 
 # Function to convert the DataFrame to Word document
 def mac_num_to_name(mac_num):
@@ -39,80 +38,29 @@ def mac_num_to_name(mac_num):
     if mac_num[:2] == '09':
         return 'First Coast Service Options, Inc. (J-N)'
 
-
 def format_date(date):
     year = date[:4]
     month = date[5:7]
     day = date[8:10]
     return f"{month}/{day}/{year}"
 
-
-def get_issue_content(issue, dest_doc, selected_argument):
+def get_issue_content(issue, selected_argument):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
         return f"{issue}"
     try:
-        doc1 = Document(filename)
-        content = copy_paragraphs(doc1, dest_doc)
-        return content
+        # Convert the issue document to markdown and return
+        output = pypandoc.convert_file(filename, 'markdown')
+        return output
     except Exception as e:
         return f"Error processing issue file: {e}"
-
 
 def get_possible_arguments(issue):
     issueformatted = issue.replace(" ", "")
     files = glob.glob(f"IssuestoArgs/{issueformatted}*.docx")
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
-
-
-def copy_paragraph_format(src_paragraph, dest_paragraph):
-    dest_paragraph.alignment = src_paragraph.alignment
-    dest_paragraph.style = src_paragraph.style
-
-    # Copy paragraph formatting (indentation, spacing)
-    if src_paragraph.paragraph_format.left_indent:
-        dest_paragraph.paragraph_format.left_indent = src_paragraph.paragraph_format.left_indent
-    if src_paragraph.paragraph_format.right_indent:
-        dest_paragraph.paragraph_format.right_indent = src_paragraph.paragraph_format.right_indent
-    if src_paragraph.paragraph_format.first_line_indent:
-        dest_paragraph.paragraph_format.first_line_indent = src_paragraph.paragraph_format.first_line_indent
-    if src_paragraph.paragraph_format.space_before:
-        dest_paragraph.paragraph_format.space_before = src_paragraph.paragraph_format.space_before
-    if src_paragraph.paragraph_format.space_after:
-        dest_paragraph.paragraph_format.space_after = src_paragraph.paragraph_format.space_after
-    if src_paragraph.paragraph_format.line_spacing:
-        dest_paragraph.paragraph_format.line_spacing = src_paragraph.paragraph_format.line_spacing
-
-
-# Function to copy runs from one paragraph to another
-def copy_runs(src_paragraph, dest_paragraph):
-    for run in src_paragraph.runs:
-        dest_run = dest_paragraph.add_run(run.text)
-        dest_run.bold = run.bold
-        dest_run.italic = run.italic
-        dest_run.underline = run.underline
-        dest_run.font.size = run.font.size
-        dest_run.font.name = run.font.name
-        if run.font.color and run.font.color.rgb:
-            dest_run.font.color.rgb = run.font.color.rgb
-
-
-# Function to copy paragraphs from source to destination
-def copy_paragraphs(src, dest):
-    for paragraph in src.paragraphs:
-        dest_paragraph = dest.add_paragraph()
-        copy_paragraph_format(paragraph, dest_paragraph)
-        copy_runs(paragraph, dest_paragraph)
-
-
-def combine_documents(master, parts):
-    composer = Composer(master)
-    for part in parts:
-        composer.append(part)
-    return composer
-
 
 def create_word_document(case_data, selected_arguments):
     doc = Document()
@@ -374,8 +322,8 @@ def create_word_document(case_data, selected_arguments):
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
-                issue_content = get_issue_content(issue[0], doc, selected_arguments[0])
-            header = doc.add_paragraph(f"{issue_content}")
+                issue_content = get_issue_content(issue[0], selected_arguments[0])
+            header = doc.add_paragraph(issue_content)
             run = header.add_run()
             run.font.size = Pt(11)
             run.font.name = 'Cambria (Body)'
@@ -385,8 +333,8 @@ def create_word_document(case_data, selected_arguments):
                 run = header.add_run()
                 run.font.size = Pt(11)
                 run.font.name = 'Cambria (Body)'
-                issue_content = get_issue_content(issue[i], doc, selected_arguments[i])
-                header = doc.add_paragraph(f"{issue_content} \n\n")
+                issue_content = get_issue_content(issue[i], selected_arguments[i])
+                header = doc.add_paragraph(issue_content)
                 run = header.add_run()
                 run.font.size = Pt(11)
                 run.font.name = 'Cambria (Body)'
@@ -400,12 +348,10 @@ def create_word_document(case_data, selected_arguments):
     doc.save(buffer)
     return buffer.getvalue()
 
-
 def string_processing(s):
     if pd.isnull(s) or s == '':
         return "Not in the spreadsheet"
     return str(s).replace('"', '')
-
 
 def find_case_data(df, case_number):
     case_number = case_number.upper()
@@ -414,12 +360,10 @@ def find_case_data(df, case_number):
     case_data = case_data.map(string_processing)
     return case_data
 
-
 def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode()
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>'
     return href
-
 
 st.title('Excel Case Finder')
 
