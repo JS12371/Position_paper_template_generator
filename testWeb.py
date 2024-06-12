@@ -61,16 +61,6 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
-def extract_exhibits(doc):
-    exhibits = Document()
-    in_exhibits_section = False
-    for paragraph in doc.paragraphs:
-        if "EXHIBITS" in paragraph.text.upper():
-            in_exhibits_section = True
-        if in_exhibits_section and paragraph.text.startswith("C-"):
-            exhibits.add_paragraph(paragraph.text)
-    return exhibits
-
 def remove_exhibits_from_document(doc):
     in_exhibits_section = False
     paragraphs_to_remove = []
@@ -83,6 +73,22 @@ def remove_exhibits_from_document(doc):
         p = paragraph._element
         p.getparent().remove(p)
         p._p = p._element = None
+        
+def extract_exhibits(doc):
+    exhibits_dict = {}
+    current_issue = None
+    in_exhibits_section = False
+    for paragraph in doc.paragraphs:
+        if "EXHIBITS" in paragraph.text.upper():
+            in_exhibits_section = True
+            continue
+        if in_exhibits_section:
+            if paragraph.text.startswith("Issue"):
+                current_issue = paragraph.text
+                exhibits_dict[current_issue] = []
+            elif paragraph.text.startswith("C-") and current_issue:
+                exhibits_dict[current_issue].append(paragraph.text)
+    return exhibits_dict
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()
@@ -157,7 +163,7 @@ def create_word_document(case_data, selected_arguments):
     mac_name = mac_num_to_name(mac_num) 
 
     determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
-    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
+    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
     if len(det_event_array) > 1: 
         determination_event_dates = 'Various' 
     else: 
@@ -166,11 +172,11 @@ def create_word_document(case_data, selected_arguments):
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
     date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found' 
-    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found' 
-    if 'Group FYE' in case_data: 
-        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
+    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found' 
+    if 'Group FYE' in case data: 
+        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found' 
     else: 
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
+        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
 
@@ -337,6 +343,7 @@ def create_word_document(case_data, selected_arguments):
             run.font.color.rgb = RGBColor(0, 0, 0)
         else:
             all_exhibits = Document()
+            exhibits_dict = {}
             while i < len(issue):
                 header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
                 run = header.add_run() 
@@ -350,14 +357,13 @@ def create_word_document(case_data, selected_arguments):
                     composer = Composer(doc)
                     composer.append(issue_doc)
                     if exhibits:
-                        composer = Composer(all_exhibits)
-                        composer.append(exhibits)
+                        exhibits_dict[f"Issue {i+1}"] = exhibits
                 run = header.add_run() 
                 run.font.color.rgb = RGBColor(0, 0, 0)
                 i += 1 
             
             # Append all exhibits to the main document at the end
-            if all_exhibits.paragraphs:
+            if exhibits_dict:
                 doc.add_page_break()
                 header = doc.add_paragraph('V. EXHIBITS')
                 header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
@@ -365,8 +371,14 @@ def create_word_document(case_data, selected_arguments):
                 run.font.bold = True 
                 run.font.color.rgb = RGBColor(0, 0, 0)
                 
-                composer = Composer(doc)
-                composer.append(all_exhibits)
+                for issue, exhibits in exhibits_dict.items():
+                    issue_header = doc.add_paragraph(issue)
+                    issue_header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
+                    run = issue_header.runs[0] 
+                    run.font.bold = True 
+                    run.font.color.rgb = RGBColor(0, 0, 0)
+                    composer = Composer(doc)
+                    composer.append(exhibits)
 
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
@@ -386,7 +398,8 @@ def create_word_document(case_data, selected_arguments):
 
     buffer = BytesIO()  
     doc.save(buffer)  
-    return buffer.getvalue()   
+    return buffer.getvalue()  
+   
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
