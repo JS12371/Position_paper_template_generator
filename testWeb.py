@@ -61,6 +61,15 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
+def extract_exhibits(doc):
+    exhibits = Document()
+    in_exhibits_section = False
+    for paragraph in doc.paragraphs:
+        if "EXHIBITS" in paragraph.text.upper():
+            in_exhibits_section = True
+        if in_exhibits_section:
+            exhibits.add_paragraph(paragraph.text)
+    return exhibits
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()
@@ -314,6 +323,7 @@ def create_word_document(case_data, selected_arguments):
             run = header.add_run()
             run.font.color.rgb = RGBColor(0, 0, 0)
         else:
+            all_exhibits = Document()
             while i < len(issue):
                 header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
                 run = header.add_run() 
@@ -324,9 +334,25 @@ def create_word_document(case_data, selected_arguments):
                 else:
                     composer = Composer(doc)
                     composer.append(issue_doc)
+                    exhibits = extract_exhibits(issue_doc)
+                    if exhibits:
+                        composer = Composer(all_exhibits)
+                        composer.append(exhibits)
                 run = header.add_run() 
                 run.font.color.rgb = RGBColor(0, 0, 0)
                 i += 1 
+            
+            # Append all exhibits to the main document at the end
+            if all_exhibits.paragraphs:
+                doc.add_page_break()
+                header = doc.add_paragraph('V. EXHIBITS')
+                header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
+                run = header.runs[0] 
+                run.font.bold = True 
+                run.font.color.rgb = RGBColor(0, 0, 0)
+                
+                composer = Composer(doc)
+                composer.append(all_exhibits)
 
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
@@ -347,7 +373,6 @@ def create_word_document(case_data, selected_arguments):
     buffer = BytesIO()  
     doc.save(buffer)  
     return buffer.getvalue()  
-
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
