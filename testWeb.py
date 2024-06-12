@@ -67,7 +67,8 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman'
+    run.font.color.rgb = RGBColor(0, 0, 0)
     p = header._p 
     pPr = p.get_or_add_pPr() 
     pBdr = OxmlElement('w:pBdr')     
@@ -110,25 +111,25 @@ def create_word_document(case_data, selected_arguments):
             pass
 
     provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found' 
-    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found' 
+    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case data else 'Provider Numbers not found' 
     if len(provider_num_array) > 1: 
         provider_numbers = "Various"
     else: 
         pass 
 
-    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found' 
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found' 
+    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case data else 'Provider Names not found' 
+    provider_name_array = case data['Provider Name'].unique() if 'Provider Name' in case data else 'Provider Names not found' 
     if len(provider_name_array) > 1: 
         provider_names = "Various"
     else: 
         pass 
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found' 
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found' 
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found' 
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found' 
     mac_name = mac_num_to_name(mac_num) 
 
-    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
-    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case_data else 'Determination Event Dates not found' 
+    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case data['Determination Event Date'].unique()]) if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
+    det_event_array = case data['Determination Event Date'].unique() if 'Determination Event Date' in case data else 'Determination Event Dates not found' 
     if len(det_event_array) > 1: 
         determination_event_dates = 'Various' 
     else: 
@@ -136,12 +137,12 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found' 
-    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found' 
-    if 'Group FYE' in case_data: 
-        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found' 
+    date_of_appeal = format_date(str(case data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case data else 'Date of Appeal not found' 
+    adj_no = ','.join(case data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found' 
+    if 'Group FYE' in case data: 
+        year = format_date(case data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found' 
     else: 
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found' 
+        year = format_date(case data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found' 
 
     table = doc.add_table(rows = 1, cols = 3) 
 
@@ -156,7 +157,8 @@ def create_word_document(case_data, selected_arguments):
     cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_middle = table.cell(0,1) 
     cell_middle.text = ")\n"*16
@@ -164,13 +166,15 @@ def create_word_document(case_data, selected_arguments):
     cell_middle.paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = cell_middle.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_right = table.cell(0,2) 
     cell_right.text = f"\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n" 
     run = cell_right.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     line_para = doc.add_paragraph() 
     line_para.add_run() 
@@ -189,19 +193,22 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     sub = doc.add_paragraph(f"Submitted by:\n\n<Name>\n{mac_name}\n<Address>\n<Address line 2>") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     sub = doc.add_paragraph(f"and\n\n<Reviewer Name>\nFederal Specialized Services, LLC\n1701 S. Racine Avenue\nChicago, IL 60608-4058") 
     sub.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = sub.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     doc.add_page_break() 
 
@@ -216,21 +223,24 @@ def create_word_document(case_data, selected_arguments):
         for paragraph in cell.paragraphs: 
             for run in paragraph.runs: 
                 run.font.size = Pt(11) 
-                run.font.name = 'Cambria (Body)' 
+                run.font.name = 'Times New Roman' 
                 run.font.bold = True 
+                run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_left1.text = f"TABLE OF CONTENTS" 
     run = cell_left1.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_right1 = table1.cell(0,1) 
     cell_right1.text = f"PAGE" 
     run = cell_right1.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     table = doc.add_table(rows = 1, cols = 2) 
     for cell in table.columns[0].cells: 
@@ -242,13 +252,15 @@ def create_word_document(case_data, selected_arguments):
     cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC\'s POSITION\n\nIV. CITATION OF PROGRAM LAWS, REGULATIONS, INSTRUCTIONS, AND CASES\n\nV. EXHIBITS" 
     run = cell_left.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_right = table.cell(0,1) 
     cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n?" 
     run = cell_right.paragraphs[0].runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     doc.save(f"Case_{case_num}.docx") 
     doc.add_page_break() 
@@ -257,14 +269,15 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
-    run.font.color.rgb = RGBColor(0,0,0) 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     header = doc.add_paragraph() 
     run = header.add_run() 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
     run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}" 
 
     doc.add_page_break() 
@@ -273,14 +286,15 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
-    run.font.color.rgb = RGBColor(0,0,0) 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     header = doc.add_paragraph() 
     run = header.add_run() 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     for i in range(len(issue)):
         if group_mode:
@@ -289,14 +303,16 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph(f"\nIssue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
-            run.font.name = 'Cambria (Body)' 
+            run.font.name = 'Times New Roman' 
+            run.font.color.rgb = RGBColor(0, 0, 0)
         else:
             if len(adj_no) > 1:
                 adj_no = "Various"
             header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0] 
             run.font.size = Pt(11) 
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman' 
+            run.font.color.rgb = RGBColor(0, 0, 0)
 
     doc.add_page_break() 
 
@@ -304,9 +320,9 @@ def create_word_document(case_data, selected_arguments):
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
     run = header.runs[0] 
     run.font.size = Pt(11) 
-    run.font.name = 'Cambria (Body)' 
+    run.font.name = 'Times New Roman' 
     run.font.bold = True 
-    run.font.color.rgb = RGBColor(0,0,0) 
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     i = 0 
     issue = list(filter(None, issue))
@@ -317,7 +333,8 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph("Issue: ")
             run = header.add_run()
             run.font.size = Pt(11)
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman'
+            run.font.color.rgb = RGBColor(0, 0, 0)
             if issue[0].startswith('Transfer'):
                 issue_content = issue[1]
             else:
@@ -329,13 +346,15 @@ def create_word_document(case_data, selected_arguments):
                     composer.append(issue_doc)
             run = header.add_run()
             run.font.size = Pt(11)
-            run.font.name = 'Cambria (Body)'
+            run.font.name = 'Times New Roman'
+            run.font.color.rgb = RGBColor(0, 0, 0)
         else:
             while i < len(issue):
                 header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
                 run = header.add_run() 
                 run.font.size = Pt(11) 
-                run.font.name = 'Cambria (Body)' 
+                run.font.name = 'Times New Roman' 
+                run.font.color.rgb = RGBColor(0, 0, 0)
                 issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
                 if error:
                     header = doc.add_paragraph(f"{error} \n\n") 
@@ -344,12 +363,22 @@ def create_word_document(case_data, selected_arguments):
                     composer.append(issue_doc)
                 run = header.add_run() 
                 run.font.size = Pt(11) 
-                run.font.name = 'Cambria (Body)' 
+                run.font.name = 'Times New Roman' 
+                run.font.color.rgb = RGBColor(0, 0, 0)
                 i += 1 
 
     for paragraph in doc.paragraphs:
-        if 'None' in paragraph.text:
-            paragraph.text = paragraph.text.replace('None', '', 1)
+        for run in paragraph.runs:
+            run.font.size = Pt(11)
+            run.font.name = 'Times New Roman'
+            run.font.color.rgb = RGBColor(0, 0, 0)
+
+    for footnote in doc.footnotes.part.rels.values():
+        for paragraph in footnote.target.paragraphs:
+            for run in paragraph.runs:
+                run.font.size = Pt(9)
+                run.font.name = 'Times New Roman'
+                run.font.color.rgb = RGBColor(0, 0, 0)
 
     buffer = BytesIO()  
     doc.save(buffer)  
