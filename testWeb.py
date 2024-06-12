@@ -313,7 +313,7 @@ def create_word_document(case_data, selected_arguments):
 
     doc.add_page_break()
 
-     header = doc.add_paragraph("III. MAC'S POSITION")
+    header = doc.add_paragraph("III. MAC'S POSITION")
     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
     run = header.runs[0]
     run.font.bold = True
