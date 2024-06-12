@@ -48,7 +48,7 @@ def get_issue_content(issue, selected_argument):
     issueformatted = issue.replace(" ", "")
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
-        return None, f"{issue}"
+        return None, f"Argument for Issue '{issue}' has not yet been added to the database."
     try:
         doc = Document(filename)
         return doc, None
@@ -331,7 +331,7 @@ def create_word_document(case_data, selected_arguments):
                 i += 1
                 continue
                 
-            header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
+            header = doc.add_paragraph(f"\n\nIssue {i+1}: {issue[i]}")
             run = header.add_run()
             run.font.color.rgb = RGBColor(0, 0, 0)
             issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
