@@ -103,24 +103,30 @@ def copy_paragraphs_for_exhibits(src, dest):
             copy_runs(paragraph, dest_paragraph)
 
 def copy_paragraphs(src, dest):
-    in_footnote = False
-    footnote_text = []
-
     for paragraph in src.paragraphs:
-        if "FOOTNOTE:" in paragraph.text:
-            in_footnote = True
-            footnote_text.append(paragraph.text.replace("FOOTNOTE:", "").strip())
-        elif "END FOOTNOTE" in paragraph.text:
-            in_footnote = False
-            footnote_id = create_footnote_with_text(dest, " ".join(footnote_text))
-            insert_footnote_in_paragraph(dest.add_paragraph(), footnote_id)
-            footnote_text = []
-        elif in_footnote:
-            footnote_text.append(paragraph.text.strip())
-        else:
-            dest_paragraph = dest.add_paragraph()
-            copy_paragraph_format(paragraph, dest_paragraph)
-            copy_runs(paragraph, dest_paragraph)
+        paragraph_text = paragraph.text
+        footnote_positions = []
+        
+        while "FOOTNOTE:" in paragraph_text:
+            footnote_start = paragraph_text.index("FOOTNOTE:")
+            footnote_end = paragraph_text.index("END FOOTNOTE", footnote_start) + len("END FOOTNOTE")
+            
+            footnote_text = paragraph_text[footnote_start + len("FOOTNOTE:"):footnote_end - len("END FOOTNOTE")].strip()
+            footnote_id = create_footnote_with_text(dest, footnote_text)
+            
+            footnote_positions.append((footnote_start, footnote_id))
+            paragraph_text = paragraph_text[:footnote_start] + paragraph_text[footnote_end:]
+        
+        dest_paragraph = dest.add_paragraph(paragraph_text)
+        copy_paragraph_format(paragraph, dest_paragraph)
+        copy_runs(paragraph, dest_paragraph)
+        
+        for pos, footnote_id in reversed(footnote_positions):
+            run = dest_paragraph.add_run()
+            footnote_reference = OxmlElement('w:footnoteReference')
+            footnote_reference.set(qn('w:id'), footnote_id)
+            run._r.append(footnote_reference)
+            dest_paragraph.add_run(paragraph_text[pos:pos])
 
 def create_footnote_with_text(doc, text):
     footnote_parts = doc._element.xpath('//w:footnotes')
@@ -150,6 +156,7 @@ def insert_footnote_in_paragraph(paragraph, footnote_id):
     footnote_reference = OxmlElement('w:footnoteReference')
     footnote_reference.set(qn('w:id'), footnote_id)
     run._r.append(footnote_reference)
+    run.font.superscript = True
 
 def extract_exhibits(doc, issue):
     exhibits = []
