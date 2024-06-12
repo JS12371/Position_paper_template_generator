@@ -61,6 +61,16 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
+def extract_exhibits(doc):
+    exhibits = Document()
+    in_exhibits_section = False
+    for paragraph in doc.paragraphs:
+        if "EXHIBITS" in paragraph.text.upper():
+            in_exhibits_section = True
+        if in_exhibits_section and paragraph.text.startswith("C-"):
+            exhibits.add_paragraph(paragraph.text)
+    return exhibits
+
 def remove_exhibits_from_document(doc):
     in_exhibits_section = False
     paragraphs_to_remove = []
@@ -73,22 +83,6 @@ def remove_exhibits_from_document(doc):
         p = paragraph._element
         p.getparent().remove(p)
         p._p = p._element = None
-        
-def extract_exhibits(doc):
-    exhibits_dict = {}
-    current_issue = None
-    in_exhibits_section = False
-    for paragraph in doc.paragraphs:
-        if "EXHIBITS" in paragraph.text.upper():
-            in_exhibits_section = True
-            continue
-        if in_exhibits_section:
-            if paragraph.text.startswith("Issue"):
-                current_issue = paragraph.text
-                exhibits_dict[current_issue] = []
-            elif paragraph.text.startswith("C-") and current_issue:
-                exhibits_dict[current_issue].append(paragraph.text)
-    return exhibits_dict
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()
@@ -343,7 +337,6 @@ def create_word_document(case_data, selected_arguments):
             run.font.color.rgb = RGBColor(0, 0, 0)
         else:
             all_exhibits = Document()
-            exhibits_dict = {}
             while i < len(issue):
                 header = doc.add_paragraph(f"\n\nIssue {i+1}: ")
                 run = header.add_run() 
@@ -357,13 +350,14 @@ def create_word_document(case_data, selected_arguments):
                     composer = Composer(doc)
                     composer.append(issue_doc)
                     if exhibits:
-                        exhibits_dict[f"Issue {i+1}"] = exhibits
+                        composer = Composer(all_exhibits)
+                        composer.append(exhibits)
                 run = header.add_run() 
                 run.font.color.rgb = RGBColor(0, 0, 0)
                 i += 1 
             
             # Append all exhibits to the main document at the end
-            if exhibits_dict:
+            if all_exhibits.paragraphs:
                 doc.add_page_break()
                 header = doc.add_paragraph('V. EXHIBITS')
                 header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
@@ -371,14 +365,8 @@ def create_word_document(case_data, selected_arguments):
                 run.font.bold = True 
                 run.font.color.rgb = RGBColor(0, 0, 0)
                 
-                for issue, exhibits in exhibits_dict.items():
-                    issue_header = doc.add_paragraph(issue)
-                    issue_header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT 
-                    run = issue_header.runs[0] 
-                    run.font.bold = True 
-                    run.font.color.rgb = RGBColor(0, 0, 0)
-                    composer = Composer(doc)
-                    composer.append(exhibits)
+                composer = Composer(doc)
+                composer.append(all_exhibits)
 
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
@@ -398,8 +386,7 @@ def create_word_document(case_data, selected_arguments):
 
     buffer = BytesIO()  
     doc.save(buffer)  
-    return buffer.getvalue()  
-   
+    return buffer.getvalue()   
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
