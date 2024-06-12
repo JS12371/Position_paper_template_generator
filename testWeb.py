@@ -62,9 +62,9 @@ def get_possible_arguments(issue):
     return arguments
 
 def change_footnote_font(doc, font_name='Times New Roman', font_size=9, font_color=RGBColor(0, 0, 0)):
-    for section in doc.sections:
-        for footnote in section.footer.paragraphs:
-            for run in footnote.runs:
+    for footnote in doc.footnotes.part.footnotes:
+        for paragraph in footnote.paragraphs:
+            for run in paragraph.runs:
                 run.font.name = font_name
                 run.font.size = Pt(font_size)
                 run.font.color.rgb = font_color
