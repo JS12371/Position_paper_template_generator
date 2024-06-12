@@ -61,6 +61,14 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
+def change_footnote_font(doc, font_name='Times New Roman', font_size=9, font_color=RGBColor(0, 0, 0)):
+    for section in doc.sections:
+        for footnote in section.footer.paragraphs:
+            for run in footnote.runs:
+                run.font.name = font_name
+                run.font.size = Pt(font_size)
+                run.font.color.rgb = font_color
+
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
     header = doc.add_paragraph('BEFORE THE PROVIDER REIMBURSEMENT REVIEW BOARD') 
@@ -372,6 +380,8 @@ def create_word_document(case_data, selected_arguments):
             run.font.size = Pt(11)
             run.font.name = 'Times New Roman'
             run.font.color.rgb = RGBColor(0, 0, 0)
+
+    change_footnote_font(doc)
 
     buffer = BytesIO()  
     doc.save(buffer)  
