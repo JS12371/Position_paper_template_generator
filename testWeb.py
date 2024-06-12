@@ -135,6 +135,14 @@ def copy_paragraphs(src, dest):
             insert_footnote_in_paragraph(dest_paragraph, footnote_id)
             if after_footnote:
                 dest.add_paragraph(after_footnote)
+        elif "FOOTNOTE:" in text:
+            parts = text.split("FOOTNOTE:")
+            before_footnote = parts[0].strip()
+            footnote_text = parts[1].strip()
+
+            dest_paragraph = dest.add_paragraph(before_footnote)
+            footnote_id = create_footnote_with_text(dest, footnote_text)
+            insert_footnote_in_paragraph(dest_paragraph, footnote_id)
         else:
             dest_paragraph = dest.add_paragraph()
             copy_paragraph_format(paragraph, dest_paragraph)
