@@ -61,13 +61,6 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
-def change_footnote_font(doc, font_name='Times New Roman', font_size=9, font_color=RGBColor(0, 0, 0)):
-    for footnote in doc.footnotes.part.footnotes:
-        for paragraph in footnote.paragraphs:
-            for run in paragraph.runs:
-                run.font.name = font_name
-                run.font.size = Pt(font_size)
-                run.font.color.rgb = font_color
 
 def create_word_document(case_data, selected_arguments):  
     doc = Document()  
@@ -378,10 +371,9 @@ def create_word_document(case_data, selected_arguments):
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             run.font.size = Pt(11)
-            run.font.name = 'Times New Roman'
+            run.font.name = 'Cambria (Body)'
             run.font.color.rgb = RGBColor(0, 0, 0)
 
-    change_footnote_font(doc)
 
     buffer = BytesIO()  
     doc.save(buffer)  
