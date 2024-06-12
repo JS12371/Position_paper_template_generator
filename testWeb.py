@@ -304,9 +304,11 @@ def create_word_document(case_data, selected_arguments):
         else:
             if len(adj_no) > 1:
                 adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}")
             run = header.runs[0]
             run.font.color.rgb = RGBColor(0, 0, 0)
+            if issue[i].startswith("Transferred"):
+                header.add_run(f"\n\nDisposition: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
 
     doc.add_page_break()
 
@@ -376,7 +378,8 @@ def create_word_document(case_data, selected_arguments):
 
     buffer = BytesIO()
     doc.save(buffer)
-    return buffer.getvalue()   
+    return buffer.getvalue()
+  
 
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
