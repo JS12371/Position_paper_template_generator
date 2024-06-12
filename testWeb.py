@@ -334,6 +334,15 @@ def create_word_document(case_data, selected_arguments):
             run.font.name = 'Times New Roman'
             run.font.color.rgb = RGBColor(0, 0, 0)
 
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    for run in paragraph.runs:
+                        run.font.size = Pt(11)
+                        run.font.name = 'Times New Roman'
+                        run.font.color.rgb = RGBColor(0, 0, 0)
+
 
     buffer = BytesIO()  
     doc.save(buffer)  
