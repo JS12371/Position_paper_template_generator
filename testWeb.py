@@ -335,6 +335,8 @@ def create_word_document(case_data, selected_arguments):
             run = header.add_run()
             run.font.color.rgb = RGBColor(0, 0, 0)
             issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
+            if str(issue_doc) == str(issue[i]):
+                issue_doc = f"The argument for {issue[i]} has not yet been loaded into the database."
             if error:
                 header = doc.add_paragraph(f"{error} \n\n")
             else:
