@@ -61,13 +61,26 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
+def remove_exhibits_from_document(doc):
+    in_exhibits_section = False
+    paragraphs_to_remove = []
+    for paragraph in doc.paragraphs:
+        if "EXHIBITS" in paragraph.text.upper():
+            in_exhibits_section = True
+        if in_exhibits_section:
+            paragraphs_to_remove.append(paragraph)
+    for paragraph in paragraphs_to_remove:
+        p = paragraph._element
+        p.getparent().remove(p)
+        p._p = p._element = None
+
 def extract_exhibits(doc):
     exhibits = Document()
     in_exhibits_section = False
     for paragraph in doc.paragraphs:
         if "EXHIBITS" in paragraph.text.upper():
             in_exhibits_section = True
-        if in_exhibits_section:
+        if in_exhibits_section and paragraph.text.startswith("C-"):
             exhibits.add_paragraph(paragraph.text)
     return exhibits
 
@@ -332,6 +345,7 @@ def create_word_document(case_data, selected_arguments):
                 if error:
                     header = doc.add_paragraph(f"{error} \n\n") 
                 else:
+                    remove_exhibits_from_document(issue_doc)
                     composer = Composer(doc)
                     composer.append(issue_doc)
                     exhibits = extract_exhibits(issue_doc)
