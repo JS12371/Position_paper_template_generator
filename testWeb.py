@@ -105,8 +105,12 @@ def extract_law_regulations(doc):
             elif paragraph.text.startswith("EXHIBITS"):
                 break
             if current_section and paragraph.text.strip() and not paragraph.text.startswith(current_section):
-                law_regulations[current_section].append(paragraph)
+                entries = paragraph.text.split(";")
+                for entry in entries:
+                    if entry.strip():
+                        law_regulations[current_section].append(entry.strip())
     return law_regulations
+
 
 
 def remove_law_regulations_from_document(doc):
