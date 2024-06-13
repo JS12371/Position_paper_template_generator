@@ -425,7 +425,6 @@ def create_word_document(case_data, selected_arguments):
 
         # Append all exhibits to the main document at the end
         if all_exhibits.paragraphs:
-            doc.add_page_break()
             header = doc.add_paragraph('V. EXHIBITS')
             header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
             run = header.runs[0]
