@@ -85,6 +85,44 @@ def remove_exhibits_from_document(doc):
         p.getparent().remove(p)
         p._p = p._element = None
 
+def extract_law_sections(doc):
+    law_sections = {"Law": [], "Regulations": [], "Program Instructions": [], "Other Sources": []}
+    in_law_section = False
+    current_section = None
+    for paragraph in doc.paragraphs:
+        if "LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS" in paragraph.text.upper():
+            in_law_section = True
+        elif in_law_section:
+            text = paragraph.text.strip()
+            if text.startswith("Law:"):
+                current_section = "Law"
+            elif text.startswith("Regulations:"):
+                current_section = "Regulations"
+            elif text.startswith("Program Instructions:"):
+                current_section = "Program Instructions"
+            elif text.startswith("Other Sources:"):
+                current_section = "Other Sources"
+            elif text.startswith("EXHIBITS"):
+                break
+            if current_section:
+                law_sections[current_section].append(paragraph)
+    return law_sections
+
+def remove_law_sections_from_document(doc):
+    in_law_section = False
+    paragraphs_to_remove = []
+    for paragraph in doc.paragraphs:
+        if "LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS" in paragraph.text.upper():
+            in_law_section = True
+        elif in_law_section:
+            if "EXHIBITS" in paragraph.text.upper():
+                break
+            paragraphs_to_remove.append(paragraph)
+    for paragraph in paragraphs_to_remove:
+        p = paragraph._element
+        p.getparent().remove(p)
+        p._p = p._element = None
+
 def create_word_document(case_data, selected_arguments):
     doc = Document()
     
@@ -325,6 +363,8 @@ def create_word_document(case_data, selected_arguments):
         pass
     else:
         all_exhibits = Document()
+        all_law_sections = {"Law": Document(), "Regulations": Document(), "Program Instructions": Document(), "Other Sources": Document()}
+        
         while i < len(issue):
             # Skip issues that are marked as "Transferred"
             if issue[i].startswith("Transferred"):
@@ -338,10 +378,22 @@ def create_word_document(case_data, selected_arguments):
             if error:
                 header = doc.add_paragraph(f"{error}\n")
             else:
+                law_sections = extract_law_sections(issue_doc)
                 exhibits = extract_exhibits(issue_doc)
+                remove_law_sections_from_document(issue_doc)
                 remove_exhibits_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
+                for section, paragraphs in law_sections.items():
+                    if paragraphs:
+                        law_doc = all_law_sections[section]
+                        header = law_doc.add_paragraph(f"\nISSUE: {issue[i]}")
+                        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                        run = header.runs[0]
+                        run.font.bold = True
+                        run.font.color.rgb = RGBColor(0, 0, 0)
+                        for paragraph in paragraphs:
+                            law_doc.add_paragraph(paragraph.text)
                 if exhibits:
                     header = all_exhibits.add_paragraph(f"\nISSUE: {issue[i]}")
                     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -353,6 +405,25 @@ def create_word_document(case_data, selected_arguments):
             run = header.add_run()
             run.font.color.rgb = RGBColor(0, 0, 0)
             i += 1
+
+        # Append all law sections to the main document at the end
+        if any(all_law_sections.values()):
+            doc.add_page_break()
+            header = doc.add_paragraph('IV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS')
+            header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+            run = header.runs[0]
+            run.font.bold = True
+            run.font.color.rgb = RGBColor(0, 0, 0)
+            for section, law_doc in all_law_sections.items():
+                if law_doc.paragraphs:
+                    doc.add_page_break()
+                    header = doc.add_paragraph(f'{section.upper()}')
+                    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                    run = header.runs[0]
+                    run.font.bold = True
+                    run.font.color.rgb = RGBColor(0, 0, 0)
+                    composer = Composer(doc)
+                    composer.append(law_doc)
 
         # Append all exhibits to the main document at the end
         if all_exhibits.paragraphs:
