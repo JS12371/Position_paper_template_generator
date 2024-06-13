@@ -336,14 +336,14 @@ def create_word_document(case_data, selected_arguments):
             run.font.color.rgb = RGBColor(0, 0, 0)
             issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
             if error:
-                header = doc.add_paragraph(f"{error} \n\n")
+                header = doc.add_paragraph(f"{error}\n\n")
             else:
                 exhibits = extract_exhibits(issue_doc)
                 remove_exhibits_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
                 if exhibits:
-                    doc.add_page_break()
+                    all_exhibits.add_paragraph()
                     header = all_exhibits.add_paragraph(f"ISSUE: {issue[i]}")
                     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
                     run = header.runs[0]
