@@ -378,10 +378,10 @@ def create_word_document(case_data, selected_arguments):
             if error:
                 header = doc.add_paragraph(f"{error}\n")
             else:
-                law_regulations = extract_law_regulations(issue_doc)
                 exhibits = extract_exhibits(issue_doc)
-                remove_law_regulations_from_document(issue_doc)
                 remove_exhibits_from_document(issue_doc)
+                law_regulations = extract_law_regulations(issue_doc)
+                remove_law_regulations_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
                 for section, paragraphs in law_regulations.items():
