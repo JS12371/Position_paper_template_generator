@@ -407,7 +407,9 @@ def create_word_document(case_data, selected_arguments):
 
         # Append all law and regulations to the main document
         if all_law_regulations.paragraphs:
-            doc.add_page_break()
+            # Ensure there's no extra blank page before this section
+            if doc.paragraphs[-1].text.strip():
+                doc.add_page_break()
             header = doc.add_paragraph('IV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS')
             header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
             run = header.runs[0]
