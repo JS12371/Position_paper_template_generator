@@ -341,7 +341,7 @@ def create_word_document(case_data, selected_arguments):
         if group_mode:
             if len(adj_no) > 1:
                 adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header = doc.add_paragraph(f"Issue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
             run = header.runs[0]
             run.font.color.rgb = RGBColor(0, 0, 0)
         else:
