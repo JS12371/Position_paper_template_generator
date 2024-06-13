@@ -86,15 +86,26 @@ def remove_exhibits_from_document(doc):
         p._p = p._element = None
 
 def extract_law_regulations(doc):
-    law_regulations = []
+    law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': []}
+    current_section = None
     in_law_regulations_section = False
     for paragraph in doc.paragraphs:
         if "LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS" in paragraph.text.upper():
             in_law_regulations_section = True
-        if in_law_regulations_section and not paragraph.text.startswith("EXHIBITS") and paragraph.text.strip():
-            law_regulations.append(paragraph)
-        if "EXHIBITS" in paragraph.text.upper():
-            in_law_regulations_section = False
+            continue
+        if in_law_regulations_section:
+            if paragraph.text.startswith("Law:"):
+                current_section = 'Law'
+            elif paragraph.text.startswith("Regulations:"):
+                current_section = 'Regulations'
+            elif paragraph.text.startswith("Program Instructions:"):
+                current_section = 'Program Instructions'
+            elif paragraph.text.startswith("Other Sources:"):
+                current_section = 'Other Sources'
+            elif paragraph.text.startswith("EXHIBITS"):
+                break
+            if current_section and paragraph.text.strip():
+                law_regulations[current_section].append(paragraph)
     return law_regulations
 
 def remove_law_regulations_from_document(doc):
@@ -372,14 +383,15 @@ def create_word_document(case_data, selected_arguments):
                 remove_exhibits_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
-                if law_regulations:
-                    header = all_law_regulations.add_paragraph(f"\nISSUE: {issue[i]}")
-                    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-                    run = header.runs[0]
-                    run.font.bold = True
-                    run.font.color.rgb = RGBColor(0, 0, 0)
-                    for law in law_regulations:
-                        all_law_regulations.add_paragraph(law.text)
+                for section, paragraphs in law_regulations.items():
+                    if paragraphs:
+                        header = all_law_regulations.add_paragraph(f"\n{section}:")
+                        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                        run = header.runs[0]
+                        run.font.bold = True
+                        run.font.color.rgb = RGBColor(0, 0, 0)
+                        for paragraph in paragraphs:
+                            all_law_regulations.add_paragraph(paragraph.text)
                 if exhibits:
                     header = all_exhibits.add_paragraph(f"\nISSUE: {issue[i]}")
                     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
