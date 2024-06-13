@@ -264,7 +264,7 @@ def create_word_document(case_data, selected_arguments):
     run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_right = table.cell(0,1)
-    cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n?"
+    cell_right.text = "\n1\n\n2\n\n3\n\n?\n\n\n?"
     run = cell_right.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -280,7 +280,7 @@ def create_word_document(case_data, selected_arguments):
     header = doc.add_paragraph()
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
-    run.text = f"\n Case Name: {case_name}\nProvider Numbers: {provider_numbers}\nLead Contractor: {mac_name}\nCalendar Year: {year[-4:]}\nPRRB Case Number: {case_num}\nDates of Determinations: {determination_event_dates}\nDate of Appeal: {date_of_appeal}"
+    run.text = f"\nCase Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
 
     doc.add_page_break()
 
