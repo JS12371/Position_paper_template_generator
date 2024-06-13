@@ -280,7 +280,7 @@ def create_word_document(case_data, selected_arguments):
     header = doc.add_paragraph()
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
-    run.text = f"\n\n Case Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
+    run.text = f"\n Case Name: {case_name}\nProvider Numbers: {provider_numbers}\nLead Contractor: {mac_name}\nCalendar Year: {year[-4:]}\nPRRB Case Number: {case_num}\nDates of Determinations: {determination_event_dates}\nDate of Appeal: {date_of_appeal}"
 
     doc.add_page_break()
 
@@ -331,20 +331,19 @@ def create_word_document(case_data, selected_arguments):
                 i += 1
                 continue
                 
-            header = doc.add_paragraph(f"\n\nIssue {i+1}: {issue[i]}")
+            header = doc.add_paragraph(f"\nIssue {i+1}: {issue[i]}")
             run = header.add_run()
             run.font.color.rgb = RGBColor(0, 0, 0)
             issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
             if error:
-                header = doc.add_paragraph(f"{error}\n\n")
+                header = doc.add_paragraph(f"{error}\n")
             else:
                 exhibits = extract_exhibits(issue_doc)
                 remove_exhibits_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
                 if exhibits:
-                    all_exhibits.add_paragraph()
-                    header = all_exhibits.add_paragraph(f"ISSUE: {issue[i]}")
+                    header = all_exhibits.add_paragraph(f"\nISSUE: {issue[i]}")
                     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
                     run = header.runs[0]
                     run.font.bold = True
