@@ -62,48 +62,23 @@ def get_possible_arguments(issue):
     return arguments
 
 
-def extract_references(doc):
-    law = []
-    regulations = []
-    program_instructions = []
-    other_sources = []
-    in_law_section = in_regulations_section = in_program_instructions_section = in_other_sources_section = False
-
+def extract_exhibits(doc):
+    exhibits = []
+    in_exhibits_section = False
     for paragraph in doc.paragraphs:
-        text = paragraph.text.upper()
+        if "EXHIBITS" in paragraph.text.upper():
+            in_exhibits_section = True
+        if in_exhibits_section and paragraph.text.startswith("C-"):
+            exhibits.append(paragraph)
+    return exhibits
 
-        if "LAW:" in text:
-            in_law_section = True
-            in_regulations_section = in_program_instructions_section = in_other_sources_section = False
-        elif "REGULATIONS:" in text:
-            in_regulations_section = True
-            in_law_section = in_program_instructions_section = in_other_sources_section = False
-        elif "PROGRAM INSTRUCTIONS:" in text:
-            in_program_instructions_section = True
-            in_law_section = in_regulations_section = in_other_sources_section = False
-        elif "OTHER SOURCES:" in text:
-            in_other_sources_section = True
-            in_law_section = in_regulations_section = in_program_instructions_section = False
-
-        if in_law_section and text.startswith("LAW:"):
-            law.append(paragraph)
-        elif in_regulations_section and text.startswith("REGULATIONS:"):
-            regulations.append(paragraph)
-        elif in_program_instructions_section and text.startswith("PROGRAM INSTRUCTIONS:"):
-            program_instructions.append(paragraph)
-        elif in_other_sources_section and text.startswith("OTHER SOURCES:"):
-            other_sources.append(paragraph)
-
-    return law, regulations, program_instructions, other_sources
-
-def remove_references_from_document(doc):
-    in_references_section = False
+def remove_exhibits_from_document(doc):
+    in_exhibits_section = False
     paragraphs_to_remove = []
     for paragraph in doc.paragraphs:
-        text = paragraph.text.upper()
-        if "LAW:" in text or "REGULATIONS:" in text or "PROGRAM INSTRUCTIONS:" in text or "OTHER SOURCES:" in text:
-            in_references_section = True
-        if in_references_section:
+        if "EXHIBITS" in paragraph.text.upper():
+            in_exhibits_section = True
+        if in_exhibits_section:
             paragraphs_to_remove.append(paragraph)
     for paragraph in paragraphs_to_remove:
         p = paragraph._element
@@ -284,7 +259,7 @@ def create_word_document(case_data, selected_arguments):
         cell.width = Pt(40)
 
     cell_left = table.cell(0,0)
-    cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC'S POSITION\n\nIV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS\n\nV. EXHIBITS"
+    cell_left.text = f"\nI. INTRODUCTION\n\nII. ISSUES AND ADJUSTMENTS IN DISPUTE\n\nIII. MAC'S POSITION\n\nIV. CITATION OF PROGRAM LAWS, REGULATIONS, INSTRUCTIONS, AND CASES\n\nV. EXHIBITS"
     run = cell_left.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -305,7 +280,7 @@ def create_word_document(case_data, selected_arguments):
     header = doc.add_paragraph()
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
-    run.text = f"\nCase Name: {case_name}\nProvider Numbers: {provider_numbers}\nLead Contractor: {mac_name}\nCalendar Year: {year[-4:]}\nPRRB Case Number: {case_num}\nDates of Determinations: {determination_event_dates}\nDate of Appeal: {date_of_appeal}"
+    run.text = f"\nCase Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[-4:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
 
     doc.add_page_break()
 
@@ -350,10 +325,6 @@ def create_word_document(case_data, selected_arguments):
         pass
     else:
         all_exhibits = Document()
-        all_law = []
-        all_regulations = []
-        all_program_instructions = []
-        all_other_sources = []
         while i < len(issue):
             # Skip issues that are marked as "Transferred"
             if issue[i].startswith("Transferred"):
@@ -367,15 +338,8 @@ def create_word_document(case_data, selected_arguments):
             if error:
                 header = doc.add_paragraph(f"{error}\n")
             else:
-                law, regulations, program_instructions, other_sources = extract_references(issue_doc)
-                all_law.extend(law)
-                all_regulations.extend(regulations)
-                all_program_instructions.extend(program_instructions)
-                all_other_sources.extend(other_sources)
-                
-                remove_references_from_document(issue_doc)
-                exhibits = extract_references(issue_doc)
-                remove_references_from_document(issue_doc)
+                exhibits = extract_exhibits(issue_doc)
+                remove_exhibits_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
                 if exhibits:
@@ -389,32 +353,6 @@ def create_word_document(case_data, selected_arguments):
             run = header.add_run()
             run.font.color.rgb = RGBColor(0, 0, 0)
             i += 1
-
-        # Append all law, regulations, program instructions, and other sources to the main document
-        if all_law or all_regulations or all_program_instructions or all_other_sources:
-            doc.add_page_break()
-            header = doc.add_paragraph('IV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS')
-            header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-            run = header.runs[0]
-            run.font.bold = True
-            run.font.color.rgb = RGBColor(0, 0, 0)
-
-            if all_law:
-                doc.add_paragraph("\nLaw:")
-                for paragraph in all_law:
-                    doc.add_paragraph(paragraph.text)
-            if all_regulations:
-                doc.add_paragraph("\nRegulations:")
-                for paragraph in all_regulations:
-                    doc.add_paragraph(paragraph.text)
-            if all_program_instructions:
-                doc.add_paragraph("\nProgram Instructions:")
-                for paragraph in all_program_instructions:
-                    doc.add_paragraph(paragraph.text)
-            if all_other_sources:
-                doc.add_paragraph("\nOther Sources:")
-                for paragraph in all_other_sources:
-                    doc.add_paragraph(paragraph.text)
 
         # Append all exhibits to the main document at the end
         if all_exhibits.paragraphs:
@@ -446,7 +384,6 @@ def create_word_document(case_data, selected_arguments):
     buffer = BytesIO()
     doc.save(buffer)
     return buffer.getvalue()
-
   
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
