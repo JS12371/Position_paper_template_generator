@@ -375,7 +375,7 @@ def create_word_document(case_data, selected_arguments):
                 
                 remove_references_from_document(issue_doc)
                 exhibits = extract_references(issue_doc)
-                remove_exhibits_from_document(issue_doc)
+                remove_references_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
                 if exhibits:
