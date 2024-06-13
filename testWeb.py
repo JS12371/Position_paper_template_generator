@@ -104,9 +104,10 @@ def extract_law_regulations(doc):
                 current_section = 'Other Sources'
             elif paragraph.text.startswith("EXHIBITS"):
                 break
-            if current_section and paragraph.text.strip():
+            if current_section and paragraph.text.strip() and not paragraph.text.startswith(current_section):
                 law_regulations[current_section].append(paragraph)
     return law_regulations
+
 
 def remove_law_regulations_from_document(doc):
     in_law_regulations_section = False
@@ -185,18 +186,18 @@ def create_word_document(case_data, selected_arguments):
         pass
 
     provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found'
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found'
+    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case data else 'Provider Names not found'
     if len(provider_name_array) > 1:
         provider_names = "Various"
     else:
         pass
 
-    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
-    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found'
+    case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case data else 'Case Num not found'
+    mac_num = case_data['MAC'].iloc[0] if 'MAC' in case data else 'MAC not found'
     mac_name = mac_num_to_name(mac_num)
 
-    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case_data else 'Determination Event Dates not found'
-    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case_data else 'Determination Event Dates not found'
+    determination_event_dates = ', '.join([format_date(str(date)[:10]) for date in case_data['Determination Event Date'].unique()]) if 'Determination Event Date' in case data else 'Determination Event Dates not found'
+    det_event_array = case_data['Determination Event Date'].unique() if 'Determination Event Date' in case data else 'Determination Event Dates not found'
     if len(det_event_array) > 1:
         determination_event_dates = 'Various'
     else:
@@ -204,12 +205,12 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found'
-    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found'
-    if 'Group FYE' in case_data:
-        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found'
+    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case data else 'Date of Appeal not found'
+    adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case data else 'Audit Adj No. not found'
+    if 'Group FYE' in case data:
+        year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case data else 'FYE not found'
     else:
-        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case_data else 'FYE not found'
+        year = format_date(case_data['FYE'].iloc[0]) if 'FYE' in case data else 'FYE not found'
 
     table = doc.add_table(rows = 1, cols = 3)
 
