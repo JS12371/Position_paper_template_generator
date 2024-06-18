@@ -76,7 +76,7 @@ def remove_exhibits_from_document(doc):
     in_exhibits_section = False
     paragraphs_to_remove = []
     for paragraph in doc.paragraphs:
-        if "EXHIBITS" in paragraph.text.upper():
+        if "EXHIBITS" in paragraph.text:
             in_exhibits_section = True
         if in_exhibits_section:
             paragraphs_to_remove.append(paragraph)
