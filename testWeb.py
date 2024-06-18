@@ -91,7 +91,7 @@ def extract_law_regulations(doc):
     current_section = None
     in_law_regulations_section = False
     for paragraph in doc.paragraphs:
-        st.write(f"{paragraph}")
+        st.write(f"{paragraph.strip()}")
         if "LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS" in paragraph.text.upper():
             st.write("FOUND LAW AND REG SECTION")
             in_law_regulations_section = True
