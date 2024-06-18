@@ -105,17 +105,17 @@ def extract_law_regulations(doc):
         if in_law_regulations_section:
             if paragraph.text.startswith("Law"):
                 current_section = 'Law'
-            elif paragraph.text.startswith("Case Law")
+            elif paragraph.text.startswith("Case Law"):
                 current_section = 'Case Law'
-            elif paragraph.text.startswith("United States Statutes")
+            elif paragraph.text.startswith("United States Statutes"):
                 current_section = 'United States Statutes'
-            elif paragraph.text.startswith("Judicial Decisions")
+            elif paragraph.text.startswith("Judicial Decisions"):
                 current_section = 'Judicial Decisions'
-            elif paragraph.text.startswith("Agency Decisions")
+            elif paragraph.text.startswith("Agency Decisions"):
                 current_section = 'Agency Decisions'
-            elif paragraph.text.startswith("Federal Register")
+            elif paragraph.text.startswith("Federal Register"):
                 current_section = 'Federal Register'
-            elif paragraph.text.startswith("SSA")
+            elif paragraph.text.startswith("SSA"):
                 current_section = 'SSA'
             elif paragraph.text.startswith("Regulations:"):
                 current_section = 'Regulations'
