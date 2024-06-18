@@ -66,7 +66,7 @@ def extract_exhibits(doc):
     exhibits = []
     in_exhibits_section = False
     for paragraph in doc.paragraphs:
-        if "EXHIBITS" in paragraph.text.upper():
+        if "EXHIBITS" in paragraph.text:
             in_exhibits_section = True
         if in_exhibits_section and paragraph.text.startswith("C-"):
             exhibits.append(paragraph)
