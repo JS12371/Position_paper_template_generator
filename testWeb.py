@@ -432,7 +432,7 @@ def create_word_document(case_data, selected_arguments):
 
         # Append all exhibits to the main document at the end
         if all_exhibits.paragraphs:
-            header = doc.add_paragraph('V. EXHIBITS')
+            header = doc.add_paragraph('\nV. EXHIBITS')
             header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
             run = header.runs[0]
             run.font.bold = True
