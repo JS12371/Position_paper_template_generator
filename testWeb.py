@@ -92,10 +92,12 @@ def extract_law_regulations(doc):
     for paragraph in doc.paragraphs:
         if "LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS" in paragraph.text.upper():
             in_law_regulations_section = True
+            st.write("found section 4")
             continue
         if in_law_regulations_section:
             if paragraph.text.startswith("Law:"):
                 current_section = 'Law'
+                st.write("Found law section")
             elif paragraph.text.startswith("Regulations:"):
                 current_section = 'Regulations'
             elif paragraph.text.startswith("Program Instructions:"):
@@ -104,8 +106,10 @@ def extract_law_regulations(doc):
                 current_section = 'Other Sources'
             elif paragraph.text.startswith("EXHIBITS"):
                 break
+                st.write("ending section 4")
             if current_section and paragraph.text.strip() and not paragraph.text.startswith(current_section):
                 entries = paragraph.text.split(";")
+                st.write(entries)
                 for entry in entries:
                     if entry.strip():
                         law_regulations[current_section].append(entry.strip())
