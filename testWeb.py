@@ -82,7 +82,6 @@ def remove_exhibits_from_document(doc):
             paragraphs_to_remove.append(paragraph)
     for paragraph in paragraphs_to_remove:
         p = paragraph._element
-        st.write(f"paragraph removed: {p}")
         p.getparent().remove(p)
         p._p = p._element = None
 
@@ -108,6 +107,7 @@ def extract_law_regulations(doc):
                 st.write("ending section 4")
             if current_section and paragraph.text.strip() and not paragraph.text.startswith(current_section):
                 entries = paragraph.text.split(";")
+                st.write(f"paragraph entered: {entries}")
                 for entry in entries:
                     if entry.strip():
                         law_regulations[current_section].append(entry.strip())
@@ -127,6 +127,7 @@ def remove_law_regulations_from_document(doc):
             in_law_regulations_section = False
     for paragraph in paragraphs_to_remove:
         p = paragraph._element
+        st.write(f"paragraph removed: {p}")
         p.getparent().remove(p)
         p._p = p._element = None
 
