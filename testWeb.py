@@ -94,7 +94,7 @@ def remove_exhibits_from_document(doc):
 
 def extract_law_regulations(doc):
     law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': [], 
-                       'United States Statutes': [], 'Judicial Decisions': [], 'Agency Decisions': [], 'SSA': []
+                       'United States Statutes': [], 'Judicial Decisions': [], 'Agency Decisions': [], 'SSA': [],
                       'Federal Register': [], 'Agency Instructions': [], 'Case Law': []}
     current_section = None
     in_law_regulations_section = False
