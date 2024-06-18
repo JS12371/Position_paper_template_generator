@@ -82,6 +82,7 @@ def remove_exhibits_from_document(doc):
             paragraphs_to_remove.append(paragraph)
     for paragraph in paragraphs_to_remove:
         p = paragraph._element
+        st.write(f"paragraph removed: {p}")
         p.getparent().remove(p)
         p._p = p._element = None
 
