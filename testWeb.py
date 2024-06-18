@@ -86,12 +86,10 @@ def remove_exhibits_from_document(doc):
         p._p = p._element = None
 
 def extract_law_regulations(doc):
-    st.write("calling law and reg extraction")
     law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': []}
     current_section = None
     in_law_regulations_section = False
     for paragraph in doc.paragraphs:
-        st.write(f"{paragraph.text}")
         if "LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS" in paragraph.text.upper():
             st.write("FOUND LAW AND REG SECTION")
             in_law_regulations_section = True
@@ -107,10 +105,8 @@ def extract_law_regulations(doc):
                 current_section = 'Other Sources'
             elif paragraph.text.startswith("EXHIBITS"):
                 break
-                st.write("ending section 4")
             if current_section and paragraph.text.strip() and not paragraph.text.startswith(current_section):
                 entries = paragraph.text.split(";")
-                st.write(f"paragraph entered: {entries}")
                 for entry in entries:
                     if entry.strip():
                         law_regulations[current_section].append(entry.strip())
@@ -389,11 +385,9 @@ def create_word_document(case_data, selected_arguments):
                 header = doc.add_paragraph(f"{error}\n")
             else:
                 exhibits = extract_exhibits(issue_doc)
-                st.write(f"extracted exhibits {exhibits}")
                 remove_exhibits_from_document(issue_doc)
                 law_regulations = extract_law_regulations(issue_doc)
-                st.write(f"extracted law and regulations {law_regulations}")
-                ##remove_law_regulations_from_document(issue_doc)
+                remove_law_regulations_from_document(issue_doc)
                 composer = Composer(doc)
                 composer.append(issue_doc)
                 for section, paragraphs in law_regulations.items():
