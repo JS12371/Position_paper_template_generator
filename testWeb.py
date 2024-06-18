@@ -48,6 +48,7 @@ def sanitize_filename(filename):
     invalid_chars = '\\/*?:"<>|'
     for char in invalid_chars:
         filename = filename.replace(char, "")
+    st.write(f"{filename}")
     return filename.replace(" ", "")
 
 def get_issue_content(issue, selected_argument):
