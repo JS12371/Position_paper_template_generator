@@ -126,7 +126,6 @@ def remove_law_regulations_from_document(doc):
             in_law_regulations_section = False
     for paragraph in paragraphs_to_remove:
         p = paragraph._element
-        st.write(f"paragraph removed: {p}")
         p.getparent().remove(p)
         p._p = p._element = None
 
