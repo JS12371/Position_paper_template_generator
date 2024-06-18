@@ -46,9 +46,11 @@ def format_date(date):
 
 def sanitize_filename(filename):
     invalid_chars = '\\/*?:"<>|'
+    st.write(f"filename")
     for char in invalid_chars:
         filename = filename.replace(char, "")
     filename = filename.replace(" ", "")
+    st.write(f"filename")
     return filename
 
 def get_issue_content(issue, selected_argument):
