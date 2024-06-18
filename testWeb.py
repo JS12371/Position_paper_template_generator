@@ -93,7 +93,9 @@ def remove_exhibits_from_document(doc):
         p._p = p._element = None
 
 def extract_law_regulations(doc):
-    law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': []}
+    law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': [], 
+                       'United States Statutes': [], 'Judicial Decisions': [], 'Agency Decisions': [], 'SSA': []
+                      'Federal Register': [], 'Agency Instructions': [], 'Case Law': []}
     current_section = None
     in_law_regulations_section = False
     for paragraph in doc.paragraphs:
@@ -101,12 +103,26 @@ def extract_law_regulations(doc):
             in_law_regulations_section = True
             continue
         if in_law_regulations_section:
-            if paragraph.text.startswith("Law:"):
+            if paragraph.text.startswith("Law"):
                 current_section = 'Law'
+            elif paragraph.text.startswith("Case Law")
+                current_section = 'Case Law'
+            elif paragraph.text.startswith("United States Statutes")
+                current_section = 'United States Statutes'
+            elif paragraph.text.startswith("Judicial Decisions")
+                current_section = 'Judicial Decisions'
+            elif paragraph.text.startswith("Agency Decisions")
+                current_section = 'Agency Decisions'
+            elif paragraph.text.startswith("Federal Register")
+                current_section = 'Federal Register'
+            elif paragraph.text.startswith("SSA")
+                current_section = 'SSA'
             elif paragraph.text.startswith("Regulations:"):
                 current_section = 'Regulations'
             elif paragraph.text.startswith("Program Instructions:"):
                 current_section = 'Program Instructions'
+            elif paragraph.text.startswith("Agency Instructions")
+                current_section = 'Agency Instructions'
             elif paragraph.text.startswith("Other Sources:"):
                 current_section = 'Other Sources'
             elif paragraph.text.startswith("EXHIBITS"):
