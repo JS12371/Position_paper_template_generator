@@ -86,6 +86,7 @@ def remove_exhibits_from_document(doc):
         p._p = p._element = None
 
 def extract_law_regulations(doc):
+    st.write("calling law and reg extraction")
     law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': []}
     current_section = None
     in_law_regulations_section = False
