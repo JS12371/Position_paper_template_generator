@@ -44,8 +44,14 @@ def format_date(date):
     day = date[8:10] 
     return f"{month}/{day}/{year}" 
 
+def sanitize_filename(filename):
+    invalid_chars = '\\/*?:"<>|'
+    for char in invalid_chars:
+        filename = filename.replace(char, "")
+    return filename.replace(" ", "")
+
 def get_issue_content(issue, selected_argument):
-    issueformatted = issue.replace(" ", "")
+    issueformatted = sanitize_filename(issue)
     filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
     if not os.path.exists(filename):
         return None, f"Argument for Issue '{issue}' has not yet been added to the database."
