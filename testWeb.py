@@ -180,8 +180,7 @@ def create_word_document(case_data, selected_arguments):
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
     for iss in issue:
-        if iss == 'Not in the spreadsheet':
-            issue.remove(iss)
+        st.write(f"{iss}")
 
     tempissue = [i for i in issue]
 
