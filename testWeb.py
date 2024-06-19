@@ -117,13 +117,13 @@ def extract_law_regulations(doc):
                 current_section = 'Federal Register'
             elif paragraph.text.startswith("SSA"):
                 current_section = 'SSA'
-            elif paragraph.text.startswith("Regulations:"):
+            elif paragraph.text.startswith("Regulations"):
                 current_section = 'Regulations'
-            elif paragraph.text.startswith("Program Instructions:"):
+            elif paragraph.text.startswith("Program Instructions"):
                 current_section = 'Program Instructions'
             elif paragraph.text.startswith("Agency Instructions"):
                 current_section = 'Agency Instructions'
-            elif paragraph.text.startswith("Other Sources:"):
+            elif paragraph.text.startswith("Other Sources"):
                 current_section = 'Other Sources'
             elif paragraph.text.startswith("EXHIBITS"):
                 break
