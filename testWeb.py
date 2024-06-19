@@ -380,59 +380,58 @@ def create_word_document(case_data, selected_arguments):
     doc.add_page_break()
 
     header = doc.add_paragraph("III. MAC'S POSITION")
-header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-run = header.runs[0]
-run.font.bold = True
-run.font.color.rgb = RGBColor(0, 0, 0)
+    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+    run = header.runs[0]
+    run.font.bold = True
+    run.font.color.rgb = RGBColor(0, 0, 0)
+    
+    i = 0
+    issue = list(filter(None, issue))
 
-i = 0
-issue = list(filter(None, issue))
-
-if issue[0] == 'Issue not found':
-    pass
-else:
-    all_law_regulations = Document()
-    all_exhibits = Document()
-    while i < len(issue):
-        # Skip issues that are marked as "Transferred"
-        if issue[i].startswith("Transferred"):
-            i += 1
-            continue
+    if issue[0] == 'Issue not found':
+        pass
+    else:
+        all_law_regulations = Document()
+        all_exhibits = Document()
+        while i < len(issue):
+            # Skip issues that are marked as "Transferred"
+            if issue[i].startswith("Transferred"):
+                i += 1
+                continue
             
-        header = doc.add_paragraph(f"\nIssue {i+1}: {issue[i]}")
-        run = header.add_run()
-        run.font.color.rgb = RGBColor(0, 0, 0)
-        issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
-        if error:
-            header = doc.add_paragraph(f"{error}\n")
-        else:
-            exhibits = extract_exhibits(issue_doc)
-            remove_exhibits_from_document(issue_doc)
-            law_regulations = extract_law_regulations(issue_doc)
-            remove_law_regulations_from_document(issue_doc)
-            composer = Composer(doc)
-            composer.append(issue_doc)
-            for section, paragraphs in law_regulations.items():
-                if paragraphs:
-                    header = all_law_regulations.add_paragraph(f"\n{section}:")
+            header = doc.add_paragraph(f"\nIssue {i+1}: {issue[i]}")
+            run = header.add_run()
+            run.font.color.rgb = RGBColor(0, 0, 0)
+            issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
+            if error:
+                header = doc.add_paragraph(f"{error}\n")
+            else:
+                exhibits = extract_exhibits(issue_doc)
+                remove_exhibits_from_document(issue_doc)
+                law_regulations = extract_law_regulations(issue_doc)
+                remove_law_regulations_from_document(issue_doc)
+                composer = Composer(doc)
+                composer.append(issue_doc)
+                for section, paragraphs in law_regulations.items():
+                    if paragraphs:
+                        header = all_law_regulations.add_paragraph(f"\n{section}:")
+                        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                        run = header.runs[0]
+                        run.font.bold = True
+                        run.font.color.rgb = RGBColor(0, 0, 0)
+                        for paragraph in paragraphs:
+                            all_law_regulations.add_paragraph(paragraph)
+                if exhibits:
+                    header = all_exhibits.add_paragraph(f"\nISSUE: {issue[i]}")
                     header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
                     run = header.runs[0]
                     run.font.bold = True
                     run.font.color.rgb = RGBColor(0, 0, 0)
-                    for paragraph in paragraphs:
-                        all_law_regulations.add_paragraph(paragraph)
-            if exhibits:
-                header = all_exhibits.add_paragraph(f"\nISSUE: {issue[i]}")
-                header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-                run = header.runs[0]
-                run.font.bold = True
-                run.font.color.rgb = RGBColor(0, 0, 0)
-                for exhibit in exhibits:
-                    all_exhibits.add_paragraph(exhibit.text)
-        run = header.add_run()
-        run.font.color.rgb = RGBColor(0, 0, 0)
-        i += 1
-
+                    for exhibit in exhibits:
+                        all_exhibits.add_paragraph(exhibit.text)
+            run = header.add_run()
+            run.font.color.rgb = RGBColor(0, 0, 0)
+            i += 1
 
         # Append all law and regulations to the main document
         if all_law_regulations.paragraphs:
