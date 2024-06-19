@@ -1,4 +1,3 @@
-
 import streamlit as st  
 import pandas as pd  
 from docx import Document  
@@ -180,18 +179,16 @@ def create_word_document(case_data, selected_arguments):
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else '<input provider name>'
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
-    ##remove any 'Not in spreadsheet' values from the issue list
-
-    for i in range(len(issue)):
-        if issue[i] == 'Not in the spreadsheet':
-            #remove it by its index
-            issue.pop(i)
-
+    try:
+        for i in range(len(issue)):
+            if issue[i] == 'Not in the spreadsheet':
+                issue.pop(i)
+    except:
+        pass
+        
     tempissue = [i for i in issue]
 
     cloneissue = [iss for iss in tempissue]
-
-    
     
     issue = tempissue
 
@@ -372,9 +369,10 @@ def create_word_document(case_data, selected_arguments):
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
 
-    st.write(f"{issue}")
-
     for i in range(len(issue)):
+        if issue[i] == 'Not in the spreadsheet':
+            issue.pop(i)
+            continue
         if group_mode:
             if len(adj_no) > 1:
                 adj_no = "Various"
@@ -402,77 +400,76 @@ def create_word_document(case_data, selected_arguments):
     i = 0
     issue = list(filter(None, issue))
 
-    st.write(f"{issue}")
-
-    if issue[0] == 'Issue not found':
-        pass
-    else:
-        all_law_regulations = Document()
-        all_exhibits = Document()
-        while i < len(issue):
-            # Skip issues that are marked as "Transferred"
-            if issue[i].startswith("Transferred"):
-                i += 1
-                continue
+    all_law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': [], 
+                           'United States Statutes': [], 'Judicial Decisions': [], 'Agency Decisions': [], 'SSA': [],
+                           'Federal Register': [], 'Agency Instructions': [], 'Case Law': []}
+    all_exhibits = Document()
+    
+    for i, issue in enumerate(issue):
+        # Skip issues that are marked as "Transferred"
+        if issue.startswith("Transferred"):
+            continue
+        
+        header = doc.add_paragraph(f"\nIssue {i+1}: {issue}")
+        run = header.add_run()
+        run.font.color.rgb = RGBColor(0, 0, 0)
+        issue_doc, error = get_issue_content(issue, selected_arguments[i])
+        if error:
+            header = doc.add_paragraph(f"{error}\n")
+        else:
+            exhibits = extract_exhibits(issue_doc)
+            remove_exhibits_from_document(issue_doc)
+            law_regulations = extract_law_regulations(issue_doc)
+            remove_law_regulations_from_document(issue_doc)
+            composer = Composer(doc)
+            composer.append(issue_doc)
             
-            header = doc.add_paragraph(f"\nIssue {i+1}: {issue[i]}")
-            run = header.add_run()
-            run.font.color.rgb = RGBColor(0, 0, 0)
-            issue_doc, error = get_issue_content(issue[i], selected_arguments[i])
-            if error:
-                header = doc.add_paragraph(f"{error}\n")
-            else:
-                exhibits = extract_exhibits(issue_doc)
-                remove_exhibits_from_document(issue_doc)
-                law_regulations = extract_law_regulations(issue_doc)
-                remove_law_regulations_from_document(issue_doc)
-                composer = Composer(doc)
-                composer.append(issue_doc)
-                for section, paragraphs in law_regulations.items():
-                    if paragraphs:
-                        header = all_law_regulations.add_paragraph(f"\n{section}:")
-                        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-                        run = header.runs[0]
-                        run.font.bold = True
-                        run.font.color.rgb = RGBColor(0, 0, 0)
-                        for paragraph in paragraphs:
-                            all_law_regulations.add_paragraph(paragraph)
-                if exhibits:
-                    header = all_exhibits.add_paragraph(f"\nISSUE: {issue[i]}")
-                    header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-                    run = header.runs[0]
-                    run.font.bold = True
-                    run.font.color.rgb = RGBColor(0, 0, 0)
-                    for exhibit in exhibits:
-                        all_exhibits.add_paragraph(exhibit.text)
-            run = header.add_run()
-            run.font.color.rgb = RGBColor(0, 0, 0)
-            i += 1
+            # Combine law and regulations
+            for section, paragraphs in law_regulations.items():
+                all_law_regulations[section].extend(paragraphs)
+            
+            if exhibits:
+                header = all_exhibits.add_paragraph(f"\nISSUE: {issue}")
+                header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                run = header.runs[0]
+                run.font.bold = True
+                run.font.color.rgb = RGBColor(0, 0, 0)
+                for exhibit in exhibits:
+                    all_exhibits.add_paragraph(exhibit.text)
+        
+        run = header.add_run()
+        run.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # Append all combined law and regulations to the main document
+    if any(all_law_regulations.values()):
+        if doc.paragraphs[-1].text.strip():
+            doc.add_page_break()
+        header = doc.add_paragraph('IV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS')
+        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+        run = header.runs[0]
+        run.font.bold = True
+        run.font.color.rgb = RGBColor(0, 0, 0)
+        
+        for section, paragraphs in all_law_regulations.items():
+            if paragraphs:
+                header = doc.add_paragraph(f"\n{section}:")
+                header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                run = header.runs[0]
+                run.font.bold = True
+                run.font.color.rgb = RGBColor(0, 0, 0)
+                for paragraph in paragraphs:
+                    doc.add_paragraph(paragraph)
 
-        # Append all law and regulations to the main document
-        if all_law_regulations.paragraphs:
-            # Ensure there's no extra blank page before this section
-            if doc.paragraphs[-1].text.strip():
-                doc.add_page_break()
-            header = doc.add_paragraph('IV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS')
-            header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-            run = header.runs[0]
-            run.font.bold = True
-            run.font.color.rgb = RGBColor(0, 0, 0)
+    # Append all exhibits to the main document at the end
+    if all_exhibits.paragraphs:
+        header = doc.add_paragraph('\nV. EXHIBITS')
+        header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+        run = header.runs[0]
+        run.font.bold = True
+        run.font.color.rgb = RGBColor(0, 0, 0)
 
-            composer = Composer(doc)
-            composer.append(all_law_regulations)
-
-        # Append all exhibits to the main document at the end
-        if all_exhibits.paragraphs:
-            header = doc.add_paragraph('\nV. EXHIBITS')
-            header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-            run = header.runs[0]
-            run.font.bold = True
-            run.font.color.rgb = RGBColor(0, 0, 0)
-
-            composer = Composer(doc)
-            composer.append(all_exhibits)
+        composer = Composer(doc)
+        composer.append(all_exhibits)
 
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
@@ -492,6 +489,7 @@ def create_word_document(case_data, selected_arguments):
     buffer = BytesIO()
     doc.save(buffer)
     return buffer.getvalue()
+
   
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
