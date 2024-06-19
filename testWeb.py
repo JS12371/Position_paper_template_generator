@@ -181,7 +181,11 @@ def create_word_document(case_data, selected_arguments):
 
     tempissue = [i for i in issue]
 
+    st.write(f"{tempissue}")
+
     cloneissue = [iss for iss in tempissue]
+
+    st.write(f"{cloneissue}")
     
     issue = tempissue
 
