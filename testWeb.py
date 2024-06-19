@@ -378,6 +378,7 @@ def create_word_document(case_data, selected_arguments):
     for i in range(len(issue)):
         if issue[i] == 'Not in the spreadsheet':
             issue.pop(i)
+            continue
         if group_mode:
             if len(adj_no) > 1:
                 adj_no = "Various"
