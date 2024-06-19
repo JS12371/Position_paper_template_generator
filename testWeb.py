@@ -179,10 +179,13 @@ def create_word_document(case_data, selected_arguments):
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else '<input provider name>'
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
-    for i in range(len(issue)):
-        if issue[i] == 'Not in the spreadsheet':
-            issue.pop(i)
-
+    try:
+        for i in range(len(issue)):
+            if issue[i] == 'Not in the spreadsheet':
+                issue.pop(i)
+    except:
+        pass
+        
     tempissue = [i for i in issue]
 
     cloneissue = [iss for iss in tempissue]
