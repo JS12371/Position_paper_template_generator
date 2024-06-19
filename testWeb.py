@@ -236,7 +236,7 @@ def create_word_document(case_data, selected_arguments):
     else:
         pass
 
-    if issue[0].startswith('Transfer') and groupmode:
+    if issue[0].startswith('Transfer') and group_mode:
         issue.remove(issue[0])
     date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found'
     adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found'
