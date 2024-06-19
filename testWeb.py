@@ -390,7 +390,7 @@ def create_word_document(case_data, selected_arguments):
     i = 0
     issue = list(filter(None, issue))
 
-    st.write(f"{issue}")
+    st.write(f"{issue[0]}")
 
     if issue[0] == 'Issue not found':
         pass
