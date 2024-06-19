@@ -179,6 +179,8 @@ def create_word_document(case_data, selected_arguments):
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else '<input provider name>'
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
 
+    st.write(f"{issue}")
+
     try:
         for i in range(len(issue)):
             if issue[i] == 'Not in the spreadsheet':
