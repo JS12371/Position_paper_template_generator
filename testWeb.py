@@ -178,9 +178,11 @@ def create_word_document(case_data, selected_arguments):
     case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
     case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else '<input provider name>'
     issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
-    cloneissue = [iss for iss in issue]
 
     tempissue = [i for i in issue]
+
+    cloneissue = [iss for iss in tempissue]
+    
     issue = tempissue
 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
