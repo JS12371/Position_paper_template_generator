@@ -496,13 +496,12 @@ def string_processing(s):
         return "Not in the spreadsheet" 
     return str(s).replace('"', '') 
 
-def find_case_data(df, case_number):
+def find_case_data(df, case_number): 
     case_number = case_number.upper()
-    df['Case Num'] = df['Case Num'].map(string_processing)
-    case_data = df[df['Case Num'] == case_number]
-    case_data = case_data.map(string_processing)
-    return case_data
-
+    df['Case Num'] = df['Case Num'].map(string_processing) 
+    case_data = df[df['Case Num'] == case_number] 
+    case_data = case_data.map(string_processing) 
+    return case_data 
 
 def get_download_link(file, filename): 
     b64 = base64.b64encode(file).decode() 
@@ -558,49 +557,28 @@ if st.session_state.df is not None:
     if 'case_data' not in st.session_state:
         st.session_state.case_data = None
 
-if case_num and find_case_button:
-    st.session_state.case_data = find_case_data(st.session_state.df, case_num)
-    st.session_state.selected_arguments = {}
-    st.session_state.case_num = case_num
+    if case_num and find_case_button:
+        st.session_state.case_data = find_case_data(st.session_state.df, case_num)
+        st.session_state.selected_arguments = {}
+        st.session_state.case_num = case_num
 
-# Proceed only if the case_data is found
-if st.session_state.case_data is not None:
-    if not st.session_state.case_data.empty:
-        issue = st.session_state.case_data['Issue'].unique()
-
-        try:
-            for i in range(len(issue)):
-                if issue[i] == 'Not in the spreadsheet':
-                    issue.pop(i)
-        except:
-            pass
-        tempissue = [i for i in issue]
-        issue = tempissue
-
-        transferred_to_case = st.session_state.case_data['Transferred to Case #'] if 'Transferred to Case #' in st.session_state.case_data else ['transferred to case not found']
-        temptransferred_to_case = [i for i in transferred_to_case]
-        transferred_to_case = temptransferred_to_case
-        i = 0
-        if len(issue) != 1:
-            while i < len(issue):
-                if transferred_to_case[i] != 'Not in the spreadsheet':
-                    issue[i] = f"Transferred to case {transferred_to_case[i]}"
-                i += 1
-        for iss in issue:
-            if iss.startswith("Transferred"):
-                pass
-            else:
-                arguments = get_possible_arguments(iss)
+    # Proceed only if the case_data is found
+    if st.session_state.case_data is not None:
+        if not st.session_state.case_data.empty:
+            issues = st.session_state.case_data['Issue'].unique()
+            for issue in issues:
+                arguments = get_possible_arguments(issue)
                 if arguments:
-                    selected_argument = st.selectbox(f"Select argument for issue '{iss}'", arguments, key=iss, index=arguments.index(st.session_state.selected_arguments.get(iss, arguments[0])))
-                    st.session_state.selected_arguments[iss] = selected_argument
+                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
+                                                     index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
+                    st.session_state.selected_arguments[issue] = selected_argument
                 else:
-                    st.session_state.selected_arguments[iss] = ""
+                    st.session_state.selected_arguments[issue] = ""
 
-        # Step 3: Create Document
-        create_doc = st.button('Create Document') 
-        if create_doc:
-            docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
-            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-    else:
-        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+            # Step 3: Create Document
+            create_doc = st.button('Create Document') 
+            if create_doc:
+                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
+                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+        else:
+            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
