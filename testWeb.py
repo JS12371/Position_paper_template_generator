@@ -496,12 +496,18 @@ def string_processing(s):
         return "Not in the spreadsheet" 
     return str(s).replace('"', '') 
 
-def find_case_data(df, case_number): 
+def find_case_data(df, case_number):
     case_number = case_number.upper()
-    df['Case Num'] = df['Case Num'].map(string_processing) 
-    case_data = df[df['Case Num'] == case_number] 
-    case_data = case_data.map(string_processing) 
-    return case_data 
+    df['Case Num'] = df['Case Num'].map(string_processing)
+    case_data = df[df['Case Num'] == case_number]
+    
+    # Replace transferred cases
+    case_data['Issue'] = case_data.apply(
+        lambda row: 'Transferred' if row['Transferred to Case #'] != 'Not in the spreadsheet' else row['Issue'], axis=1)
+    
+    case_data = case_data.map(string_processing)
+    return case_data
+
 
 def get_download_link(file, filename): 
     b64 = base64.b64encode(file).decode() 
