@@ -508,6 +508,27 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
+# New function to check if an issue is transferred
+def is_transferred_issue(issue, case_data):
+    transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
+    temptransferred_to_case = [i for i in transferred_to_case]
+    transferred_to_case = temptransferred_to_case
+
+    group_mode = False
+    if case_data['Case Num'].iloc[0].endswith('G') or case_data['Case Num'].iloc[0].endswith('C'):
+        group_mode = True
+
+    i = 0
+    if len(issue) != 1:
+        while i < len(issue):
+            if transferred_to_case[i] != 'Not in the spreadsheet':
+                issue[i] = f"Transferred to case {transferred_to_case[i]}"
+            i += 1
+
+    issue = list(dict.fromkeys(issue))
+    if issue[0].startswith('Transfer') and group_mode:
+        return True
+    return False
 
 st.title('Excel Case Finder')  
 
@@ -566,6 +587,8 @@ if st.session_state.df is not None:
     if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
             issues = st.session_state.case_data['Issue'].unique()
+            # Filter out transferred issues
+            issues = [issue for issue in issues if not is_transferred_issue([issue], st.session_state.case_data)]
             for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
