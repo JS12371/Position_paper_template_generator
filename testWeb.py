@@ -574,8 +574,7 @@ if st.session_state.case_data is not None:
         issues = st.session_state.case_data['Issue'].unique()
         for issue in issues:
             if issue.startswith("Transferred"):
-                st.write(f"Skipping argument selection for transferred issue: '{issue}'")
-                st.session_state.selected_arguments[issue] = ""
+                pass
             else:
                 arguments = get_possible_arguments(issue)
                 if arguments:
