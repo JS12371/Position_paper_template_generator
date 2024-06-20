@@ -521,7 +521,7 @@ def is_transferred_issue(issue, case_data):
     i = 0
     if len(issue) != 1:
         while i < len(issue):
-            st.write(f"{transferred_to_case[i]")
+            st.write(f"{transferred_to_case[i]}")
             if transferred_to_case[i] != 'Not in the spreadsheet' or transferred_to_case[i] != '':
                 issue[i] = f"Transferred to case {transferred_to_case[i]}"
             i += 1
