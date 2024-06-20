@@ -589,6 +589,7 @@ if st.session_state.df is not None:
             issues = st.session_state.case_data['Issue'].unique()
             # Filter out transferred issues
             st.write(f"{issues}")
+            st.write(f"{issues[0]}")
             issues = [issue for issue in issues if not is_transferred_issue([issue], st.session_state.case_data)]
             st.write(f"{issues}")
             for issue in issues:
