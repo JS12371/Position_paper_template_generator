@@ -593,17 +593,31 @@ if st.session_state.df is not None:
             issues = st.session_state.case_data['Issue']
             transferred_to_case = st.session_state.case_data['Transferred to Case #']
             # Filter out transferred issues
-            tempissues = []
             st.write(f"{issues}")
 
             length = len(issues)
             length2 = len(transferred_to_case)
             st.write(f" iss {length} and transfer {length2}")
+
+            temptrans = []
+            
+            for i in transferred_to_case:
+                temptrans.append(i)
+
+            transferred_to_case = temptrans
+
+            tempiss = []
+
+            for i in issues:
+                tempiss.append(i)
+
+            issues = tempiss
+
+            
+
+            
            
                 
-                    
-                    
-            issues = tempissues
             st.write(f"{issues}")
             st.write(f"{len(issues)}")
             for issue in issues:
