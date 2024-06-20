@@ -592,8 +592,7 @@ if st.session_state.case_data is not None:
             else:
                 arguments = get_possible_arguments(iss)
                 if arguments:
-                    selected_argument = st.selectbox(f"Select argument for issue '{iss}'", arguments, key=issue, 
-                    index=arguments.index(st.session_state.selected_arguments.get(iss, arguments[0])))
+                    selected_argument = st.selectbox(f"Select argument for issue '{iss}'", arguments, key=iss, index=arguments.index(st.session_state.selected_arguments.get(iss, arguments[0])))
                     st.session_state.selected_arguments[iss] = selected_argument
                 else:
                     st.session_state.selected_arguments[iss] = ""
