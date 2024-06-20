@@ -597,13 +597,8 @@ if st.session_state.df is not None:
             st.write(f"{issues}")
 
             length = len(issues)
-            index = 0
-            while index < length:
-                if transferred_to_case[index] == 'Not in the spreadsheet':
-                    tempissues.append(issues[index])
-                else:
-                    transferred_to_case.pop(index)
-                index = index + 1
+            length2 = len(transferred_to_case)
+            st.write(f" iss {length} and transfer {length2}")
            
                 
                     
