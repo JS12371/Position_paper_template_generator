@@ -519,6 +519,7 @@ def is_transferred_issue(issue, case_data):
         group_mode = True
 
     i = 0
+    st.write(f"{transferred_to_case[i]}")
     if len(issue) != 1:
         while i < len(issue):
             st.write(f"{transferred_to_case[i]}")
