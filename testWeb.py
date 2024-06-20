@@ -590,7 +590,7 @@ if st.session_state.df is not None:
     # Proceed only if the case_data is found
     if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
-            issues = st.session_state.case_data['Issue'].unique()
+            issues = st.session_state.case_data['Issue']
             # Filter out transferred issues
             st.write(f"{issues}")
             st.write(f"{issues[0]}")
