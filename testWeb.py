@@ -567,6 +567,26 @@ if case_num and find_case_button:
 if st.session_state.case_data is not None:
     if not st.session_state.case_data.empty:
         issues = st.session_state.case_data['Issue'].unique()
+        issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
+
+        try:
+            for i in range(len(issue)):
+                if issue[i] == 'Not in the spreadsheet':
+                    issue.pop(i)
+        except:
+            pass
+        tempissue = [i for i in issue]
+        issue = tempissue
+
+        transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
+        temptransferred_to_case = [i for i in transferred_to_case]
+        transferred_to_case = temptransferred_to_case
+        i = 0
+        if len(issue) != 1:
+            while i < len(issue):
+                if transferred_to_case[i] != 'Not in the spreadsheet':
+                    issue[i] = f"Transferred to case {transferred_to_case[i]}"
+                i += 1
         for issue in issues:
             if issue.startswith("Transferred"):
                 pass
@@ -574,7 +594,7 @@ if st.session_state.case_data is not None:
                 arguments = get_possible_arguments(issue)
                 if arguments:
                     selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
-                                                     index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
+                    index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
                     st.session_state.selected_arguments[issue] = selected_argument
                 else:
                     st.session_state.selected_arguments[issue] = ""
