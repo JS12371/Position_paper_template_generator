@@ -511,7 +511,8 @@ def get_download_link(file, filename):
 # New function to check if an issue is transferred
 def is_transferred_issue(issue, case_data):
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
-    st.write(f"{transferred_to_case}")
+    for i in range(len(transferred_to_case)):
+        st.write(f"{transferred_to_case[i]}")
     temptransferred_to_case = [i for i in transferred_to_case]
     transferred_to_case = temptransferred_to_case
 
@@ -522,7 +523,6 @@ def is_transferred_issue(issue, case_data):
         group_mode = True
 
     i = 0
-    st.write(f"{transferred_to_case[i]}")
     if len(issue) != 1:
         while i < len(issue):
             if transferred_to_case[i] != 'Not in the spreadsheet' or transferred_to_case[i] != '':
