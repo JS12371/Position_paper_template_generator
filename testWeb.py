@@ -566,8 +566,7 @@ if case_num and find_case_button:
 # Proceed only if the case_data is found
 if st.session_state.case_data is not None:
     if not st.session_state.case_data.empty:
-        issues = st.session_state.case_data['Issue'].unique()
-        issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
+        issue = st.session_state.case_data['Issue'].unique()
 
         try:
             for i in range(len(issue)):
@@ -587,17 +586,17 @@ if st.session_state.case_data is not None:
                 if transferred_to_case[i] != 'Not in the spreadsheet':
                     issue[i] = f"Transferred to case {transferred_to_case[i]}"
                 i += 1
-        for issue in issues:
-            if issue.startswith("Transferred"):
+        for iss in issue:
+            if iss.startswith("Transferred"):
                 pass
             else:
                 arguments = get_possible_arguments(issue)
                 if arguments:
-                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
-                    index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
-                    st.session_state.selected_arguments[issue] = selected_argument
+                    selected_argument = st.selectbox(f"Select argument for issue '{iss}'", arguments, key=issue, 
+                    index=arguments.index(st.session_state.selected_arguments.get(iss, arguments[0])))
+                    st.session_state.selected_arguments[iss] = selected_argument
                 else:
-                    st.session_state.selected_arguments[issue] = ""
+                    st.session_state.selected_arguments[iss] = ""
 
         # Step 3: Create Document
         create_doc = st.button('Create Document') 
