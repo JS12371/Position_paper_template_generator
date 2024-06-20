@@ -613,12 +613,16 @@ if st.session_state.df is not None:
 
             issues = tempiss
 
+            tempiss = []
             
-
+            for i in range(len(issues)):
+                if transferred_to_case[i] == 'Not in the spreadsheet':
+                    
             
            
                 
             st.write(f"{issues}")
+            st.write(f"{transferred_to_case}")
             st.write(f"{len(issues)}")
             for issue in issues:
                 arguments = get_possible_arguments(issue)
