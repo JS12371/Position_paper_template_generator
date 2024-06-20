@@ -595,6 +595,7 @@ if st.session_state.df is not None:
             st.write(f"{issues}")
             issues = [issue for issue in issues if not is_transferred_issue([issue], st.session_state.case_data)]
             st.write(f"{issues}")
+            st.write(f"{len(issues)}")
             for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
