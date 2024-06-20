@@ -577,7 +577,7 @@ if st.session_state.case_data is not None:
         tempissue = [i for i in issue]
         issue = tempissue
 
-        transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
+        transferred_to_case = st.session_state.case_data['Transferred to Case #'] if 'Transferred to Case #' in st.session_state.case_data else ['transferred to case not found']
         temptransferred_to_case = [i for i in transferred_to_case]
         transferred_to_case = temptransferred_to_case
         i = 0
