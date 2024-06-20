@@ -500,11 +500,6 @@ def find_case_data(df, case_number):
     case_number = case_number.upper()
     df['Case Num'] = df['Case Num'].map(string_processing)
     case_data = df[df['Case Num'] == case_number]
-    
-    # Replace transferred cases
-    case_data['Issue'] = case_data.apply(
-        lambda row: 'Transferred' if row['Transferred to Case #'] != 'Not in the spreadsheet' else row['Issue'], axis=1)
-    
     case_data = case_data.map(string_processing)
     return case_data
 
