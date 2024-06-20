@@ -590,10 +590,19 @@ if st.session_state.df is not None:
     # Proceed only if the case_data is found
     if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
-            issues = st.session_state.case_data['Issue'].unique()
+            issues = st.session_state.case_data['Issue']
+            transferred_to_case = st.session_state.case_data['Transferred to Case #']
             # Filter out transferred issues
+            tempissues = []
             st.write(f"{issues}")
-            issues = [issue for issue in issues if not is_transferred_issue([issue], st.session_state.case_data)]
+            for index in range(0, len(issues)):
+                if transferred_to_case[i] == 'Not in the spreadsheet':
+                    tempissues.append(issues[i])
+                else:
+                    transferred_to_case.pop(i)
+                    
+                    
+            issues = tempissues
             st.write(f"{issues}")
             st.write(f"{len(issues)}")
             for issue in issues:
