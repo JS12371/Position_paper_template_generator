@@ -567,12 +567,6 @@ if st.session_state.df is not None:
         if not st.session_state.case_data.empty:
             issues = st.session_state.case_data['Issue']
             transferred_to_case = st.session_state.case_data['Transferred to Case #']
-            # Filter out transferred issues
-            st.write(f"{issues}")
-
-            length = len(issues)
-            length2 = len(transferred_to_case)
-            st.write(f" iss {length} and transfer {length2}")
 
             temptrans = []
             
@@ -598,10 +592,6 @@ if st.session_state.df is not None:
 
             issues = tempiss
             
-                
-            st.write(f"{issues}")
-            st.write(f"{transferred_to_case}")
-            st.write(f"{len(issues)}")
             for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
