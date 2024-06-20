@@ -557,7 +557,7 @@ if st.session_state.df is not None:
     if 'case_data' not in st.session_state:
         st.session_state.case_data = None
 
-    if case_num and find_case_button:
+if case_num and find_case_button:
     st.session_state.case_data = find_case_data(st.session_state.df, case_num)
     st.session_state.selected_arguments = {}
     st.session_state.case_num = case_num
