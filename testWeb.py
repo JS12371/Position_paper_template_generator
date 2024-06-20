@@ -595,7 +595,7 @@ if st.session_state.df is not None:
             # Filter out transferred issues
             tempissues = []
             st.write(f"{issues}")
-            for index in range(0, len(issues)):
+            for index in range(0, len(issues)-1):
                 if transferred_to_case[index] == 'Not in the spreadsheet':
                     tempissues.append(issues[index])
                 else:
