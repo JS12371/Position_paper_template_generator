@@ -558,15 +558,19 @@ if st.session_state.df is not None:
         st.session_state.case_data = None
 
     if case_num and find_case_button:
-        st.session_state.case_data = find_case_data(st.session_state.df, case_num)
-        st.session_state.selected_arguments = {}
-        st.session_state.case_num = case_num
+    st.session_state.case_data = find_case_data(st.session_state.df, case_num)
+    st.session_state.selected_arguments = {}
+    st.session_state.case_num = case_num
 
-    # Proceed only if the case_data is found
-    if st.session_state.case_data is not None:
-        if not st.session_state.case_data.empty:
-            issues = st.session_state.case_data['Issue'].unique()
-            for issue in issues:
+# Proceed only if the case_data is found
+if st.session_state.case_data is not None:
+    if not st.session_state.case_data.empty:
+        issues = st.session_state.case_data['Issue'].unique()
+        for issue in issues:
+            if issue.startswith("Transferred"):
+                st.write(f"Skipping argument selection for transferred issue: '{issue}'")
+                st.session_state.selected_arguments[issue] = ""
+            else:
                 arguments = get_possible_arguments(issue)
                 if arguments:
                     selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
@@ -575,10 +579,10 @@ if st.session_state.df is not None:
                 else:
                     st.session_state.selected_arguments[issue] = ""
 
-            # Step 3: Create Document
-            create_doc = st.button('Create Document') 
-            if create_doc:
-                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
-                st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
-        else:
-            st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+        # Step 3: Create Document
+        create_doc = st.button('Create Document') 
+        if create_doc:
+            docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
+            st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
+    else:
+        st.write('Case not found in the spreadsheet. Please try again with a different case number.')
