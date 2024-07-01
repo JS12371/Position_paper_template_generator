@@ -588,7 +588,7 @@ if st.session_state.df is not None:
                 if transferred_to_case[i] == 'Not in the spreadsheet':
                     tempiss.append(issues[i])
                 else:
-                    tempiss.append("Transferred Case")
+                    tempiss.append(f"Transferred Case #{i}")
 
             issues = tempiss
             
