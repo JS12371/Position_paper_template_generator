@@ -1,3 +1,4 @@
+
 import streamlit as st  
 import pandas as pd  
 from docx import Document  
@@ -9,7 +10,7 @@ import base64
 from io import BytesIO 
 import os 
 import glob
-from docxcompose.composer import Composer  # Import Composer from docxcompose
+from docxcompose.composer import Composer
 
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
@@ -68,7 +69,6 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
-
 def extract_exhibits(doc):
     exhibits = []
     in_exhibits_section = False
@@ -76,7 +76,7 @@ def extract_exhibits(doc):
         if "EXHIBITS" in paragraph.text:
             in_exhibits_section = True
         if in_exhibits_section and paragraph.text.startswith("C-"):
-            exhibits.append(paragraph)
+            exhibits.append(paragraph.text)
     return exhibits
 
 def remove_exhibits_from_document(doc):
@@ -133,8 +133,6 @@ def extract_law_regulations(doc):
                     if entry.strip():
                         law_regulations[current_section].append(entry.strip())
     return law_regulations
-
-
 
 def remove_law_regulations_from_document(doc):
     in_law_regulations_section = False
@@ -403,10 +401,11 @@ def create_word_document(case_data, selected_arguments):
     all_law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': [], 
                            'United States Statutes': [], 'Judicial Decisions': [], 'Agency Decisions': [], 'SSA': [],
                            'Federal Register': [], 'Agency Instructions': [], 'Case Law': []}
-    all_exhibits = Document()
+    all_exhibits = []
+
+    exhibit_counter = 1
     
     for i, issue in enumerate(issue):
-        # Skip issues that are marked as "Transferred"
         if issue.startswith("Transferred"):
             continue
         
@@ -418,6 +417,9 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph(f"{error}\n")
         else:
             exhibits = extract_exhibits(issue_doc)
+            exhibits = [f"C-{exhibit_counter + j}: {exhibits[j]}" for j in range(len(exhibits))]
+            exhibit_counter += len(exhibits)
+            all_exhibits.extend(exhibits)
             remove_exhibits_from_document(issue_doc)
             law_regulations = extract_law_regulations(issue_doc)
             remove_law_regulations_from_document(issue_doc)
@@ -427,20 +429,10 @@ def create_word_document(case_data, selected_arguments):
             # Combine law and regulations
             for section, paragraphs in law_regulations.items():
                 all_law_regulations[section].extend(paragraphs)
-            
-            if exhibits:
-                header = all_exhibits.add_paragraph(f"\nISSUE: {issue}")
-                header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
-                run = header.runs[0]
-                run.font.bold = True
-                run.font.color.rgb = RGBColor(0, 0, 0)
-                for exhibit in exhibits:
-                    all_exhibits.add_paragraph(exhibit.text)
-        
+
         run = header.add_run()
         run.font.color.rgb = RGBColor(0, 0, 0)
     
-    # Append all combined law and regulations to the main document
     if any(all_law_regulations.values()):
         if doc.paragraphs[-1].text.strip():
             doc.add_page_break()
@@ -460,17 +452,16 @@ def create_word_document(case_data, selected_arguments):
                 for paragraph in paragraphs:
                     doc.add_paragraph(paragraph)
 
-    # Append all exhibits to the main document at the end
-    if all_exhibits.paragraphs:
+    if all_exhibits:
         header = doc.add_paragraph('\nV. EXHIBITS')
         header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
         run = header.runs[0]
         run.font.bold = True
         run.font.color.rgb = RGBColor(0, 0, 0)
 
-        composer = Composer(doc)
-        composer.append(all_exhibits)
-
+        for exhibit in all_exhibits:
+            doc.add_paragraph(exhibit)
+    
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             run.font.size = Pt(11)
@@ -490,7 +481,6 @@ def create_word_document(case_data, selected_arguments):
     doc.save(buffer)
     return buffer.getvalue()
 
-  
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
         return "Not in the spreadsheet" 
@@ -507,7 +497,6 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode() 
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
-
 
 st.title('Excel Case Finder')  
 
