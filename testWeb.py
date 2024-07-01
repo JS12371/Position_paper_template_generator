@@ -607,6 +607,8 @@ if st.session_state.df is not None:
                 if issue[i].startswith("Transf"):
                     issues.remove(i)
 
+            st.write(issues)
+
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
             if create_doc:
