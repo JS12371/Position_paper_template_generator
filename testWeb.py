@@ -590,15 +590,9 @@ if st.session_state.df is not None:
                 else:
                     tempiss.append(f"Transferred Case #{i}")
 
-            st.write(tempiss)
-
             issues = tempiss
 
             issues = set(issues)
-
-            st.write(issues)
-
-            
             
             for issue in issues:
                 arguments = get_possible_arguments(issue)
@@ -608,6 +602,9 @@ if st.session_state.df is not None:
                     st.session_state.selected_arguments[issue] = selected_argument
                 else:
                     st.session_state.selected_arguments[issue] = ""
+
+            for issue in issues:
+                st.write(st.session_state.selected_arguments[issue]
 
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
