@@ -590,6 +590,8 @@ if st.session_state.df is not None:
                 else:
                     tempiss.append(f"Transferred Case #{i}")
 
+            st.write(issues)
+
             issues = tempiss
             
             for issue in issues:
