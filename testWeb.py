@@ -1,4 +1,3 @@
-
 import streamlit as st  
 import pandas as pd  
 from docx import Document  
@@ -10,7 +9,7 @@ import base64
 from io import BytesIO 
 import os 
 import glob
-from docxcompose.composer import Composer
+from docxcompose.composer import Composer  # Import Composer from docxcompose
 
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
@@ -69,6 +68,7 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
+
 def extract_exhibits(doc):
     exhibits = []
     in_exhibits_section = False
@@ -76,7 +76,7 @@ def extract_exhibits(doc):
         if "EXHIBITS" in paragraph.text:
             in_exhibits_section = True
         if in_exhibits_section and paragraph.text.startswith("C-"):
-            exhibits.append(paragraph.text)
+            exhibits.append(paragraph)
     return exhibits
 
 def remove_exhibits_from_document(doc):
@@ -133,6 +133,8 @@ def extract_law_regulations(doc):
                     if entry.strip():
                         law_regulations[current_section].append(entry.strip())
     return law_regulations
+
+
 
 def remove_law_regulations_from_document(doc):
     in_law_regulations_section = False
@@ -401,11 +403,10 @@ def create_word_document(case_data, selected_arguments):
     all_law_regulations = {'Law': [], 'Regulations': [], 'Program Instructions': [], 'Other Sources': [], 
                            'United States Statutes': [], 'Judicial Decisions': [], 'Agency Decisions': [], 'SSA': [],
                            'Federal Register': [], 'Agency Instructions': [], 'Case Law': []}
-    all_exhibits = []
-
-    exhibit_counter = 1
+    all_exhibits = Document()
     
     for i, issue in enumerate(issue):
+        # Skip issues that are marked as "Transferred"
         if issue.startswith("Transferred"):
             continue
         
@@ -417,9 +418,6 @@ def create_word_document(case_data, selected_arguments):
             header = doc.add_paragraph(f"{error}\n")
         else:
             exhibits = extract_exhibits(issue_doc)
-            exhibits = [f"C-{exhibit_counter + j}: {exhibits[j]}" for j in range(len(exhibits))]
-            exhibit_counter += len(exhibits)
-            all_exhibits.extend(exhibits)
             remove_exhibits_from_document(issue_doc)
             law_regulations = extract_law_regulations(issue_doc)
             remove_law_regulations_from_document(issue_doc)
@@ -429,10 +427,20 @@ def create_word_document(case_data, selected_arguments):
             # Combine law and regulations
             for section, paragraphs in law_regulations.items():
                 all_law_regulations[section].extend(paragraphs)
-
+            
+            if exhibits:
+                header = all_exhibits.add_paragraph(f"\nISSUE: {issue}")
+                header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                run = header.runs[0]
+                run.font.bold = True
+                run.font.color.rgb = RGBColor(0, 0, 0)
+                for exhibit in exhibits:
+                    all_exhibits.add_paragraph(exhibit.text)
+        
         run = header.add_run()
         run.font.color.rgb = RGBColor(0, 0, 0)
     
+    # Append all combined law and regulations to the main document
     if any(all_law_regulations.values()):
         if doc.paragraphs[-1].text.strip():
             doc.add_page_break()
@@ -452,16 +460,17 @@ def create_word_document(case_data, selected_arguments):
                 for paragraph in paragraphs:
                     doc.add_paragraph(paragraph)
 
-    if all_exhibits:
+    # Append all exhibits to the main document at the end
+    if all_exhibits.paragraphs:
         header = doc.add_paragraph('\nV. EXHIBITS')
         header.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
         run = header.runs[0]
         run.font.bold = True
         run.font.color.rgb = RGBColor(0, 0, 0)
 
-        for exhibit in all_exhibits:
-            doc.add_paragraph(exhibit)
-    
+        composer = Composer(doc)
+        composer.append(all_exhibits)
+
     for paragraph in doc.paragraphs:
         for run in paragraph.runs:
             run.font.size = Pt(11)
@@ -481,6 +490,7 @@ def create_word_document(case_data, selected_arguments):
     doc.save(buffer)
     return buffer.getvalue()
 
+  
 def string_processing(s): 
     if pd.isnull(s) or s == '': 
         return "Not in the spreadsheet" 
@@ -498,22 +508,33 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
+
 st.title('Excel Case Finder')  
 
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
+# Maintain the loaded DataFrame
 if 'df' not in st.session_state:
     st.session_state.df = None
 
+# Define the relevant columns to read
+relevant_columns0 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Issue Typ']
+relevant_columns1 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'FYE', 'Issue Typ']
+relevant_columns2 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Group FYE', 'Issue Typ']
+
 # Modify the read_excel call to use only the relevant columns based on the file name
 if uploaded_file and st.session_state.df is None:
+    # Analyze the file name
     file_name = uploaded_file.name
+    
+    # Determine which columns to use based on the file name
     if file_name.startswith('045'):
         relevant_columns = relevant_columns2
     elif file_name.startswith('061'):
         relevant_columns = relevant_columns1
     else:
+        # Default to relevant_columns1 if no specific condition is met
         relevant_columns = relevant_columns0
     
     try:
@@ -525,11 +546,12 @@ if uploaded_file and st.session_state.df is None:
     except Exception as e:
         st.write(f'Error reading file: {e}')
 
+
 # Proceed only if the DataFrame is loaded
 if st.session_state.df is not None:
     # Step 2: Enter Case Number
     case_num = st.text_input('Enter Case Number', value=st.session_state.get('case_num', ''))
-    find_case_button = st.button('Find Case')
+    find_case_button = st.button('Find Case') 
 
     # Maintain the loaded case_data
     if 'case_data' not in st.session_state:
@@ -547,35 +569,40 @@ if st.session_state.df is not None:
             transferred_to_case = st.session_state.case_data['Transferred to Case #']
 
             temptrans = []
+            
             for i in transferred_to_case:
                 temptrans.append(i)
+
             transferred_to_case = temptrans
 
             tempiss = []
+
             for i in issues:
                 tempiss.append(i)
+
             issues = tempiss
 
             tempiss = []
+            
             for i in range(len(issues)):
                 if transferred_to_case[i] == 'Not in the spreadsheet':
                     tempiss.append(issues[i])
                 else:
                     tempiss.append("Transferred Case")
+
             issues = tempiss
             
-            # Ensure unique keys for each selectbox by appending an index
-            for idx, issue in enumerate(issues):
+            for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
-                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=f"{issue}_{idx}", 
+                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
                                                      index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
                     st.session_state.selected_arguments[issue] = selected_argument
                 else:
                     st.session_state.selected_arguments[issue] = ""
 
             # Step 3: Create Document
-            create_doc = st.button('Create Document')
+            create_doc = st.button('Create Document') 
             if create_doc:
                 docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
