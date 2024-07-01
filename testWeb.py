@@ -628,6 +628,7 @@ if st.session_state.df is not None:
             st.write(f"{issues}")
             st.write(f"{transferred_to_case}")
             st.write(f"{len(issues)}")
+            issues = issues.unique()
             for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
