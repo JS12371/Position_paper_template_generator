@@ -603,6 +603,7 @@ if st.session_state.df is not None:
                 else:
                     st.session_state.selected_arguments[issue] = ""
 
+            issues = list(issues)
             for i in range(len(issues)):
                 if issue[i].startswith("Transf"):
                     issues.remove(i)
