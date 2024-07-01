@@ -603,10 +603,11 @@ if st.session_state.df is not None:
                 else:
                     st.session_state.selected_arguments[issue] = ""
 
+
             issues = list(issues)
-            for i in range(len(issues)):
-                if issue[i].startswith("Transf"):
-                    issues.remove(i)
+
+            # Use a list comprehension to filter out issues that start with "Transf"
+            issues = [issue for issue in issues if not issue.startswith("Transf")]
 
             st.write(issues)
 
