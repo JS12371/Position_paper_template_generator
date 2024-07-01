@@ -604,7 +604,7 @@ if st.session_state.df is not None:
                     st.session_state.selected_arguments[issue] = ""
 
             for issue in issues:
-                st.write(st.session_state.selected_arguments[issue]
+                st.write(st.session_state.selected_arguments[issue])
 
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
