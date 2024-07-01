@@ -590,12 +590,11 @@ if st.session_state.df is not None:
                 else:
                     tempiss.append(f"Transferred Case #{i}")
 
-            st.write(issues)
+            st.write(tempiss)
 
             issues = tempiss
 
             issues = set(issues)
-            arguments = set(arguments)
 
             
             
