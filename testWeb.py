@@ -591,7 +591,6 @@ if st.session_state.df is not None:
                     tempiss.append("Transferred Case")
 
             issues = tempiss
-            issues = list(set(issues))
             for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
