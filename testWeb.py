@@ -596,7 +596,7 @@ if st.session_state.df is not None:
 
             issues = set(issues)
 
-            st.write(tempiss)
+            st.write(issues)
 
             
             
