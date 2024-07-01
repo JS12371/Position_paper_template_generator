@@ -64,7 +64,7 @@ def get_issue_content(issue, selected_argument):
 
 def get_possible_arguments(issue):
     issueformatted = sanitize_filename(issue)
-    files = glob.glob(f"IssuestoArgs/{issueformatted}|*.docx")
+    files = glob.glob(f"IssuestoArgs/{issueformatted}*.docx")
     arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
