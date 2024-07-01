@@ -503,17 +503,18 @@ st.title('Excel Case Finder')
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx', 'xls'])  
 
-# Maintain the loaded DataFrame
 if 'df' not in st.session_state:
     st.session_state.df = None
 
+# Modify the read_excel call to use only the relevant columns based on the file name
 if uploaded_file and st.session_state.df is None:
     file_name = uploaded_file.name
-    relevant_columns = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Issue Typ']
     if file_name.startswith('045'):
-        relevant_columns.append('Group FYE')
+        relevant_columns = relevant_columns2
     elif file_name.startswith('061'):
-        relevant_columns.append('FYE')
+        relevant_columns = relevant_columns1
+    else:
+        relevant_columns = relevant_columns0
     
     try:
         st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns, engine='calamine')
@@ -542,19 +543,29 @@ if st.session_state.df is not None:
     # Proceed only if the case_data is found
     if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
-            issues = st.session_state.case_data['Issue'].unique().tolist()
-            transferred_to_case = st.session_state.case_data['Transferred to Case #'].tolist()
+            issues = st.session_state.case_data['Issue']
+            transferred_to_case = st.session_state.case_data['Transferred to Case #']
 
-            # Correctly handle transferred cases
-            processed_issues = []
-            for i, issue in enumerate(issues):
+            temptrans = []
+            for i in transferred_to_case:
+                temptrans.append(i)
+            transferred_to_case = temptrans
+
+            tempiss = []
+            for i in issues:
+                tempiss.append(i)
+            issues = tempiss
+
+            tempiss = []
+            for i in range(len(issues)):
                 if transferred_to_case[i] == 'Not in the spreadsheet':
-                    processed_issues.append(issue)
+                    tempiss.append(issues[i])
                 else:
-                    processed_issues.append("Transferred Case")
-
+                    tempiss.append("Transferred Case")
+            issues = tempiss
+            
             # Ensure unique keys for each selectbox by appending an index
-            for idx, issue in enumerate(processed_issues):
+            for idx, issue in enumerate(issues):
                 arguments = get_possible_arguments(issue)
                 if arguments:
                     selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=f"{issue}_{idx}", 
@@ -566,7 +577,7 @@ if st.session_state.df is not None:
             # Step 3: Create Document
             create_doc = st.button('Create Document')
             if create_doc:
-                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in processed_issues])
+                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
