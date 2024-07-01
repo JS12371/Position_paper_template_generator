@@ -65,7 +65,7 @@ def get_issue_content(issue, selected_argument):
 def get_possible_arguments(issue):
     issueformatted = sanitize_filename(issue)
     files = glob.glob(f"IssuestoArgs/{issueformatted}*.docx")
-    arguments = [os.path.basename(f).replace(f"{issueformatted}_", "").replace(".docx", "") for f in files]
+    arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
     return arguments
 
 
@@ -591,6 +591,7 @@ if st.session_state.df is not None:
                     tempiss.append("Transferred Case")
 
             issues = tempiss
+            
             for issue in issues:
                 arguments = get_possible_arguments(issue)
                 if arguments:
