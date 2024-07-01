@@ -568,43 +568,39 @@ if st.session_state.df is not None:
             issues = st.session_state.case_data['Issue']
             transferred_to_case = st.session_state.case_data['Transferred to Case #']
 
-            temptrans = []
-            
-            for i in transferred_to_case:
-                temptrans.append(i)
-
+            # Clean up the issues and transferred_to_case lists
+            temptrans = [i for i in transferred_to_case]
             transferred_to_case = temptrans
 
-            tempiss = []
-
-            for i in issues:
-                tempiss.append(i)
-
+            tempiss = [i for i in issues]
             issues = tempiss
 
             tempiss = []
-            
             for i in range(len(issues)):
                 if transferred_to_case[i] == 'Not in the spreadsheet':
                     tempiss.append(issues[i])
                 else:
                     tempiss.append("Transferred Case")
-
             issues = tempiss
-            
+
+            # Use a set to track unique issues
+            unique_issues = set()
+
             for index, issue in enumerate(issues):
-                arguments = get_possible_arguments(issue)
-                if arguments:
-                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=f"{issue}_{index}", 
-                                                     index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
-                    st.session_state.selected_arguments[issue] = selected_argument
-                else:
-                    st.session_state.selected_arguments[issue] = ""
+                if issue not in unique_issues:
+                    unique_issues.add(issue)
+                    arguments = get_possible_arguments(issue)
+                    if arguments:
+                        selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=f"{issue}_{index}", 
+                                                         index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
+                        st.session_state.selected_arguments[issue] = selected_argument
+                    else:
+                        st.session_state.selected_arguments[issue] = ""
 
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
             if create_doc:
-                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in issues])
+                docx_file = create_word_document(st.session_state.case_data, [st.session_state.selected_arguments[issue] for issue in unique_issues])
                 st.markdown(get_download_link(docx_file, f'Case_{case_num}.docx'), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
