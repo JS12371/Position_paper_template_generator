@@ -593,6 +593,11 @@ if st.session_state.df is not None:
             st.write(issues)
 
             issues = tempiss
+
+            issues = set(issues)
+            arguments = set(arguments)
+
+            
             
             for issue in issues:
                 arguments = get_possible_arguments(issue)
