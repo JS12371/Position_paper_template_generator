@@ -53,7 +53,7 @@ def sanitize_filename(filename):
 
 def get_issue_content(issue, selected_argument):
     issueformatted = sanitize_filename(issue)
-    filename = f"IssuestoArgs/{issueformatted}{selected_argument}.docx"
+    filename = f"IssuestoArgs/{issueformatted}_{selected_argument}.docx"
     if not os.path.exists(filename):
         return None, f"Argument for Issue '{issue}' has not yet been added to the database."
     try:
@@ -64,8 +64,8 @@ def get_issue_content(issue, selected_argument):
 
 def get_possible_arguments(issue):
     issueformatted = sanitize_filename(issue)
-    files = glob.glob(f"IssuestoArgs/{issueformatted}*.docx")
-    arguments = [os.path.basename(f).replace(f"{issueformatted}", "").replace(".docx", "") for f in files]
+    files = glob.glob(f"IssuestoArgs/{issueformatted}_*.docx")
+    arguments = [os.path.basename(f).replace(f"{issueformatted}_", "").replace(".docx", "") for f in files]
     return arguments
 
 
