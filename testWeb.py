@@ -592,10 +592,10 @@ if st.session_state.df is not None:
 
             issues = tempiss
             
-            for issue in issues:
+            for index, issue in enumerate(issues):
                 arguments = get_possible_arguments(issue)
                 if arguments:
-                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=issue, 
+                    selected_argument = st.selectbox(f"Select argument for issue '{issue}'", arguments, key=f"{issue}_{index}", 
                                                      index=arguments.index(st.session_state.selected_arguments.get(issue, arguments[0])))
                     st.session_state.selected_arguments[issue] = selected_argument
                 else:
