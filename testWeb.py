@@ -407,6 +407,7 @@ def create_word_document(case_data, selected_arguments):
     
     for i, issue in enumerate(issue):
         # Skip issues that are marked as "Transferred"
+        st.write(selected_arguments)
         if issue.startswith("Transferred"):
             continue
         
@@ -605,6 +606,7 @@ if st.session_state.df is not None:
 
 
             issues = list(issues)
+            
 
             # Use a list comprehension to filter out issues that start with "Transf"
             issues = [issue for issue in issues if not issue.startswith("Transf")]
