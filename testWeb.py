@@ -603,9 +603,9 @@ if st.session_state.df is not None:
                 else:
                     st.session_state.selected_arguments[issue] = ""
 
-            for issue in issues:
-                if issue.startswith("Transf"):
-                    issues.remove(issue)
+            for i in range(len(issues)):
+                if issue[i].startswith("Transf"):
+                    issues.remove(i)
 
             # Step 3: Create Document
             create_doc = st.button('Create Document') 
