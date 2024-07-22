@@ -360,8 +360,6 @@ def create_word_document(case_data, selected_arguments):
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
 
-    st.write(f"{issue}")
-
     for i in range(len(issue)):
         if group_mode:
             if len(adj_no) > 1:
@@ -389,8 +387,6 @@ def create_word_document(case_data, selected_arguments):
     
     i = 0
     issue = list(filter(None, issue))
-
-    st.write(f"{issue}")
 
     if issue[0] == 'Issue not found':
         pass
