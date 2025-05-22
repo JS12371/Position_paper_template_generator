@@ -5,4 +5,3 @@ python-docx
 modin[dask]
 openpyxl
 python-calamine
-test test test
