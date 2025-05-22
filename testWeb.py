@@ -68,8 +68,6 @@ def get_possible_arguments(issue):
     arguments = [os.path.basename(f).replace(f"{issueformatted}_", "").replace(".docx", "") for f in files]
     return arguments
 
-print("test")
-
 
 def extract_exhibits(doc):
     exhibits = []
