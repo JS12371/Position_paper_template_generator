@@ -261,7 +261,7 @@ def create_word_document(case_data, selected_arguments):
     run.font.color.rgb = RGBColor(0, 0, 0)
 
     cell_right = table.cell(0,2)
-    cell_right.text = f"\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:10]}\n"
+    cell_right.text = f"\n\n\n\n\n\nPRRB Case No. {case_num}\n\nFYE: {year[:]}\n"
     run = cell_right.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
