@@ -9,9 +9,13 @@ from openai import OpenAI
 from docx import Document
 from io import BytesIO
 import base64
+import os
+
+def load_api_key():
+    return os.getenv("CHAT_API")
 
 DB_NAME = "database.db"
-API_KEY_FILE = secrets.CHAT_API
+API_KEY_FILE = load_api_key()
 
 def load_api_key():
     with open(API_KEY_FILE, "r") as f:
