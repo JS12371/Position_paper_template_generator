@@ -11,15 +11,11 @@ from io import BytesIO
 import base64
 import os
 
+DB_NAME = "database.db"
+import os
+
 def load_api_key():
     return os.getenv("CHAT_API")
-
-DB_NAME = "database.db"
-API_KEY_FILE = load_api_key()
-
-def load_api_key():
-    with open(API_KEY_FILE, "r") as f:
-        return f.read().strip()
 
 def get_all_stratifiers():
     conn = sqlite3.connect(DB_NAME)
