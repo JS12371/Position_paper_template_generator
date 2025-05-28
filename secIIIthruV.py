@@ -11,7 +11,7 @@ from io import BytesIO
 import base64
 
 DB_NAME = "database.db"
-API_KEY_FILE = "CHATAPI.txt"
+API_KEY_FILE = secrets.CHAT_API
 
 def load_api_key():
     with open(API_KEY_FILE, "r") as f:
