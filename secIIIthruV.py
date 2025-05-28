@@ -486,7 +486,7 @@ if uploaded_file and st.session_state.df is None:
         relevant_columns = relevant_columns0
     
     try:
-        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns)#, engine='calamine')
+        st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns, engine='calamine')
         if not st.session_state.df.empty:
             st.write('File uploaded successfully')
         else:
