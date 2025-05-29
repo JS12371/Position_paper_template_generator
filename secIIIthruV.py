@@ -404,20 +404,6 @@ def create_word_document(case_data):
 
     doc.add_page_break()
 
-    for paragraph in doc.paragraphs:
-        for run in paragraph.runs:
-            run.font.size = Pt(11)
-            run.font.name = 'Times New Roman'
-            run.font.color.rgb = RGBColor(0, 0, 0)
-
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for paragraph in cell.paragraphs:
-                    for run in paragraph.runs:
-                        run.font.size = Pt(11)
-                        run.font.name = 'Times New Roman'
-                        run.font.color.rgb = RGBColor(0, 0, 0)
 
     doc.add_heading("III. MAC's Position", level=1)
     doc.add_paragraph(st.session_state.section_iii)
@@ -434,6 +420,21 @@ def create_word_document(case_data):
     doc.add_heading("V. EXHIBITS", level=1)
     for ex in st.session_state.section_v:
         doc.add_paragraph(f"- {ex}")
+
+    for paragraph in doc.paragraphs:
+        for run in paragraph.runs:
+            run.font.size = Pt(11)
+            run.font.name = 'Times New Roman'
+            run.font.color.rgb = RGBColor(0, 0, 0)
+
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    for run in paragraph.runs:
+                        run.font.size = Pt(11)
+                        run.font.name = 'Times New Roman'
+                        run.font.color.rgb = RGBColor(0, 0, 0)
 
     buffer = BytesIO()
     doc.save(buffer)
