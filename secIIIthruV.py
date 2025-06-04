@@ -230,19 +230,41 @@ def create_word_document(case_data):
         except:
             pass
 
-    provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found'
-    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found'
+    if 'Provider ID' in case_data:
+        provider_numbers = ', '.join(case_data['Provider ID'].unique())
+        provider_num_array = case_data['Provider ID'].unique()
+    elif 'Prov Num' in case_data:
+        provider_numbers = ', '.join(case_data['Prov Num'].unique()) 
+        provider_num_array = case_data['Prov Num'].unique()
+    else:
+        provider_numbers = 'Provider Number(s) not found'
+        provider_num_array = 'Provider Numbers not found'
+
+    
     if len(provider_num_array) > 1:
         provider_numbers = "Various"
     else:
         pass
 
-    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found'
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found'
+    if 'Provider Name' in case_data:
+        provider_names = ', '.join(case_data['Provider Name'].unique())
+        provider_name_array = case_data['Provider Name'].unique()
+    elif 'Firm' in case_data: 
+        provider_names = ', '.join(case_data['Firm'].unique())
+        provider_name_array = case_data['Firm'].unique()
+    else:
+        provider_names = 'Provider Name(s) not found'
+        provider_name_array = 'Provider Name(s) not found'
+    
     if len(provider_name_array) > 1:
         provider_names = "Various"
     else:
         pass
+
+    if 'Est. Reimb. Impact' in case_data:
+        reimbursement = case_data['Est. Reimb. Impact'].unique()[0]
+    else:
+        reimbursement = 'N/A'
 
     case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
     mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found'
@@ -400,7 +422,7 @@ def create_word_document(case_data):
             run.font.color.rgb = RGBColor(0, 0, 0)
             if issue[i].startswith("Transferred"):
                 header.add_run(f"\n\nDisposition: {issue[i]}")
-            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: {reimbursement}\n")
 
     doc.add_page_break()
 
@@ -458,7 +480,7 @@ def get_download_link(file, filename):
     return href 
 
 
-st.title('QA Position Paper Template Generator')  
+st.title('QR Position Paper Template Generator')  
 
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file (061 report)", type=['xlsx', 'xls'])  
