@@ -204,6 +204,8 @@ def create_word_document(case_data, selected_arguments):
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
         except:
             pass
+
+    
     if 'Provider ID' in case_data:
         provider_numbers = ', '.join(case_data['Provider ID'].unique())
         provider_num_array = case_data['Provider ID'].unique()
@@ -230,16 +232,16 @@ def create_word_document(case_data, selected_arguments):
         provider_names = 'Provider Name(s) not found'
         provider_name_array = 'Provider Name(s) not found'
 
+    if len(provider_name_array) > 1:
+        provider_names = "Various"
+    else:
+        pass
+
     if 'Est. Reimb. Impact' in case_data:
         reimbursement = case_data['Est. Reimb. Impact'].unique()[0]
     else:
         reimbursement = 'N/A'
         
-
-    if len(provider_name_array) > 1:
-        provider_names = "Various"
-    else:
-        pass
 
     case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
     mac_num = case_data['MAC'].iloc[0] if 'MAC' in case_data else 'MAC not found'
