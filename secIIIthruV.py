@@ -279,7 +279,14 @@ def create_word_document(case_data):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found'
+    
+    if 'Appeal Date' in case_data:
+        date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10])
+    elif 'Appeal Request Date' in case_data:
+        date_of_appeal = format_date(str(case_data['Appeal Request Date'].iloc[0])[:10])
+    else:
+        date_of_appeal = 'Date of Appeal not found'
+    
     adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found'
     if 'Group FYE' in case_data:
         year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found'
@@ -296,7 +303,7 @@ def create_word_document(case_data):
         cell.width = Pt(260)
 
     cell_left = table.cell(0,0)
-    cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
+    cell_left.text = f"\n{provider_names}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
     run = cell_left.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -393,7 +400,7 @@ def create_word_document(case_data):
     header = doc.add_paragraph()
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
-    run.text = f"\nCase Name: {case_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
+    run.text = f"\nProvider Name: {provider_names}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
 
     doc.add_page_break()
 
@@ -422,7 +429,7 @@ def create_word_document(case_data):
             run.font.color.rgb = RGBColor(0, 0, 0)
             if issue[i].startswith("Transferred"):
                 header.add_run(f"\n\nDisposition: {issue[i]}")
-            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: {reimbursement}\n")
+            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: ${reimbursement}\n")
 
     doc.add_page_break()
 
