@@ -204,16 +204,38 @@ def create_word_document(case_data, selected_arguments):
             issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
         except:
             pass
+    if 'Provider ID' in case_data:
+        provider_numbers = ', '.join(case_data['Provider ID'].unique())
+        provider_num_array = case_data['Provider ID'].unique()
+    elif 'Prov Num' in case_data:
+        provider_numbers = ', '.join(case_data['Prov Num'].unique()) 
+        provider_num_array = case_data['Prov Num'].unique()
+    else:
+        provider_numbers = 'Provider Number(s) not found'
+        provider_num_array = 'Provider Numbers not found'
 
-    provider_numbers = ', '.join(case_data['Provider ID'].unique()) if 'Provider ID' in case_data else 'Provider Numbers not found'
-    provider_num_array = case_data['Provider ID'].unique() if 'Provider ID' in case_data else 'Provider Numbers not found'
+
     if len(provider_num_array) > 1:
         provider_numbers = "Various"
     else:
         pass
 
-    provider_names = ', '.join(case_data['Provider Name'].unique()) if 'Provider Name' in case_data else 'Provider Names not found'
-    provider_name_array = case_data['Provider Name'].unique() if 'Provider Name' in case_data else 'Provider Names not found'
+    if 'Provider Name' in case_data:
+        provider_names = ', '.join(case_data['Provider Name'].unique())
+        provider_name_array = case_data['Provider Name'].unique()
+    elif 'Firm' in case_data: 
+        provider_names = ', '.join(case_data['Firm'].unique())
+        provider_name_array = case_data['Firm'].unique()
+    else:
+        provider_names = 'Provider Name(s) not found'
+        provider_name_array = 'Provider Name(s) not found'
+
+    if 'Est. Reimb. Impact' in case_data:
+        reimbursement = case_data['Est. Reimb. Impact'].unique()[0]
+    else:
+        reimbursement = 'N/A'
+        
+
     if len(provider_name_array) > 1:
         provider_names = "Various"
     else:
@@ -232,7 +254,14 @@ def create_word_document(case_data, selected_arguments):
 
     if issue[0].startswith('Transfer'):
         issue.remove(issue[0])
-    date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10]) if 'Appeal Date' in case_data else 'Date of Appeal not found'
+
+    if 'Appeal Date' in case_data:
+        date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10])
+    elif 'Appeal Request Date' in case_data:
+        date_of_appeal = format_date(str(case_data['Appeal Request Date'].iloc[0])[:10])
+    else:
+        date_of_appeal = 'Date of Appeal not found'
+    
     adj_no = ','.join(case_data['Audit Adj No.'].unique()) if 'Audit Adj No.' in case_data else 'Audit Adj No. not found'
     if 'Group FYE' in case_data:
         year = format_date(case_data['Group FYE'].iloc[0]) if 'Group FYE' in case_data else 'FYE not found'
@@ -249,7 +278,7 @@ def create_word_document(case_data, selected_arguments):
         cell.width = Pt(260)
 
     cell_left = table.cell(0,0)
-    cell_left.text = f"\n{case_name}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
+    cell_left.text = f"\n{case_name}\n\nProvider Number: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
     run = cell_left.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -364,7 +393,7 @@ def create_word_document(case_data, selected_arguments):
         if group_mode:
             if len(adj_no) > 1:
                 adj_no = "Various"
-            header = doc.add_paragraph(f"Issue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header = doc.add_paragraph(f"Issue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: {reimbursement}\n")
             run = header.runs[0]
             run.font.color.rgb = RGBColor(0, 0, 0)
         else:
@@ -375,7 +404,7 @@ def create_word_document(case_data, selected_arguments):
             run.font.color.rgb = RGBColor(0, 0, 0)
             if issue[i].startswith("Transferred"):
                 header.add_run(f"\n\nDisposition: {issue[i]}")
-            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
+            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: {reimbursement}\n")
 
     doc.add_page_break()
 
