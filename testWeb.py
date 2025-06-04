@@ -495,7 +495,7 @@ def get_download_link(file, filename):
     return href 
 
 
-st.title('QA Position Paper Template Generator')  
+st.title('QR Position Paper Template Generator')  
 
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file (upload the 061 report)", type=['xlsx', 'xls'])  
