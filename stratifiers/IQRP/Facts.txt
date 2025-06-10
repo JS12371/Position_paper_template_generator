@@ -1,0 +1,23 @@
+The Medicare program pays acute care hospitals for inpatient services under the Inpatient
+Prospective Payment System (“IPPS”).  Under IPPS, the Medicare program pays
+hospitals predetermined, standardized amounts per discharge, subject to certain payment
+adjustments.  The standardized amounts are increased each year by the “market basket
+update” to account for increases in operating costs.    
+ 
+The Medicare Prescription Drug, Improvement, and Modernization Act (“MMA”) of 2003,
+Section 501(b), amended 42 U.S.C. § 1395ww(b)(3)(B) to establish the Inpatient Hospital Quality Reporting program ("Hospital IQRP"). The Hospital IQRP requires each hospital to submit quality measure data “…in a form and manner, and at a time, specified by the Secretary.”  The Hospital IQRP was expanded by Section 5001(a)
+of the Deficit Reduction Act of 2005.  For fiscal years 2015 and beyond, federal law
+specifies that a hospital that fails to report the required quality data under the Hospital IQRP
+be penalized by reducing the hospital’s IPPS market basket percentage increase for the
+relevant year by one-fourth. 42 C.F.R. § 412.64(d)(2)(i)(C).  Specifically, the regulation at
+42 C.F.R. § 412.64(d)(2)(i)(C) states: 
+
+    2)(i) In the case of a “subsection (d) hospital,” as defined under section
+    1886(d)(1)(B) of the Act, that does not submit quality data on a quarterly basis to
+    CMS, in the form and manner specified by CMS, the percentage increase in the
+    market basket index (as defined in § 413.40(a)(3) of this chapter) for prospective
+    payment hospitals is reduced -  
+        (A) For fiscal years 2005 and 2006, by 0.4 percentage points; and  
+        (B) For fiscal year 2007 through 2014, by 2 percentage points.  
+        (C) For fiscal year 2015 and subsequent fiscal years, by one-fourth. 
+    <Exhibit C-4>.

@@ -1,4 +1,5 @@
-streamlit
+streamlit==1.32.0
+PyMuPDF==1.23.8
 docxcompose
 pandas
 python-docx

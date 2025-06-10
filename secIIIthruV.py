@@ -5,17 +5,21 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 from datetime import datetime
-from openai import OpenAI
 from docx import Document
 from io import BytesIO
 import base64
 import os
+import re
+import PyPDF2
+from docx.oxml import OxmlElement 
+from docx.oxml.ns import qn 
+from docx.shared import Pt, RGBColor  
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
+from docxcompose.composer import Composer
 
 DB_NAME = "database.db"
 import os
 
-def load_api_key():
-    return os.getenv("CHAT_API")
 
 def get_all_stratifiers():
     conn = sqlite3.connect(DB_NAME)
@@ -26,20 +30,18 @@ def get_all_stratifiers():
     return stratifiers
 
 def get_recent_case_data(stratifier, cutoff_date):
-    conn = sqlite3.connect(DB_NAME)
-    df = pd.read_sql_query("""
-        SELECT id, mac_facts, mac_arguments, mac_conclusion, created_at
-        FROM Cases
-        WHERE stratifier = ?
-          AND mac_facts IS NOT NULL AND mac_arguments IS NOT NULL AND mac_conclusion IS NOT NULL
-    """, conn, params=(stratifier,))
-    conn.close()
-
-    df["created_at"] = pd.to_datetime(df["created_at"], errors='coerce', infer_datetime_format=True)
-    cutoff = pd.to_datetime(cutoff_date)
-    df = df[df["created_at"] >= cutoff]
-
-    return df[["id", "mac_facts", "mac_arguments", "mac_conclusion"]].values.tolist()
+    # Get the directory where the current script is located
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    facts_path = os.path.join(current_dir, "stratifiers", stratifier, "Facts.txt")
+    
+    try:
+        with open(facts_path, 'r') as f:
+            facts = f.read().strip()
+    except FileNotFoundError as e:
+        print(f"Error: Could not find required files: {e}")
+        return []
+    
+    return [[1, facts, "", ""]]  # Return empty strings for arguments and conclusion
 
 def get_all_laws_and_exhibits_for_stratifier(stratifier):
     conn = sqlite3.connect(DB_NAME)
@@ -66,18 +68,6 @@ def get_all_laws_and_exhibits_for_stratifier(stratifier):
     conn.close()
     return all_laws, all_exhibits
 
-def gpt_generalize_section(client, section_title, current_gen, next_section):
-    messages = [
-        {"role": "system", "content": f"You are a legal analyst AI. You are refining a boilerplate for section '{section_title}' of a CMS appeal. Compare the two provided texts. Retain similarities, and generalize differences using placeholders like <HOSPITAL>, <DATE>, <VALUE>, <AGENCY>. Do NOT generalize information that is specific but in both cases. Do NOT include any information that is not in both of the provided texts."},
-        {"role": "user", "content": f"CURRENT GENERALIZED {section_title.upper()}:\n\n{current_gen}\n\nNEXT CASE {section_title.upper()}:\n\n{next_section}\n\nReturn the updated generalized version."}
-    ]
-
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-        temperature=0.2
-    )
-    return response.choices[0].message.content.strip()
 
 def create_word_document():
     doc = Document()
@@ -105,18 +95,7 @@ def get_download_link(file, filename):
     b64 = base64.b64encode(file).decode()
     return f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download Document</a>'
 
-import streamlit as st  
-import pandas as pd  
-from docx import Document  
-from docx.oxml import OxmlElement 
-from docx.oxml.ns import qn 
-from docx.shared import Pt, RGBColor  
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  
-import base64  
-from io import BytesIO 
-import os 
-import glob
-from docxcompose.composer import Composer  # Import Composer from docxcompose
+  # Import Composer from docxcompose
 
 # Function to convert the DataFrame to Word document  
 def mac_num_to_name(mac_num): 
@@ -151,32 +130,22 @@ def format_date(date):
     day = date[8:10] 
     return f"{month}/{day}/{year}" 
 
-def sanitize_filename(filename):
-    invalid_chars = '\\/*?:"<>|'
-    for char in invalid_chars:
-        filename = filename.replace(char, "")
-    filename = filename.replace(" ", "")
-    return filename
 
-def get_issue_content(issue, selected_argument):
-    issueformatted = sanitize_filename(issue)
-    filename = f"IssuestoArgs/{issueformatted}_{selected_argument}.docx"
-    if not os.path.exists(filename):
-        return None, f"Argument for Issue '{issue}' has not yet been added to the database."
-    try:
-        doc = Document(filename)
-        return doc, None
-    except Exception as e:
-        return None, f"Error processing issue file: {e}"
+def extract_issue_input(text, provider_name):
+    # Pattern to match text between "Fiscal Year" and "for"
+    pattern = r"Fiscal Year\s+(.*?)\s+for"
+    
+    match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+    
+    if match:
+        # Clean up the captured text
+        issue_input = match.group(1).strip()
+        # Replace multiple newlines with a single space
+        issue_input = re.sub(r'\n\s*', ' ', issue_input)
+        return issue_input
+    return None
 
-def get_possible_arguments(issue):
-    issueformatted = sanitize_filename(issue)
-    files = glob.glob(f"IssuestoArgs/{issueformatted}_*.docx")
-    arguments = [os.path.basename(f).replace(f"{issueformatted}_", "").replace(".docx", "") for f in files]
-    return arguments
-
-
-def create_word_document(case_data):
+def create_word_document(case_data, selected_stratifier, provider_name, issue_text=None):
     doc = Document()
     
     # Set default font
@@ -201,12 +170,23 @@ def create_word_document(case_data):
     pPr.append(pBdr)
 
     case_num = case_data['Case Num'].iloc[0] if 'Case Num' in case_data else 'Case Num not found'
-    case_name = case_data['Case Name'].iloc[0] if 'Case Name' in case_data else '<input provider name>'
-    issue = case_data['Issue'] if 'Issue' in case_data else ['Issue not found']
-    cloneissue = [iss for iss in issue]
-
-    tempissue = [i for i in issue]
-    issue = tempissue
+    
+    # Get the issue from the uploaded PDF if available
+    if issue_text:
+        # Get the directory where the current script is located
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        issue_path = os.path.join(current_dir, "stratifiers", selected_stratifier, "Issue.txt")
+        
+        try:
+            with open(issue_path, 'r') as f:
+                issue_template = f.read().strip()
+                # Replace <INPUT> with the extracted issue input
+                issue = issue_template.replace("<INPUT>", issue_text)
+        except FileNotFoundError as e:
+            print(f"Error: Could not find required files: {e}")
+            issue = "Issue not found"
+    else:
+        issue = "Issue not found"
 
     transferred_to_case = case_data['Transferred to Case #'] if 'Transferred to Case #' in case_data else ['transferred to case not found']
     temptransferred_to_case = [i for i in transferred_to_case]
@@ -216,19 +196,7 @@ def create_word_document(case_data):
     if case_num.endswith('G') or case_num.endswith('C'):
         group_mode = True
 
-    i = 0
-    if len(issue) != 1:
-        while i < len(issue):
-            if transferred_to_case[i] != 'Not in the spreadsheet':
-                issue[i] = f"Transferred to case {transferred_to_case[i]}"
-            i += 1
-
-    issue = list(dict.fromkeys(issue))
-    if issue[0] == 'Issue not found':
-        try:
-            issue = case_data['Issue Typ'].iloc[0].split(',') if 'Issue Typ' in case_data else ['Issue not found']
-        except:
-            pass
+    
 
     if 'Provider ID' in case_data:
         provider_numbers = ', '.join(case_data['Provider ID'].unique())
@@ -262,7 +230,11 @@ def create_word_document(case_data):
         pass
 
     if 'Est. Reimb. Impact' in case_data:
-        reimbursement = case_data['Est. Reimb. Impact'].unique()[0]
+        reimbursement = 1.0 or 1
+        for i in case_data['Est. Reimb. Impact'].unique():
+            if float(i) != 1.0 and float(i) != 1:
+                reimbursement = i
+                break
     else:
         reimbursement = 'N/A'
 
@@ -277,8 +249,6 @@ def create_word_document(case_data):
     else:
         pass
 
-    if issue[0].startswith('Transfer'):
-        issue.remove(issue[0])
     
     if 'Appeal Date' in case_data:
         date_of_appeal = format_date(str(case_data['Appeal Date'].iloc[0])[:10])
@@ -303,7 +273,7 @@ def create_word_document(case_data):
         cell.width = Pt(260)
 
     cell_left = table.cell(0,0)
-    cell_left.text = f"\n{provider_names}\n\nProvider Numbers: {provider_numbers}\n\n     Provider Names: {provider_names} \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
+    cell_left.text = f"\n{provider_name}\n\nProvider Numbers: {provider_numbers}\n\n     (Provider) \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
     run = cell_left.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -332,7 +302,7 @@ def create_word_document(case_data):
     pBdr.append(bottom_bdr)
     pPr.append(pBdr)
 
-    header = doc.add_paragraph('MEDICARE ADMINISTRATIVE CONTRACTOR’S POSITION PAPER')
+    header = doc.add_paragraph("MEDICARE ADMINISTRATIVE CONTRACTOR'S POSITION PAPER")
     header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     run = header.runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
@@ -400,7 +370,7 @@ def create_word_document(case_data):
     header = doc.add_paragraph()
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
-    run.text = f"\nProvider Name: {provider_names}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
+    run.text = f"\nProvider Name: {provider_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
 
     doc.add_page_break()
 
@@ -414,22 +384,11 @@ def create_word_document(case_data):
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
 
-    for i in range(len(issue)):
-        if group_mode:
-            if len(adj_no) > 1:
-                adj_no = "Various"
-            header = doc.add_paragraph(f"Issue: {issue[i]}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: N/A\n")
-            run = header.runs[0]
-            run.font.color.rgb = RGBColor(0, 0, 0)
-        else:
-            if len(adj_no) > 1:
-                adj_no = "Various"
-            header = doc.add_paragraph(f"\nIssue {i + 1}: {cloneissue[i]}")
-            run = header.runs[0]
-            run.font.color.rgb = RGBColor(0, 0, 0)
-            if issue[i].startswith("Transferred"):
-                header.add_run(f"\n\nDisposition: {issue[i]}")
-            header.add_run(f"\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: ${reimbursement}\n")
+    if len(adj_no) > 1:
+        adj_no = "Various"
+    header = doc.add_paragraph(f"Issue: {issue}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: {reimbursement}\n")
+    run = header.runs[0]
+    run.font.color.rgb = RGBColor(0, 0, 0) 
 
     doc.add_page_break()
 
@@ -486,8 +445,90 @@ def get_download_link(file, filename):
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">Download file</a>' 
     return href 
 
+def extract_text_from_pdf(pdf_path):
+    text = ""
+    with open(pdf_path, 'rb') as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
+
+def check_determination_text(text):
+    pattern = r"NOTICE\s+OF\s+QUALITY\s+REPORTING\s+PROGRAM\s+NONCOMPLIANCE\s+DECISION\s+UPHELD"
+    return bool(re.search(pattern, text, re.MULTILINE))
+
+def check_iqrp_requirement(text):
+    pattern = r"The\s+requirement\s+that\s+facilities\s+participating\s+in\s+the\s+Hospital\s+!QR\s+Program\s+report\s+quality\s+data\s+to\s+CMS\s+is\s+set\s+forth\s+in\s+42\s+Code\s+of\s+Federal\s+Regulations\s+\(CFR\)\s+Part\s+412,\s+Subpart\s+H\."
+    pattern2 = r"The\s+requirement\s+that\s+facilities\s+participating\s+in\s+the\s+Hospital\s+IQR\s+Program\s+report\s+quality\s+data\s+to\s+CMS\s+is\s+set\s+forth\s+in\s+42\s+Code\s+of\s+Federal\s+Regulations\s+\(CFR\)\s+Part\s+412,\s+Subpart\s+H\."
+    if bool(re.search(pattern, text, re.MULTILINE)):
+        return bool(re.search(pattern, text, re.MULTILINE))
+    elif bool(re.search(pattern2, text, re.MULTILINE)):
+        return bool(re.search(pattern2, text, re.MULTILINE))
+    return False
+
+
+def extract_provider_name(text):
+    # Find the determination text first
+    determination_pattern = r"NOTICE\s+OF\s+QUALITY\s+REPORTING\s+PROGRAM\s+NONCOMPLIANCE\s+DECISION\s+UPHELD"
+    determination_match = re.search(determination_pattern, text, re.MULTILINE)
+    
+    if determination_match:
+        # Get the text after the determination
+        text_after_determination = text[determination_match.end():]
+        
+        # Look for "for" followed by text until "CMS"
+        provider_pattern = r"for\s+(.*?)\s+CMS"
+        provider_match = re.search(provider_pattern, text_after_determination, re.IGNORECASE | re.DOTALL)
+        
+        if provider_match:
+            return provider_match.group(1).strip()
+    return None
+
 
 st.title('QR Position Paper Template Generator')  
+
+# Add PDF upload section
+st.subheader('Upload Final Determination')
+uploaded_pdf = st.file_uploader("Choose a PDF file", type=['pdf'])
+
+if uploaded_pdf is not None:
+    # Save the uploaded file temporarily
+    temp_path = "temp_upload.pdf"
+    with open(temp_path, "wb") as f:
+        f.write(uploaded_pdf.getvalue())
+    
+    try:
+        # Extract text from PDF
+        text = extract_text_from_pdf(temp_path)
+        
+        # Check if it's a valid determination and IQRP
+        is_determination = check_determination_text(text)
+        is_iqrp = check_iqrp_requirement(text)
+        
+        if not is_determination:
+            st.error("This is not a valid final determination")
+        else:
+            if is_iqrp:
+                st.success("This is an IQRP determination")
+                # Set the stratifier to IQRP
+                st.session_state.selected_stratifier = "IQRP"
+                # Extract provider name and issue input
+            else:
+                st.warning("This is not a known determination type")
+                
+            provider_name = extract_provider_name(text)
+            issue_input = extract_issue_input(text, provider_name)
+            if issue_input:
+                st.session_state.issue_input = issue_input
+            
+    
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
+    
+    finally:
+        # Clean up the temporary file
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Choose an Excel file (061 report)", type=['xlsx', 'xls'])  
@@ -496,24 +537,23 @@ uploaded_file = st.file_uploader("Choose an Excel file (061 report)", type=['xls
 if 'df' not in st.session_state:
     st.session_state.df = None
 
-# Define the relevant columns to read
-relevant_columns0 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Issue Typ']
-relevant_columns1 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Prov Num', 'Provider Name', 'Firm', 'MAC', 'Determination Event Date', 'Appeal Date', 'Appeal Request Date', 'Audit Adj No.', 'FYE', 'Issue Typ', 'Est. Reimb. Impact']
-relevant_columns2 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Provider Name', 'MAC', 'Determination Event Date', 'Appeal Date', 'Audit Adj No.', 'Group FYE', 'Issue Typ']
 
+relevant_columns1 = ['Case Num', 'Case Name', 'Issue', 'Transferred to Case #', 'Provider ID', 'Prov Num', 'Provider Name', 'Firm', 'MAC', 'Determination Event Date', 'Appeal Date', 'Appeal Request Date', 'Audit Adj No.', 'FYE', 'Issue Typ', 'Est. Reimb. Impact']
+ 
 # Modify the read_excel call to use only the relevant columns based on the file name
 if uploaded_file and st.session_state.df is None:
     # Analyze the file name
     file_name = uploaded_file.name
     
     # Determine which columns to use based on the file name
+    relevant_columns = relevant_columns1
     if file_name.startswith('045'):
-        relevant_columns = relevant_columns2
+        st.write("Please upload a 061 report")
     elif file_name.startswith('061'):
         relevant_columns = relevant_columns1
     else:
         # Default to relevant_columns1 if no specific condition is met
-        relevant_columns = relevant_columns0
+        relevant_columns = relevant_columns1
     
     try:
         st.session_state.df = pd.read_excel(uploaded_file, usecols=lambda col: col in relevant_columns, engine='calamine')
@@ -543,13 +583,15 @@ if st.session_state.df is not None:
     # Proceed only if the case_data is found
     if st.session_state.case_data is not None:
         if not st.session_state.case_data.empty:
-            api_key = load_api_key()
-            client = OpenAI(api_key=api_key)
-
-            cutoff_date = st.date_input("Select cutoff date (cases on or after this date will be used)").strftime("%Y-%m-%d")
+            cutoff_date = st.date_input("Select cutoff date [date of the appeal request] (papers on or after this date will be used)").strftime("%Y-%m-%d")
             stratifier_options = get_all_stratifiers()
-            selected_stratifier = st.selectbox("Select Stratifier", stratifier_options)
-
+            
+            # Use the selected stratifier from PDF upload if available
+            default_stratifier = st.session_state.get('selected_stratifier', stratifier_options[0] if stratifier_options else None)
+            if is_iqrp:
+                selected_stratifier = "IQRP"
+            else:
+                selected_stratifier = "notyetsupported"
             if st.button("Generate MAC Position Sections"):
                 case_rows = get_recent_case_data(selected_stratifier, cutoff_date)
                 if not case_rows:
@@ -557,24 +599,22 @@ if st.session_state.df is not None:
                 else:
                     facts_gen, args_gen, concl_gen = case_rows[0][1:]
 
-                    for _, facts, args, concl in case_rows[1:]:
-                        facts_gen = gpt_generalize_section(client, "Facts", facts_gen, facts)
-                        args_gen = gpt_generalize_section(client, "Arguments", args_gen, args)
-                        concl_gen = gpt_generalize_section(client, "Conclusion", concl_gen, concl)
-
                     laws, exhibits = get_all_laws_and_exhibits_for_stratifier(selected_stratifier)
 
-                    st.session_state.section_iii = f"A. Facts:\n{facts_gen}\n\nB. Arguments:\n{args_gen}\n\nC. Conclusion:\n{concl_gen}"
+                    st.session_state.section_iii = f"A. Facts:\n{facts_gen}\n\nB. Arguments:\n\nC. Conclusion:"
                     st.session_state.section_iv = laws
                     st.session_state.section_v = exhibits
 
                     st.success("Sections III-V generated and ready.")
 
             if "section_iii" in st.session_state and st.button("Download Word Document"):
-                file_data = create_word_document(st.session_state.case_data)
+                issue_input = st.session_state.get('issue_input')
+                file_data = create_word_document(case_data = st.session_state.case_data, issue_text = issue_input, selected_stratifier = selected_stratifier, provider_name = provider_name)
                 st.markdown(get_download_link(file_data, "MAC_Position_Paper.docx"), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
+
+
 
 
 
