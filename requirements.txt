@@ -6,4 +6,3 @@ python-docx
 modin[dask]
 openpyxl
 python-calamine
-openai
