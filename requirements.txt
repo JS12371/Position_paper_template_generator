@@ -1,6 +1,8 @@
 streamlit==1.32.0
 PyMuPDF==1.23.8
-docxcompose==1.3.4
-pandas==2.2.2
-python-docx==1.1.0
-openpyxl==3.1.2
+docxcompose
+pandas
+python-docx
+modin[dask]
+openpyxl
+python-calamine
