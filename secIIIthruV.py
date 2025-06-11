@@ -196,8 +196,6 @@ def create_word_document(case_data, selected_stratifier, provider_name, issue_te
     if case_num.endswith('G') or case_num.endswith('C'):
         group_mode = True
 
-    no_of_days = case_data['No. of Days'] if 'No. of Days' in case_data else 'No. of Days not found'
-
     
 
     if 'Provider ID' in case_data:
@@ -208,18 +206,13 @@ def create_word_document(case_data, selected_stratifier, provider_name, issue_te
         provider_num_array = case_data['Prov Num'].unique()
     else:
         provider_numbers = 'Provider Number(s) not found'
-        provider_num_array = 'Provider Number not found'
+        provider_num_array = 'Provider Numbers not found'
 
     
     if len(provider_num_array) > 1:
         provider_numbers = "Various"
     else:
-        # Ensure we have a valid provider number
-        provider_num = str(provider_num_array[0]).strip()
-        if len(provider_num) == 6:
-            provider_numbers = f"{provider_num[:2]}-{provider_num[2:]}"
-        else:
-            provider_numbers = provider_num  # Keep original if not 6 digits
+        pass
 
     if 'Provider Name' in case_data:
         provider_names = ', '.join(case_data['Provider Name'].unique())
@@ -280,7 +273,7 @@ def create_word_document(case_data, selected_stratifier, provider_name, issue_te
         cell.width = Pt(260)
 
     cell_left = table.cell(0,0)
-    cell_left.text = f"\n{provider_name}\n\nProvider Number: {provider_numbers}\n\n     (Provider) \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
+    cell_left.text = f"\n{provider_name}\n\nProvider Numbers: {provider_numbers}\n\n     (Provider) \n\n vs. \n\n{mac_name}\n     (Medicare Administrative Contractor)\n\n        and \n\n Federal Specialized Services \n     (Appeals Support Contractor)\n"
     run = cell_left.paragraphs[0].runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0)
 
@@ -377,7 +370,7 @@ def create_word_document(case_data, selected_stratifier, provider_name, issue_te
     header = doc.add_paragraph()
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
-    run.text = f"\nProvider Name: {provider_name}\n\nProvider Number: {provider_numbers}\n\nFiscal Year under Appeal: {year[:]}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[:]}\n\nPRRB Case Number: {case_num}\n\nDate of Final Determination: {determination_event_dates}\n\nDate of Appeal Request Received: {date_of_appeal}\n\nElapsed Days between NPR and Appeal Request: {no_of_days}"
+    run.text = f"\nProvider Name: {provider_name}\n\nProvider Numbers: {provider_numbers}\n\nLead Contractor: {mac_name}\n\nCalendar Year: {year[:]}\n\nPRRB Case Number: {case_num}\n\nDates of Determinations: {determination_event_dates}\n\nDate of Appeal: {date_of_appeal}"
 
     doc.add_page_break()
 
@@ -391,9 +384,8 @@ def create_word_document(case_data, selected_stratifier, provider_name, issue_te
     run = header.add_run()
     run.font.color.rgb = RGBColor(0, 0, 0)
 
-    if isinstance(adj_no, list) and len(adj_no) > 1:
+    if len(adj_no) > 1:
         adj_no = "Various"
-    
     header = doc.add_paragraph(f"Issue: {issue}\n\nAdjustment No(s): {adj_no}\n\nApproximate Reimbursement Amount: {reimbursement}\n")
     run = header.runs[0]
     run.font.color.rgb = RGBColor(0, 0, 0) 
@@ -403,6 +395,7 @@ def create_word_document(case_data, selected_stratifier, provider_name, issue_te
 
     doc.add_heading("III. MAC's Position", level=1)
     doc.add_paragraph(st.session_state.section_iii)
+    #add a new line
     doc.add_paragraph("")
 
     doc.add_heading("IV. LAW, REGULATIONS, AND PROGRAM INSTRUCTIONS", level=1)
@@ -620,9 +613,3 @@ if st.session_state.df is not None:
                 st.markdown(get_download_link(file_data, "MAC_Position_Paper.docx"), unsafe_allow_html=True)
         else:
             st.write('Case not found in the spreadsheet. Please try again with a different case number.')
-
-
-
-
-
-
