@@ -6,3 +6,5 @@ python-docx
 modin[dask]
 openpyxl
 python-calamine
+PyPDF2
+
